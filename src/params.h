@@ -24,3 +24,9 @@
 #define DIST_TO_PROJ		277
 // Essentially the FOV / PROJ_W, but we will pre-compute that here.
 #define ANGLE_BETWEEN_RAYS	0.1875f
+
+// Holds the angle of each ray (there are projection plane width number of them).
+// The value stored here is the angle if the player has a rotation of 0. This way,
+// we need only add the player's rotation to these values. They are computed in
+// the initialize function.
+float ray_angles[PROJ_W];
