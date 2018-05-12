@@ -1,0 +1,29 @@
+<!-- Liam Wynn, 5/11/2018, CS410p: Full Stack Web Development -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset='UTF-8'>
+		<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'>
+		</script>
+	</head>
+
+	<body>
+		<canvas id='canvas' width='320' height='200'>
+		</canvas>
+
+		<script type='text/javascript'>
+			// The compiled js requires this so we can actually perform the rendering
+			var Module = {
+				canvas: (
+					function() {
+						return document.getElementById('canvas');
+					}
+				)()
+			};
+		</script>
+
+		<script type='text/javascript' src='raycaster.js'>
+		</script>
+	</body>
+</html>
