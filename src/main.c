@@ -5,7 +5,6 @@
 
 #include "loop_handling.h"
 #include "params.h"
-#include "map.h"
 
 // What we pass to the loop function
 struct context {
@@ -35,7 +34,7 @@ int main() {
 	const int run_infinite = 1;
 
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
-	SDL_CreateWindowAndRenderer(320, 200, 0, &window, &renderer);
+	SDL_CreateWindowAndRenderer(PROJ_W, PROJ_H, 0, &window, &renderer);
 
 	ctx.renderer = renderer;
 
