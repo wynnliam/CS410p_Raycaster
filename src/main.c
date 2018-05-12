@@ -1,9 +1,9 @@
 // Liam Wynn, 5/11/2018, CS410p: Full Stack Web Development
 
-#include <SDL2/SDL.h>
 #include <emscripten.h>
 #include <stdio.h>
 
+#include "loop_handling.h"
 #include "params.h"
 #include "map.h"
 
@@ -17,18 +17,14 @@ void loop(void* args) {
 	struct context* ctx = (struct context*)args;
 	SDL_Renderer* renderer = ctx->renderer;
 
-	SDL_SetRenderDrawColor(renderer, 100, 149, 237, 255);
-	// Fills the screen with the current render draw color.
-	SDL_RenderClear(renderer);
-
-	// Forces the screen to be updated.
-	SDL_RenderPresent(renderer);
+	// Handle all non-rendering logic before we update.
+	// Things like keyboard input and user movement.
+	update();
+	// Do a ray-casting rendering step.
+	render(renderer);
 }
 
 int main() {
-
-	printf("%d %d\n", map[19], map[20]);
-
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 
@@ -42,6 +38,9 @@ int main() {
 	SDL_CreateWindowAndRenderer(320, 200, 0, &window, &renderer);
 
 	ctx.renderer = renderer;
+
+	// Initialize any non-SDL logic
+	initialize();
 
 	// Actually sets the rendering loop.
 	emscripten_set_main_loop_arg(loop, &ctx, fps_count, run_infinite);
