@@ -4,6 +4,8 @@
 #include <emscripten.h>
 #include <stdio.h>
 
+#include "map.h"
+
 // What we pass to the loop function
 struct context {
 	SDL_Renderer* renderer;
@@ -15,12 +17,16 @@ void loop(void* args) {
 	SDL_Renderer* renderer = ctx->renderer;
 
 	SDL_SetRenderDrawColor(renderer, 100, 149, 237, 255);
+	// Fills the screen with the current render draw color.
 	SDL_RenderClear(renderer);
 
+	// Forces the screen to be updated.
 	SDL_RenderPresent(renderer);
 }
 
 int main() {
+
+	printf("%d %d\n", map[19], map[20]);
 
 	SDL_Window* window;
 	SDL_Renderer* renderer;
