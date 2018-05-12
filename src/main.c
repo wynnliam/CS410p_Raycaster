@@ -21,16 +21,23 @@ void loop(void* args) {
 }
 
 int main() {
-	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 
 	SDL_Window* window;
 	SDL_Renderer* renderer;
-	SDL_CreateWindowAndRenderer(320, 200, 0, &window, &renderer);
 
 	struct context ctx;
+	// Using -1 makes the renderer run as fast as possible.
+	const int fps_count = -1;
+	// If true, runs the loop infinitely.
+	const int run_infinite = 1;
+
+	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
+	SDL_CreateWindowAndRenderer(320, 200, 0, &window, &renderer);
+
 	ctx.renderer = renderer;
 
-	emscripten_set_main_loop_arg(loop, &ctx, -1, 1);
+	// Actually sets the rendering loop.
+	emscripten_set_main_loop_arg(loop, &ctx, fps_count, run_infinite);
 
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
