@@ -4,6 +4,7 @@
 #include <emscripten.h>
 #include <stdio.h>
 
+#include "params.h"
 #include "map.h"
 
 // What we pass to the loop function
