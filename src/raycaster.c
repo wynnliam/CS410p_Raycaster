@@ -24,6 +24,7 @@
 void initialize_lookup_tables() {
 	// Stores the angle in radians.
 	float curr_angle;
+	// Use these to make this procedure more readable.
 	float curr_sin, curr_cos, curr_tan;
 
 	int deg;
@@ -44,5 +45,17 @@ void initialize_lookup_tables() {
 		tan128table[deg] = (int)curr_tan;
 
 		printf("deg %d. Sin: %d, Cos: %d, tan: %d\n", deg, sin128table[deg], cos128table[deg], tan128table[deg]);
+	}
+}
+
+void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_rot) {
+	// Stores the precise angle of our current ray.
+	float curr_angle = (float)player_rot - FOV_HALF;
+
+	int i;
+	for(i = 0; i < PROJ_W; ++i) {
+		//TODO: Trace ray
+
+		curr_angle += ANGLE_BETWEEN_RAYS;
 	}
 }

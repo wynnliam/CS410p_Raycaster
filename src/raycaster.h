@@ -5,6 +5,9 @@
 	the raycast algorithm.
 */
 
+#ifndef RAYCASTER
+#define RAYCASTER
+#include <SDL2/SDL.h>
 
 // Field of view, in radians. This specifies the angle of what we can
 // view. It is also important for computing the rays themselves.
@@ -52,3 +55,6 @@ int tan128table[361];
 		All values in sin128table, cos128table, and tan128table are computed.
 */
 void initialize_lookup_tables();
+
+void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_rot);
+#endif

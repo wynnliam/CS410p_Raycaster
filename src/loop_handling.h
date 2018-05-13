@@ -7,6 +7,8 @@
 	here.
 */
 
+#ifndef LOOP_HANDLER
+#define LOOP_HANDLER
 #include <SDL2/SDL.h>
 
 // Handles any pre-loop logic we need.
@@ -18,3 +20,4 @@ void update();
 
 // Handles per-frame rendering logic.
 void render(SDL_Renderer* renderer);
+#endif

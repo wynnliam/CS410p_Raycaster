@@ -27,6 +27,8 @@ void render(SDL_Renderer* renderer) {
 	// cornflower blue.
 	SDL_RenderClear(renderer);
 
+	cast_rays(renderer, player_x, player_y, player_rot);
+
 	// Forces the screen to be updated.
 	SDL_RenderPresent(renderer);
 }
