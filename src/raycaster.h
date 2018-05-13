@@ -5,6 +5,7 @@
 	the raycast algorithm.
 */
 
+
 // Field of view, in radians. This specifies the angle of what we can
 // view. It is also important for computing the rays themselves.
 #define FOV					60
@@ -32,9 +33,22 @@
 // This will enable us to preserve enough precision for each number as
 // a byte. When we want a value, we can access sin128table[i] >> 7, which
 // undoes the multiplication.
-char sin128table[361];
+int sin128table[361];
 // Stores the cos value of every degree from 0 to 360 multiplied by 128.
-char cos128table[361];
+int cos128table[361];
 // Stores every tan value of every degree from 0 to 360 multiplied by 128.
 // The values for 0, 90, 180, 270, and 360 will be -1.
-char tan128Table[361];
+int tan128table[361];
+
+/*
+	For angles 0 to 360, computes sin(a) * 128, cos(a) * 128, and tan(a) * 128
+	and stores them in the angle lookup tables. For angles 0, 90, 180, 270, 360,
+	we use the value -1.
+
+	PRECONDITIONS:
+		None
+
+	POSTCONDITIONS:
+		All values in sin128table, cos128table, and tan128table are computed.
+*/
+void initialize_lookup_tables();

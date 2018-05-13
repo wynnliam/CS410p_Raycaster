@@ -1,16 +1,18 @@
 // Liam Wynn, 5/11/2018, CS410p: Full Stack Web Development
 
 #include "loop_handling.h"
+#include "raycaster.h"
 
-#include "params.h"
-#include "map.h"
-
-#include <stdio.h>
-#include <math.h>
+// Stores the player 
+int player_x, player_y;
+// The player rotation.
+int player_rot;
 
 /*INITIALIZATION PROCEDURES*/
 
 void initialize() {
+	// Initializes all the angle lookup tables.
+	initialize_lookup_tables();
 }
 
 /*UPDATE PROCEDURES*/
