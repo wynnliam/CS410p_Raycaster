@@ -32,6 +32,20 @@
 // Essentially the FOV / PROJ_W, but we will pre-compute that here.
 #define ANGLE_BETWEEN_RAYS	0.1875
 
+struct hitinfo {
+	// Where we hit.
+	int hit_pos[2];
+	// The squared distance.
+	int dist;
+	// The wall texture.
+	int wall_type;
+	// If true, the intersection was along a horizontal grid.
+	// Otherwise, it was vertical.
+	int is_horiz;
+	// Used when correcting for 'fisheye' lens.
+	int quadrant;
+};
+
 // Stores the sin value of every degree from 0 to 360 multiplied by 128.
 // This will enable us to preserve enough precision for each number as
 // a byte. When we want a value, we can access sin128table[i] >> 7, which
@@ -85,7 +99,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 		ray_angle - the angle of the ray as an integer (in degrees). We use an imprecise
 		value so as to do our lookup's quickly.
 		player_x, player_y - where the ray will originate from.
-		hit_pos - where we store the point where a wall hits.
+		hit - stores all of the data about this hit.
 */
-void get_ray_hit(int ray_angle, int player_x, int player_y, int hit_pos[2]);
+void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit);
 #endif

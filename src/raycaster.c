@@ -73,7 +73,7 @@ int get_dist_sqrd(int x1, int y1, int x2, int y2) {
 	return d_x + d_y;
 }
 
-void get_ray_hit(int ray_angle, int player_x, int player_y, int hit_pos[2]) {
+void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit) {
 	// Stores the position of the ray as it moved
 	// from one grid line to the next.
 	int curr_h_x, curr_h_y;
@@ -84,6 +84,8 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, int hit_pos[2]) {
 
 	int hit_h[2];
 	int hit_v[2];
+	int h_dist;
+	int v_dist;
 	int tile;
 
 	// First, we must deal with bad angles. These angles will break the raycaster, since
@@ -98,6 +100,7 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, int hit_pos[2]) {
 
 	// The ray is in quadrant 1.
 	if(1 <= ray_angle && ray_angle <= 89) {
+		hit->quadrant = 1;
 		// Divide player_y by 64, floor that, multiply by 64, and then subtract 1.
 		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
 		// Multiply player_y and curr_h_y by 128, then divide by the tan * 128. This will
@@ -120,6 +123,7 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, int hit_pos[2]) {
 
 	// The ray is in quadrant 2.
 	else if(91 <= ray_angle && ray_angle <= 179) {
+		hit->quadrant = 2;
 		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
 		curr_h_x = player_x + (((player_y - curr_h_y) << 7) / tan128table[ray_angle]);
 
@@ -135,6 +139,7 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, int hit_pos[2]) {
 
 	// The ray is in quadrant 3.
 	else if(181 <= ray_angle && ray_angle <= 269) {
+		hit->quadrant = 3;
 		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
 		curr_h_x = player_x - (((curr_h_y - player_y) * tan128table[ray_angle]) >> 7);
 
@@ -150,6 +155,7 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, int hit_pos[2]) {
 
 	// The ray is in quadrant 4 (271 <= ray_angle && ray_angle <= 359)
 	else if(271 <= ray_angle && ray_angle <= 359) {
+		hit->quadrant = 4;
 		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
 		curr_h_x = player_x - (((curr_h_y - player_y) * tan128table[ray_angle]) >> 7);
 
@@ -164,8 +170,8 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, int hit_pos[2]) {
 	}
 
 	else {
-		hit_pos[0] = -1;
-		hit_pos[1] = -1;
+		hit->hit_pos[0] = -1;
+		hit->hit_pos[1] = -1;
 		return;
 	}
 
@@ -210,33 +216,43 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, int hit_pos[2]) {
 	// Now choose either the horizontal or vertical intersection
 	// point. Or choose -1, -1 to denote an error.
 	if(hit_h[0] == -1 && hit_h[1] == -1 && hit_v[0] == -1 && hit_v[1] == -1) {
-		hit_pos[0] = -1;
-		hit_pos[1] = -1;
+		hit->hit_pos[0] = -1;
+		hit->hit_pos[1] = -1;
 	}
 
 	else if(hit_h[0] == -1 && hit_h[1] == -1) {
-		hit_pos[0] = hit_v[0];
-		hit_pos[1] = hit_v[1];
+		hit->hit_pos[0] = hit_v[0];
+		hit->hit_pos[1] = hit_v[1];
+		hit->is_horiz = 0;
 	}
 
 	else if(hit_v[0] == -1 && hit_v[1] == -1) {
-		hit_pos[0] = hit_h[0];
-		hit_pos[1] = hit_h[1];
+		hit->hit_pos[0] = hit_h[0];
+		hit->hit_pos[1] = hit_h[1];
+		hit->is_horiz = 1;
 	}
 
 	else {
-		if(get_dist_sqrd(hit_h[0], hit_h[1], player_x, player_y) >
-		   get_dist_sqrd(hit_v[0], hit_v[1], player_x, player_y))
-		{
-			hit_pos[0] = hit_h[0];
-			hit_pos[1] = hit_h[1];
+		h_dist = get_dist_sqrd(hit_h[0], hit_h[1], player_x, player_y);
+		v_dist = get_dist_sqrd(hit_v[0], hit_v[1], player_x, player_y);
+
+		if(h_dist > v_dist) {
+			hit->hit_pos[0] = hit_h[0];
+			hit->hit_pos[1] = hit_h[1];
+
+			hit->is_horiz = 1;
 		}
 
 		else {
-			hit_pos[0] = hit_v[0];
-			hit_pos[1] = hit_v[1];
+			hit->hit_pos[0] = hit_v[0];
+			hit->hit_pos[1] = hit_v[1];
+
+			hit->is_horiz = 0;
 		}
 	}
+
+	hit->dist = get_dist_sqrd(hit->hit_pos[0], hit->hit_pos[1], player_x, player_y);
+	hit->wall_type = get_tile(hit->hit_pos[0], hit->hit_pos[1]);
 }
 
 void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_rot) {
@@ -244,10 +260,12 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 	float curr_angle = (float)player_rot - FOV_HALF;
 	// The curr_angle adjusted to be within 0 and 360.
 	float adj_angle;
+	int correct_angle;
 	int slice_dist;
 	int slice_height;
 	int wall;
-	int hit_pos[2];
+
+	struct hitinfo hit;
 
 	int i;
 	for(i = 0; i < PROJ_W; ++i) {
@@ -258,15 +276,25 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 		if(adj_angle > 360)
 			adj_angle -= 360;
 
-		get_ray_hit((int)adj_angle, player_x, player_y, hit_pos);
+		correct_angle = (int)adj_angle - player_rot;
+		if(correct_angle < 0)
+			correct_angle += 360;
+		if(correct_angle > 360)
+			correct_angle -= 360;
 
-		if(hit_pos[0] != -1 && hit_pos[1] != -1) {
-			wall = get_tile(hit_pos[0], hit_pos[1]);
-			slice_dist = (int)sqrt(get_dist_sqrd(hit_pos[0], hit_pos[1], player_x, player_y)) + 1;
+		get_ray_hit((int)adj_angle, player_x, player_y, &hit);
+
+		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
+			wall = hit.wall_type;
+			slice_dist = (int)sqrt(hit.dist) + 1;
+
+			slice_dist *= cos128table[correct_angle];
+			slice_dist = slice_dist >> 7;
+
 			slice_height = (int)(64.0f / slice_dist * DIST_TO_PROJ);
 
 			SDL_SetRenderDrawColor(renderer, textures[wall][0], textures[wall][1], textures[wall][2], 255);
-			SDL_RenderDrawLine(renderer, i, 100 - (slice_height / 2), i, 100 + (slice_height / 2));
+			SDL_RenderDrawLine(renderer, i, 100 - (slice_height >> 1), i, 100 + (slice_height >> 1));
 		}
 
 
