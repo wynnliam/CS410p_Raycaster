@@ -9,10 +9,10 @@
 #include <math.h>
 
 // The player's position
-int player_x = 768;
-int player_y = 192;
+int player_x = 640;
+int player_y = 320;
 // Player rotation in degrees.
-float player_rot = 225.0f;
+float player_rot = 180.0f;
 
 // Computes all of the ray angles as if the player had a rotation
 // of 0.
@@ -71,131 +71,82 @@ void compute_ray_angles() {
 /*UPDATE PROCEDURES*/
 
 void update() {
+	SDL_Event event;
+	while(SDL_PollEvent(&event)) {
+		if(event.type == SDL_KEYDOWN) {
+			if(event.key.keysym.sym == SDLK_a) {
+				player_rot -= 1;
+			}
+
+			if(event.key.keysym.sym == SDLK_d) {
+				player_rot += 1;
+			}
+
+			if(player_rot < 0.0f)
+				player_rot += 360.0f;
+			if(player_rot > 360.0f)
+				player_rot -= 360.0f;
+
+			printf("Player rotation: %f\n", player_rot);
+		}
+	}
 }
 
 /*RENDERING PROCEDURES*/
 
-int isWall(int x, int y) {
-	// Gets the location in unit coordinates
-	int x_unit = x / UNIT_SIZE;
-	int y_unit = y / UNIT_SIZE;
+int is_wall(int x, int y) {
+	int grid_x = x / UNIT_SIZE;
+	int grid_y = y / UNIT_SIZE;
 
-	if(y_unit < 0 || y_unit >= MAP_H || x_unit < 0 || x_unit >= MAP_W)
-		return -1;
+	if(grid_x < 0) grid_x = 0;
+	if(grid_x > MAP_W - 1) grid_x = MAP_W - 1;
+	if(grid_y < 0) grid_y = 0;
+	if(grid_y > MAP_H - 1) grid_y = MAP_H - 1;
 
-	else
-		return map[y_unit * MAP_W + x_unit] > 0;
+	return map[grid_y * MAP_W + grid_x] > 0;
 }
 
-int getWall(int x, int y) {
-	if(!isWall(x, y))
-		return -1;
+int get_map_unit(int x, int y) {
+	int grid_x = x / UNIT_SIZE;
+	int grid_y = y / UNIT_SIZE;
 
-	int x_unit = x / UNIT_SIZE;
-	int y_unit = y / UNIT_SIZE;
+	if(grid_x < 0) grid_x = 0;
+	if(grid_x > MAP_W - 1) grid_x = MAP_W - 1;
+	if(grid_y < 0) grid_y = 0;
+	if(grid_y > MAP_H - 1) grid_y = MAP_H - 1;
 
-	return map[y_unit * MAP_W + x_unit];
+	return map[grid_y * MAP_W + grid_x];
 }
 
-void get_horizontal_intersection(float ray_angle, int intersect_point[2]) {
-	// Used when getting the tangent
-	float angle_rads = (float)M_PI * ray_angle / 180.0f;
-	float sin_angle = (float)sin(angle_rads);
-	// Use these values to have our ray trace.
-	int curr_x, curr_y;
+void cast_ray(float ray_angle, int hit[2]) {
 	int next_x, next_y;
-	int delta_x;
-	int ret_val;
+	int delta_x, delta_y;
+	float ray_rad = (float)(ray_angle * M_PI / 180.0);
 
-	curr_x = player_x;
-	curr_y = player_y;
+	next_x = player_x;
+	next_y = player_y;
+	delta_x = (int)(UNIT_SIZE * cos(ray_rad));
+	delta_y = (int)(UNIT_SIZE * sin(ray_rad));
 
-	if(sin_angle > 0)
-		next_y = (int)floor((float)player_y / (float)UNIT_SIZE) * UNIT_SIZE - 1;
-	else
-		next_y = (int)floor((float)player_y / (float)UNIT_SIZE) * UNIT_SIZE + UNIT_SIZE;
-
-	if(ray_angle == 90.0f || ray_angle == 270.0f) {
-		next_x = player_x;
-		delta_x = 0;
-	}
-	
-	else {
-		next_x = (int)((player_y - next_y) / (float)tan(angle_rads) + player_x);
-		delta_x = (int)(UNIT_SIZE / tan(angle_rads));
-	}
-
-	while(!(ret_val = isWall(next_x, next_y))) {
-		curr_x = next_x;
-		curr_y = next_y;
-
+	while(!is_wall(next_x, next_y)) {
 		next_x += delta_x;
-		next_y += UNIT_SIZE;
-	}
-
-	if(ret_val == -1) {
-		intersect_point[0] = -1;
-		intersect_point[1] = -1;
-	}
-
-	else {
-		intersect_point[0] = next_x;
-		intersect_point[1] = next_y;
-	}
-}
-
-void get_vertical_intersection(float ray_angle, int intersect_point[2]) {
-	// Used when getting the tangent
-	float angle_rads = (float)M_PI * ray_angle / 180.0f;
-	float cos_angle = (float)sin(angle_rads);
-	// Use these values to have our ray trace.
-	int curr_x, curr_y;
-	int next_x, next_y;
-	int delta_y;
-	int ret_val;
-
-	curr_x = player_x;
-	curr_y = player_y;
-
-	if(cos_angle > 0)
-		next_x = (int)floor((float)player_x / (float)UNIT_SIZE) * UNIT_SIZE - 1;
-	else
-		next_x = (int)floor((float)player_x / (float)UNIT_SIZE) * UNIT_SIZE + UNIT_SIZE;
-
-	next_y = (int)(player_y + tan(angle_rads) * (player_x - next_x));
-	delta_y = (int)(UNIT_SIZE * tan(angle_rads));
-
-	while(!(ret_val = isWall(next_x, next_y))) {
-		curr_x = next_x;
-		curr_y = next_y;
-
-		next_x += UNIT_SIZE;
 		next_y += delta_y;
 	}
 
-	if(ret_val == -1) {
-		intersect_point[0] = -1;
-		intersect_point[1] = -1;
-	}
-
-	else {
-		intersect_point[0] = next_x;
-		intersect_point[1] = next_y;
-	}
-}
-
-int isValid(int x, int y) {
-	return x != -1 && y != -1;
+	hit[0] = next_x;
+	hit[1] = next_y;
 }
 
 float get_dist(int x1, int y1, int x2, int y2) {
-	int dX = x1 - x2;
-	int dY = y1 - y2;
+	int d_x, d_y;
 
-	dX *= dX;
-	dY *= dY;
+	d_x = x1 - x2;
+	d_y = y1 - y2;
 
-	return (float)sqrt(dX + dY);
+	d_x *= d_x;
+	d_y *= d_y;
+
+	return (float)sqrt(d_x + d_y);
 }
 
 void render(SDL_Renderer* renderer) {
@@ -204,56 +155,36 @@ void render(SDL_Renderer* renderer) {
 	// cornflower blue.
 	SDL_RenderClear(renderer);
 
-	float curr_ray_angle;
-	int h_intersect[2];
-	int v_intersect[2];
-	int wall_x, wall_y;
-	float correct_dist;
-	int slice_height;
-	char wall;
+	float curr_angle = player_rot - FOV_HALF;
+	int hit[2];
+	float dist, correct_dist;
+	int proj_height;
+	int wall;
 
 	int i;
-	// There are PROJ_W number of rays - one for each column of pixels
-	// in the screen.
-	for(i = 0; i < PROJ_W; i++) {
-		curr_ray_angle = player_rot + ray_angles[i];
+	for(i = 0; i < PROJ_W; ++i) {
+		if(curr_angle < 0)
+			curr_angle += 360.0f;
+		if(curr_angle > 360.0f)
+			curr_angle -= 360.0f;
 
-		get_horizontal_intersection(curr_ray_angle, h_intersect);
-		get_vertical_intersection(curr_ray_angle, v_intersect);
+		// TODO: Rewrite this so it's more effecient and accurate.
+		cast_ray(curr_angle, hit);
+		wall = get_map_unit(hit[0], hit[1]);
 
-		if(!isValid(h_intersect[0], h_intersect[1]) && !isValid(v_intersect[0], v_intersect[1]))
-			continue;
+		//hit[0] = hit[0] / UNIT_SIZE * UNIT_SIZE;
+		//hit[1] = hit[1] / UNIT_SIZE * UNIT_SIZE;
 
-		else if(!isValid(h_intersect[0], h_intersect[1]) && isValid(v_intersect[0], v_intersect[1])) {
-			wall_x = v_intersect[0];
-			wall_y = v_intersect[1];
-		}
+		dist = get_dist(hit[0], hit[1], player_x, player_y);
+		//correct_dist = dist;
+		correct_dist = dist * (float)cos((curr_angle - player_rot) * M_PI / 180);
 
-		else if(!isValid(h_intersect[0], h_intersect[1]) && isValid(v_intersect[0], v_intersect[1])) {
-			wall_x = h_intersect[0];
-			wall_y = h_intersect[1];
-		}
-
-		else {
-			if(get_dist(h_intersect[0], h_intersect[1], player_x, player_y) <
-			   get_dist(v_intersect[0], v_intersect[1], player_x, player_y))
-			{
-				wall_x = h_intersect[0];
-				wall_y = h_intersect[1];
-			}
-
-			else {
-				wall_x = h_intersect[0];
-				wall_y = h_intersect[1];
-			}
-		}
-
-		correct_dist = get_dist(wall_x, wall_y, player_x, player_y) * (float)cos(curr_ray_angle * M_PI / 180.0);
-		slice_height = (UNIT_SIZE / correct_dist) * DIST_TO_PROJ;
-		wall = getWall(wall_x, wall_y);
+		proj_height = (int)(UNIT_SIZE / correct_dist * DIST_TO_PROJ);
 
 		SDL_SetRenderDrawColor(renderer, textures[wall][0], textures[wall][1], textures[wall][2], 255);
-		SDL_RenderDrawLine(renderer, i, 100 - slice_height / 2, i, 100 + slice_height / 2);
+		SDL_RenderDrawLine(renderer, i, 100 - (proj_height / 2), i, 100 + (proj_height / 2));
+
+		curr_angle += ANGLE_BETWEEN_RAYS;
 	}
 
 	// Forces the screen to be updated.
