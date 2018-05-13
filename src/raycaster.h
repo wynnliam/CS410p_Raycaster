@@ -1,8 +1,8 @@
-// Liam Wynn, 5/12/2018, CS410p: Full Stack Web Development
+// Liam Wynn, 5/13/2018, CS410p: Full Stack Web Development
 
 /*
-	Contains a series of parameters, constants, and pre-computed values
-	making the raycast efficient.
+	Contains every function, parameter, and so on for performing
+	the raycast algorithm.
 */
 
 // Field of view, in radians. This specifies the angle of what we can
