@@ -11,6 +11,9 @@ int player_rot;
 /*INITIALIZATION PROCEDURES*/
 
 void initialize() {
+	player_x = 640;
+	player_y = 320;
+	player_rot = 30;
 	// Initializes all the angle lookup tables.
 	initialize_lookup_tables();
 }
@@ -18,6 +21,23 @@ void initialize() {
 /*UPDATE PROCEDURES*/
 
 void update() {
+	SDL_Event event;
+	while(SDL_PollEvent(&event)) {
+		if(event.type == SDL_KEYDOWN) {
+			if(event.key.keysym.sym == SDLK_a) {
+				player_rot -= 1;
+			}
+
+			if(event.key.keysym.sym == SDLK_d) {
+				player_rot += 1;
+			}
+		}
+	}
+
+	if(player_rot < 0)
+		player_rot += 360;
+	if(player_rot > 360)
+		player_rot -= 360;
 }
 
 /*RENDERING PROCEDURES*/
