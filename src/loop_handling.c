@@ -172,8 +172,8 @@ void render(SDL_Renderer* renderer) {
 		cast_ray(curr_angle, hit);
 		wall = get_map_unit(hit[0], hit[1]);
 
-		//hit[0] = hit[0] / UNIT_SIZE * UNIT_SIZE;
-		//hit[1] = hit[1] / UNIT_SIZE * UNIT_SIZE;
+		hit[0] = hit[0] / UNIT_SIZE * UNIT_SIZE;
+		hit[1] = hit[1] / UNIT_SIZE * UNIT_SIZE;
 
 		dist = get_dist(hit[0], hit[1], player_x, player_y);
 		//correct_dist = dist;
