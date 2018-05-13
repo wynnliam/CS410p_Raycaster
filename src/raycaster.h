@@ -56,5 +56,36 @@ int tan128table[361];
 */
 void initialize_lookup_tables();
 
+/*
+	Scans through each ray and performs the ray casting algorithm. For each ray,
+	we calculate its angle relative to the player, and use that to quickly
+	find the wall we want to trace for. Then, we can compute the distance to that
+	wall. Once we have that distance, we compute the size of the line we want to render,
+	and then render it!
+
+	ARGUMENTS:
+		renderer - used to draw lines in SDL.
+		player_x, player_y - the position of the player.
+		player_rot - the rotation of the player in degrees.
+
+	PRECONDITIONS:
+		SDL is initialized, and initialize_lookup_tables is called.
+
+	POSTCONDITIONS:
+		A single raycasted scene is rendered.
+		
+*/
 void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_rot);
+
+/*
+	Traces a ray along grid columns to find the first wall it hits. We then return
+	this wall slice that is hit so as to render it.
+
+	ARGUMENTS:
+		ray_angle - the angle of the ray as an integer (in degrees). We use an imprecise
+		value so as to do our lookup's quickly.
+		player_x, player_y - where the ray will originate from.
+		hit_pos - where we store the point where a wall hits.
+*/
+void get_ray_hit(int ray_angle, int player_x, int player_y, int hit_pos[2]);
 #endif

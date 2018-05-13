@@ -48,13 +48,61 @@ void initialize_lookup_tables() {
 	}
 }
 
+void get_ray_hit(int ray_angle, int player_x, int player_y, int hit_pos[2]) {
+	// Stores the position of the ray as it moved
+	// from one grid line to the next.
+	int curr_h_x, curr_h_y;
+	int curr_v_x, curr_v_y;
+	// How much we move from curr_x and curr_y.
+	int delt_h_x, delt_h_y;
+	int delt_v_x, delt_v_y;
+
+	// First, we must deal with bad angles. These angles will break the raycaster, since
+	// it will produce NaN's.
+	if(ray_angle == 360)
+		ray_angle = 0;
+	if(ray_angle == 0 || ray_angle == 90 || ray_angle == 180 || ray_angle == 270)
+		ray_angle += 1;
+
+	// Next, we choose our curr and delta vectors according to the quadrant
+	// our angle is in.
+
+	// The ray is in quadrant 1.
+	if(1 <= ray_angle && ray_angle <= 89) {
+	}
+
+	// The ray is in quadrant 2.
+	else if(91 <= ray_angle && ray_angle <= 179) {
+	}
+
+	// The ray is in quadrant 3.
+	else if(181 <= ray_angle && ray_angle <= 269) {
+	}
+
+	// The ray is in quadrant 4 (271 <= ray_angle && ray_angle <= 359)
+	else {
+	}
+}
+
 void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_rot) {
 	// Stores the precise angle of our current ray.
 	float curr_angle = (float)player_rot - FOV_HALF;
+	// The curr_angle adjusted to be within 0 and 360.
+	float adj_angle;
+	int hit_pos[2];
 
 	int i;
 	for(i = 0; i < PROJ_W; ++i) {
-		//TODO: Trace ray
+		adj_angle = curr_angle;
+
+		if(adj_angle < 0)
+			adj_angle += 360;
+		if(adj_angle > 360)
+			adj_angle -= 360;
+
+		get_ray_hit((int)adj_angle, player_x, player_y, hit_pos);
+
+		// TODO: Draw slice!
 
 		curr_angle += ANGLE_BETWEEN_RAYS;
 	}
