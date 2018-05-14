@@ -141,39 +141,26 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 	}
 
 	// The ray is in quadrant 3.
-	/*else if(181 <= ray_angle && ray_angle <= 269) {
+	else if(181 <= ray_angle && ray_angle <= 269) {
 		hit->quadrant = 3;
-		int alpha = 270 - ray_angle;
+
+		ray_angle -= 180;
+
 		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
-		curr_h_x = player_x - ((curr_h_y - player_y) << 7) / tan128table[alpha];
+		curr_h_x = player_x - (((curr_h_y - player_y) << 7) / tan128table[ray_angle]);
 
 		curr_v_x = ((player_x >> UNIT_POWER) << UNIT_POWER) - 1;
-		curr_v_y = ((tan128table[alpha] * (player_x - curr_v_x)) >> 7) + player_y;
+		curr_v_y = ((tan128table[ray_angle] * (player_x  - curr_v_x)) >> 7) + player_y;
 
-		delt_h_x = (1 << 13) / tan128table[alpha];
 		delt_h_y = UNIT_SIZE;
+		delt_h_x = -(1 << 13) / tan128table[ray_angle];
 
 		delt_v_x = -UNIT_SIZE;
-		delt_v_y = (UNIT_SIZE * tan128table[alpha]) >> 7;
-	}*/
+		delt_v_y = (UNIT_SIZE * tan128table[ray_angle]) >> 7;
+	}
 
 	// The ray is in quadrant 4 (271 <= ray_angle && ray_angle <= 359)
 	/*else if(271 <= ray_angle && ray_angle <= 359) {
-		// Correct for angle.
-		int alpha = 90 - (360 - ray_angle);
-
-		hit->quadrant = 4;
-		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
-		curr_h_x = player_x + (((curr_h_y - player_y) * tan128table[alpha]) >> 7);
-
-		curr_v_x = ((player_x >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
-		curr_v_y = player_y + ((curr_v_x - player_x) << 7) / tan128table[alpha];
-
-		delt_h_x = (tan128table[alpha] << UNIT_POWER) >> 7;
-		delt_h_y = UNIT_SIZE;
-
-		delt_v_x = UNIT_SIZE;
-		delt_v_y = (1 << 13) / tan128table[alpha];
 	}*/
 
 	else {
