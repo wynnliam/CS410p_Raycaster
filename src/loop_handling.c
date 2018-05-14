@@ -27,11 +27,11 @@ void update() {
 	while(SDL_PollEvent(&event)) {
 		if(event.type == SDL_KEYDOWN) {
 			if(event.key.keysym.sym == SDLK_a) {
-				player_rot -= 1;
+				player_rot += 1;
 			}
 
 			if(event.key.keysym.sym == SDLK_d) {
-				player_rot += 1;
+				player_rot -= 1;
 			}
 
 			printf("rot: %d\n", player_rot);

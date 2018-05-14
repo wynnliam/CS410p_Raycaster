@@ -178,11 +178,11 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		return;
 	}
 
-	printf("ray angle: %d | ", ray_angle);
+	/*printf("ray angle: %d | ", ray_angle);
 	printf("ch: %d %d | ", curr_h_x, curr_h_y);
 	printf("dh: %d %d | ", delt_h_x, delt_h_y);
 	printf("cv: %d %d | ", curr_v_x, curr_v_y);
-	printf("dv: %d %d\n", delt_v_x, delt_v_y);
+	printf("dv: %d %d\n", delt_v_x, delt_v_y);*/
 	// Now find the point that is a wall by travelling along horizontal gridlines.
 	tile = get_tile(curr_h_x, curr_h_y);
 	while(tile == 0) {
@@ -221,8 +221,8 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		hit_v[1] = curr_v_y;
 	}
 
-	printf("hit h: {%d, %d}\n", hit_h[0], hit_h[1]);
-	printf("hit v: {%d, %d}\n", hit_v[0], hit_v[1]);
+	//printf("hit h: {%d, %d}\n", hit_h[0], hit_h[1]);
+	//printf("hit v: {%d, %d}\n", hit_v[0], hit_v[1]);
 
 	// Now choose either the horizontal or vertical intersection
 	// point. Or choose -1, -1 to denote an error.
@@ -262,7 +262,7 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		}
 	}
 
-	printf("Final hit: {%d, %d}\n", hit->hit_pos[0], hit->hit_pos[1]);
+	//printf("Final hit: {%d, %d}\n", hit->hit_pos[0], hit->hit_pos[1]);
 
 	hit->dist = get_dist_sqrd(hit->hit_pos[0], hit->hit_pos[1], player_x, player_y);
 	hit->wall_type = get_tile(hit->hit_pos[0], hit->hit_pos[1]);
@@ -282,7 +282,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 	int i;
 
-	printf("player_rot: %d\n", player_rot);
+	//printf("player_rot: %d\n", player_rot);
 
 	for(i = 0; i < PROJ_W; ++i) {
 		adj_angle = curr_angle;
@@ -307,11 +307,11 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 			slice_dist *= cos128table[correct_angle];
 			slice_dist = slice_dist >> 7;
 
-			printf("curr angle %f ", curr_angle);
+			/*printf("curr angle %f ", curr_angle);
 			printf("adj angle: %d ", (int)adj_angle);
 			printf("dist: %d ", slice_dist);
 			printf("wall: %d ", wall);
-			printf("\n");
+			printf("\n");*/
 
 			slice_height = (int)(64.0f / slice_dist * DIST_TO_PROJ);
 
