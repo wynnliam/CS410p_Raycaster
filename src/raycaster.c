@@ -122,21 +122,23 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 	}
 
 	// The ray is in quadrant 2.
-	/*else if(91 <= ray_angle && ray_angle <= 179) {
-		ray_angle = ray_angle - 90;
+	else if(91 <= ray_angle && ray_angle <= 179) {
 		hit->quadrant = 2;
+
+		ray_angle = ray_angle - 90;
+
 		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
-		curr_h_x = player_x + (((player_y - curr_h_y) << 7) / tan128table[ray_angle]);
+		curr_h_x = player_x - ((tan128table[ray_angle] * (player_y - curr_h_y)) >> 7);
 
 		curr_v_x = ((player_x >> UNIT_POWER) << UNIT_POWER) - 1;
-		curr_v_y = player_y + ((tan128table[ray_angle] * (player_x - curr_v_x)) >> 7);
+		curr_v_y = player_y - ((player_x - curr_v_x) << 7) / tan128table[ray_angle];
 
-		delt_h_x = ((1 << 13) / tan128table[ray_angle]);
 		delt_h_y = -UNIT_SIZE;
+		delt_h_x = (UNIT_SIZE * tan128table[ray_angle]) >> 7;
 
 		delt_v_x = -UNIT_SIZE;
-		delt_v_y = (tan128table[ray_angle] << UNIT_POWER) >> 7;
-	}*/
+		delt_v_y = (delt_v_x << 7) / tan128table[ray_angle];
+	}
 
 	// The ray is in quadrant 3.
 	/*else if(181 <= ray_angle && ray_angle <= 269) {
