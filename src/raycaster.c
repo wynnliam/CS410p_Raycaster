@@ -118,11 +118,11 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 
 		delt_v_x = UNIT_SIZE;
 		// Compute -tan(angle) * 64
-		delt_v_y = -((tan128table[ray_angle] >> 7) << 3);
+		delt_v_y = -((tan128table[ray_angle] >> 7) << UNIT_POWER);
 	}
 
 	// The ray is in quadrant 2.
-	else if(91 <= ray_angle && ray_angle <= 179) {
+	/*else if(91 <= ray_angle && ray_angle <= 179) {
 		hit->quadrant = 2;
 		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
 		curr_h_x = player_x + (((player_y - curr_h_y) << 7) / tan128table[ray_angle]);
@@ -130,15 +130,15 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		curr_v_x = ((player_x >> UNIT_POWER) << UNIT_POWER) - 1;
 		curr_v_y = player_y + ((tan128table[ray_angle] * (player_x - curr_v_x)) >> 7);
 
-		delt_h_x = -((1 << 13) / tan128table[ray_angle]);
+		delt_h_x = ((1 << 13) / tan128table[ray_angle]);
 		delt_h_y = -UNIT_SIZE;
 
 		delt_v_x = -UNIT_SIZE;
-		delt_v_y = (tan128table[ray_angle] << 3) >> 7;
-	}
+		delt_v_y = (tan128table[ray_angle] << UNIT_POWER) >> 7;
+	}*/
 
 	// The ray is in quadrant 3.
-	else if(181 <= ray_angle && ray_angle <= 269) {
+	/*else if(181 <= ray_angle && ray_angle <= 269) {
 		hit->quadrant = 3;
 		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
 		curr_h_x = player_x - (((curr_h_y - player_y) * tan128table[ray_angle]) >> 7);
@@ -151,22 +151,25 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 
 		delt_v_x = -UNIT_SIZE;
 		delt_v_y = (1 << 13) / tan128table[ray_angle];
-	}
+	}*/
 
 	// The ray is in quadrant 4 (271 <= ray_angle && ray_angle <= 359)
 	else if(271 <= ray_angle && ray_angle <= 359) {
+		// Correct for angle.
+		int alpha = 90 - (360 - ray_angle);
+
 		hit->quadrant = 4;
 		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
-		curr_h_x = player_x - (((curr_h_y - player_y) * tan128table[ray_angle]) >> 7);
+		curr_h_x = player_x + (((curr_h_y - player_y) * tan128table[alpha]) >> 7);
 
 		curr_v_x = ((player_x >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
-		curr_v_y = player_y - ((curr_v_x - player_x) << 7) / tan128table[ray_angle];
+		curr_v_y = player_y + ((curr_v_x - player_x) << 7) / tan128table[alpha];
 
-		delt_h_x = -((tan128table[ray_angle] << UNIT_POWER) >> 7);
+		delt_h_x = (tan128table[alpha] << UNIT_POWER) >> 7;
 		delt_h_y = UNIT_SIZE;
 
 		delt_v_x = UNIT_SIZE;
-		delt_v_y = -(1 << 13) / tan128table[ray_angle];
+		delt_v_y = (1 << 13) / tan128table[alpha];
 	}
 
 	else {
@@ -175,6 +178,11 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		return;
 	}
 
+	printf("ray angle: %d | ", ray_angle);
+	printf("ch: %d %d | ", curr_h_x, curr_h_y);
+	printf("dh: %d %d | ", delt_h_x, delt_h_y);
+	printf("cv: %d %d | ", curr_v_x, curr_v_y);
+	printf("dv: %d %d\n", delt_v_x, delt_v_y);
 	// Now find the point that is a wall by travelling along horizontal gridlines.
 	tile = get_tile(curr_h_x, curr_h_y);
 	while(tile == 0) {
@@ -212,6 +220,9 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		hit_v[0] = curr_v_x;
 		hit_v[1] = curr_v_y;
 	}
+
+	printf("hit h: {%d, %d}\n", hit_h[0], hit_h[1]);
+	printf("hit v: {%d, %d}\n", hit_v[0], hit_v[1]);
 
 	// Now choose either the horizontal or vertical intersection
 	// point. Or choose -1, -1 to denote an error.
@@ -251,13 +262,15 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		}
 	}
 
+	printf("Final hit: {%d, %d}\n", hit->hit_pos[0], hit->hit_pos[1]);
+
 	hit->dist = get_dist_sqrd(hit->hit_pos[0], hit->hit_pos[1], player_x, player_y);
 	hit->wall_type = get_tile(hit->hit_pos[0], hit->hit_pos[1]);
 }
 
 void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_rot) {
 	// Stores the precise angle of our current ray.
-	float curr_angle = (float)player_rot - FOV_HALF;
+	float curr_angle = (float)player_rot + FOV_HALF;
 	// The curr_angle adjusted to be within 0 and 360.
 	float adj_angle;
 	int correct_angle;
@@ -268,6 +281,9 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 	struct hitinfo hit;
 
 	int i;
+
+	printf("player_rot: %d\n", player_rot);
+
 	for(i = 0; i < PROJ_W; ++i) {
 		adj_angle = curr_angle;
 
@@ -291,13 +307,18 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 			slice_dist *= cos128table[correct_angle];
 			slice_dist = slice_dist >> 7;
 
+			printf("curr angle %f ", curr_angle);
+			printf("adj angle: %d ", (int)adj_angle);
+			printf("dist: %d ", slice_dist);
+			printf("wall: %d ", wall);
+			printf("\n");
+
 			slice_height = (int)(64.0f / slice_dist * DIST_TO_PROJ);
 
 			SDL_SetRenderDrawColor(renderer, textures[wall][0], textures[wall][1], textures[wall][2], 255);
 			SDL_RenderDrawLine(renderer, i, 100 - (slice_height >> 1), i, 100 + (slice_height >> 1));
 		}
 
-
-		curr_angle += ANGLE_BETWEEN_RAYS;
+		curr_angle -= ANGLE_BETWEEN_RAYS;
 	}
 }

@@ -3,6 +3,8 @@
 #include "loop_handling.h"
 #include "raycaster.h"
 
+#include <stdio.h>
+
 // Stores the player 
 int player_x, player_y;
 // The player rotation.
@@ -13,7 +15,7 @@ int player_rot;
 void initialize() {
 	player_x = 640;
 	player_y = 320;
-	player_rot = 30;
+	player_rot = 0;
 	// Initializes all the angle lookup tables.
 	initialize_lookup_tables();
 }
@@ -31,6 +33,8 @@ void update() {
 			if(event.key.keysym.sym == SDLK_d) {
 				player_rot += 1;
 			}
+
+			printf("rot: %d\n", player_rot);
 		}
 	}
 
