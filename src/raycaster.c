@@ -123,37 +123,34 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		delt_v_x = UNIT_SIZE;
 		// Compute -tan(angle) * 64
 		delt_v_y = -((tan128table[ray_angle] << UNIT_POWER) >> 7);
-
-		/*int temp;
-		printf("ray angle: %d\n", ray_angle);
-		printf("tan128table[ray_angle]: %d\n", tan128table[ray_angle]);
-		temp = curr_v_x - player_x;
-		printf("curr_v_x - player_x: %d\n", temp);
-		temp *= tan128table[ray_angle];
-		printf("above * tan128table[ray_angle: %d\n", temp);
-		temp = temp >> 7;
-		printf("above / 128: %d\n", temp);
-		printf("curr_v_y: %d\n", player_y - temp);*/
 	}
 
 	// The ray is in quadrant 2.
-	/*else if(91 <= ray_angle && ray_angle <= 179) {
+	else if(91 <= ray_angle && ray_angle <= 179) {
 		hit->quadrant = 2;
 
+		// Adjusts the angle so its between 1 and 89.
 		ray_angle = ray_angle - 90;
 
+		// Compute floor(player_y / 64) * 64 - 1.
 		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
+		// Computes player_x - (player_y * curr_h_y) * tan(ray_angle).
 		curr_h_x = player_x - ((tan128table[ray_angle] * (player_y - curr_h_y)) >> 7);
 
+		// Compute floor(player_x / 64) * 64 - 1.
 		curr_v_x = ((player_x >> UNIT_POWER) << UNIT_POWER) - 1;
+		// Compute player_y - (player_x - curr_v_x) / tan(ray_angle).
 		curr_v_y = player_y - ((player_x - curr_v_x) << 7) / tan128table[ray_angle];
 
+		// -64, since we are travelling in the negative y direction.
 		delt_h_y = -UNIT_SIZE;
-		delt_h_x = (UNIT_SIZE * tan128table[ray_angle]) >> 7;
+		// -64 * tan(ray_angle), since we are travelling in the negative x direction.
+		delt_h_x = -((UNIT_SIZE * tan128table[ray_angle]) >> 7);
 
+		
 		delt_v_x = -UNIT_SIZE;
-		delt_v_y = (delt_v_x << 7) / tan128table[ray_angle];
-	}*/
+		delt_v_y = -((1 << 13) / tan128table[ray_angle]);
+	}
 
 	// The ray is in quadrant 3.
 	/*else if(181 <= ray_angle && ray_angle <= 269) {
