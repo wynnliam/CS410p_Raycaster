@@ -35,14 +35,61 @@ void initialize_lookup_tables() {
 
 		// In the raycaster, these values cause problems since you get NaN for
 		// some computations.
-		if(deg == 0 || deg == 90 || deg == 180 || deg == 270 || deg == 360)
+		if(deg == 0 || deg == 90 || deg == 180 || deg == 270 || deg == 360) {
 			curr_tan = -1;
+
+			delta_h_x[deg] = 0;
+			delta_h_y[deg] = 0;
+			delta_v_x[deg] = 0;
+			delta_v_y[deg] = 0;
+		}
+
 		else
 			curr_tan = (float)round(tan(curr_angle) * 128);
 
 		sin128table[deg] = (int)curr_sin;
 		cos128table[deg] = (int)curr_cos;
 		tan128table[deg] = (int)curr_tan;
+
+		if(1 <= deg && deg <= 89) {
+			// 64 / tan(ray_angle). We must account for the 128.
+			delta_h_x[deg] = (1 << 13) / tan128table[deg];
+			delta_h_y[deg]= -UNIT_SIZE;
+
+			delta_v_x[deg] = UNIT_SIZE;
+			// Compute -tan(angle) * 64
+			delta_v_y[deg] = -((tan128table[deg] << UNIT_POWER) >> 7);
+		}
+
+		else if(91 <= deg && deg <= 179) {
+			// -64, since we are travelling in the negative y direction.
+			delta_h_y[deg] = -UNIT_SIZE;
+			// Computes -64 / tan(deg). Negative since we're
+			// travelling in the negative y direction.
+			delta_h_x[deg] = (tan128table[deg - 90] * -UNIT_SIZE) >> 7;
+
+			delta_v_x[deg] = -UNIT_SIZE;
+			delta_v_y[deg] = -((1 << 13) / tan128table[deg - 90]);
+		}
+
+		else if(181 <= deg && deg <= 269) {
+			delta_h_y[deg] = UNIT_SIZE;
+			delta_h_x[deg]  = -(1 << 13) / tan128table[deg - 180];
+
+			delta_v_x[deg] = -UNIT_SIZE;
+			// Computes 64 * tan(ray_angle).
+			delta_v_y[deg]  = (UNIT_SIZE * tan128table[deg - 180]) >> 7;
+		}
+
+		else {
+			delta_h_y[deg] = UNIT_SIZE;
+			// Computes 64 * tan(ray_angle)
+			delta_h_x[deg] = (UNIT_SIZE * tan128table[deg - 270]) >> 7;
+
+			delta_v_x[deg] = UNIT_SIZE;
+			// Computes 64 / tan(ray_angle)
+			delta_v_y[deg] = (1 << 13) / tan128table[deg - 270];
+		}
 
 		//printf("deg %d. Sin: %d, Cos: %d, tan: %d\n", deg, sin128table[deg], cos128table[deg], tan128table[deg]);
 	}
@@ -112,13 +159,10 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		// Get the tan(curr_v_x - player_x) and subtract that from player_y.
 		curr_v_y = player_y - (((curr_v_x - player_x) * tan128table[ray_angle]) >> 7);
 
-		// 64 / tan(ray_angle). We must account for the 128.
-		delt_h_x = (1 << 13) / tan128table[ray_angle];
-		delt_h_y = -UNIT_SIZE;
-
-		delt_v_x = UNIT_SIZE;
-		// Compute -tan(angle) * 64
-		delt_v_y = -((tan128table[ray_angle] << UNIT_POWER) >> 7);
+		delt_h_x = delta_h_x[ray_angle];
+		delt_h_y = delta_h_y[ray_angle];
+		delt_v_x = delta_v_x[ray_angle];
+		delt_v_y = delta_v_y[ray_angle];
 	}
 
 	// The ray is in quadrant 2.
@@ -138,15 +182,11 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		// Compute player_y - (player_x - curr_v_x) / tan(ray_angle).
 		curr_v_y = player_y - ((player_x - curr_v_x) << 7) / tan128table[ray_angle];
 
-		// -64, since we are travelling in the negative y direction.
-		delt_h_y = -UNIT_SIZE;
-		// -64 * tan(ray_angle), since we are travelling in the negative x direction.
-		delt_h_x = -((UNIT_SIZE * tan128table[ray_angle]) >> 7);
-
-		
-		delt_v_x = -UNIT_SIZE;
-		// Computes -64 / tan(ray_angle)
-		delt_v_y = -((1 << 13) / tan128table[ray_angle]);
+		ray_angle = ray_angle + 90;
+		delt_h_x = delta_h_x[ray_angle];
+		delt_h_y = delta_h_y[ray_angle];
+		delt_v_x = delta_v_x[ray_angle];
+		delt_v_y = delta_v_y[ray_angle];
 	}
 
 	// The ray is in quadrant 3.
@@ -166,12 +206,11 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		// Computes tan(ray_angle) * (player_x - curr_v_x) + player_y.
 		curr_v_y = ((tan128table[ray_angle] * (player_x  - curr_v_x)) >> 7) + player_y;
 
-		delt_h_y = UNIT_SIZE;
-		delt_h_x = -(1 << 13) / tan128table[ray_angle];
-
-		delt_v_x = -UNIT_SIZE;
-		// Computes 64 * tan(ray_angle).
-		delt_v_y = (UNIT_SIZE * tan128table[ray_angle]) >> 7;
+		ray_angle = ray_angle + 180;
+		delt_h_x = delta_h_x[ray_angle];
+		delt_h_y = delta_h_y[ray_angle];
+		delt_v_x = delta_v_x[ray_angle];
+		delt_v_y = delta_v_y[ray_angle];
 	}
 
 	// The ray is in quadrant 4 (271 <= ray_angle && ray_angle <= 359)
@@ -191,13 +230,11 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		// Computes (curr_v_x - player_x) / tan(ray_angle) + player_y.
 		curr_v_y = ((curr_v_x - player_x) << 7) / tan128table[ray_angle] + player_y;
 
-		delt_h_y = UNIT_SIZE;
-		// Computes 64 * tan(ray_angle)
-		delt_h_x = (UNIT_SIZE * tan128table[ray_angle]) >> 7;
-
-		delt_v_x = UNIT_SIZE;
-		// Computes 64 / tan(ray_angle)
-		delt_v_y = (1 << 13) / tan128table[ray_angle];
+		ray_angle = ray_angle + 270;
+		delt_h_x = delta_h_x[ray_angle];
+		delt_h_y = delta_h_y[ray_angle];
+		delt_v_x = delta_v_x[ray_angle];
+		delt_v_y = delta_v_y[ray_angle];
 	}
 
 	else {
@@ -331,11 +368,11 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
 			wall = hit.wall_type;
+			slice_dist = (int)(sqrt(hit.dist) * cos128table[correct_angle]) >> 7;
 			//slice_dist = (int)sqrt(hit.dist) + 1;
 
 			//slice_dist *= cos128table[correct_angle];
 			//slice_dist = slice_dist >> 7;
-			slice_dist = (int)(sqrt(hit.dist) * cos128table[correct_angle]) >> 7;
 
 			//printf("curr angle %f ", curr_angle);
 			//printf("adj angle: %d ", (int)adj_angle);
