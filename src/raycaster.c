@@ -159,10 +159,6 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		// Get the tan(curr_v_x - player_x) and subtract that from player_y.
 		curr_v_y = player_y - (((curr_v_x - player_x) * tan128table[ray_angle]) >> 7);
 
-		delt_h_x = delta_h_x[ray_angle];
-		delt_h_y = delta_h_y[ray_angle];
-		delt_v_x = delta_v_x[ray_angle];
-		delt_v_y = delta_v_y[ray_angle];
 	}
 
 	// The ray is in quadrant 2.
@@ -182,11 +178,8 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		// Compute player_y - (player_x - curr_v_x) / tan(ray_angle).
 		curr_v_y = player_y - ((player_x - curr_v_x) << 7) / tan128table[ray_angle];
 
+		// Update the angle so we can access the proper delta values
 		ray_angle = ray_angle + 90;
-		delt_h_x = delta_h_x[ray_angle];
-		delt_h_y = delta_h_y[ray_angle];
-		delt_v_x = delta_v_x[ray_angle];
-		delt_v_y = delta_v_y[ray_angle];
 	}
 
 	// The ray is in quadrant 3.
@@ -207,10 +200,6 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		curr_v_y = ((tan128table[ray_angle] * (player_x  - curr_v_x)) >> 7) + player_y;
 
 		ray_angle = ray_angle + 180;
-		delt_h_x = delta_h_x[ray_angle];
-		delt_h_y = delta_h_y[ray_angle];
-		delt_v_x = delta_v_x[ray_angle];
-		delt_v_y = delta_v_y[ray_angle];
 	}
 
 	// The ray is in quadrant 4 (271 <= ray_angle && ray_angle <= 359)
@@ -231,10 +220,6 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		curr_v_y = ((curr_v_x - player_x) << 7) / tan128table[ray_angle] + player_y;
 
 		ray_angle = ray_angle + 270;
-		delt_h_x = delta_h_x[ray_angle];
-		delt_h_y = delta_h_y[ray_angle];
-		delt_v_x = delta_v_x[ray_angle];
-		delt_v_y = delta_v_y[ray_angle];
 	}
 
 	else {
@@ -242,6 +227,11 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		hit->hit_pos[1] = -1;
 		return;
 	}
+
+	delt_h_x = delta_h_x[ray_angle];
+	delt_h_y = delta_h_y[ray_angle];
+	delt_v_x = delta_v_x[ray_angle];
+	delt_v_y = delta_v_y[ray_angle];
 
 	//printf("ray angle: %d | ", ray_angle);
 	//printf("ch: %d %d | ", curr_h_x, curr_h_y);
@@ -310,6 +300,7 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 	}
 
 	else {
+		// TODO: Calculate distance more effeciently
 		h_dist = get_dist_sqrd(hit_h[0], hit_h[1], player_x, player_y);
 		v_dist = get_dist_sqrd(hit_v[0], hit_v[1], player_x, player_y);
 
