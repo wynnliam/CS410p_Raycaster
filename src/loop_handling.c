@@ -33,8 +33,6 @@ void update() {
 			if(event.key.keysym.sym == SDLK_d) {
 				player_rot -= 1;
 			}
-
-			printf("rot: %d\n", player_rot);
 		}
 	}
 

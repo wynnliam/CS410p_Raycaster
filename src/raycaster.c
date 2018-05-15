@@ -40,10 +40,6 @@ void initialize_lookup_tables() {
 		else
 			curr_tan = (float)round(tan(curr_angle) * 128);
 
-		sin_table[deg] = curr_sin / 128.0f;
-		cos_table[deg] = curr_cos / 128.0f;
-		tan_table[deg] = curr_tan / 128.0f;
-
 		sin128table[deg] = (int)curr_sin;
 		cos128table[deg] = (int)curr_cos;
 		tan128table[deg] = (int)curr_tan;
@@ -339,7 +335,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 			//slice_dist *= cos128table[correct_angle];
 			//slice_dist = slice_dist >> 7;
-			slice_dist = (int)(sqrt(hit.dist) * cos_table[correct_angle]);
+			slice_dist = (int)(sqrt(hit.dist) * cos128table[correct_angle]) >> 7;
 
 			//printf("curr angle %f ", curr_angle);
 			//printf("adj angle: %d ", (int)adj_angle);
