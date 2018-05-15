@@ -129,6 +129,10 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 	int delt_h_x, delt_h_y;
 	int delt_v_x, delt_v_y;
 
+	// Stores the ray angle adjusted for its quadrant. We use this angle to compute
+	// the curr_h and curr_v values.
+	int alpha;
+
 	int hit_h[2];
 	int hit_v[2];
 	int h_dist;
@@ -148,16 +152,18 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 	// The ray is in quadrant 1.
 	if(1 <= ray_angle && ray_angle <= 89) {
 		hit->quadrant = 1;
+		alpha = ray_angle;
+
 		// Divide player_y by 64, floor that, multiply by 64, and then subtract 1.
 		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
 		// Multiply player_y and curr_h_y by 128, then divide by the tan * 128. This will
 		// undo the the 128 multiplication without having a divide by 0 (For example, tan128table[1]).
-		curr_h_x = (((player_y - curr_h_y) << 7) / tan128table[ray_angle]) + player_x;
+		curr_h_x = (((player_y - curr_h_y) << 7) / tan128table[alpha]) + player_x;
 
 		// Divide player_x by 64, floor the result, multiply by 64 and add 64.
 		curr_v_x = ((player_x >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
 		// Get the tan(curr_v_x - player_x) and subtract that from player_y.
-		curr_v_y = player_y - (((curr_v_x - player_x) * tan128table[ray_angle]) >> 7);
+		curr_v_y = player_y - (((curr_v_x - player_x) * tan128table[alpha]) >> 7);
 
 	}
 
@@ -166,20 +172,17 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		hit->quadrant = 2;
 
 		// Adjusts the angle so its between 1 and 89.
-		ray_angle = ray_angle - 90;
+		alpha = ray_angle - 90;
 
 		// Compute floor(player_y / 64) * 64 - 1.
 		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
 		// Computes player_x - (player_y * curr_h_y) * tan(ray_angle).
-		curr_h_x = player_x - ((tan128table[ray_angle] * (player_y - curr_h_y)) >> 7);
+		curr_h_x = player_x - ((tan128table[alpha] * (player_y - curr_h_y)) >> 7);
 
 		// Compute floor(player_x / 64) * 64 - 1.
 		curr_v_x = ((player_x >> UNIT_POWER) << UNIT_POWER) - 1;
 		// Compute player_y - (player_x - curr_v_x) / tan(ray_angle).
-		curr_v_y = player_y - ((player_x - curr_v_x) << 7) / tan128table[ray_angle];
-
-		// Update the angle so we can access the proper delta values
-		ray_angle = ray_angle + 90;
+		curr_v_y = player_y - ((player_x - curr_v_x) << 7) / tan128table[alpha];
 	}
 
 	// The ray is in quadrant 3.
@@ -187,19 +190,17 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		hit->quadrant = 3;
 
 		// Adjusts the angle so its between 1 and 89.
-		ray_angle = ray_angle - 180;
+		alpha = ray_angle - 180;
 
 		// Computes floor(player_y / 64) * 64 + 64.
 		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
 		// Computes player_x - (curr_h_y - player_y / tan(ray_angle).
-		curr_h_x = player_x - (((curr_h_y - player_y) << 7) / tan128table[ray_angle]);
+		curr_h_x = player_x - (((curr_h_y - player_y) << 7) / tan128table[alpha]);
 
 		// Computes floor(player x / 64) * 64 - 1.
 		curr_v_x = ((player_x >> UNIT_POWER) << UNIT_POWER) - 1;
 		// Computes tan(ray_angle) * (player_x - curr_v_x) + player_y.
-		curr_v_y = ((tan128table[ray_angle] * (player_x  - curr_v_x)) >> 7) + player_y;
-
-		ray_angle = ray_angle + 180;
+		curr_v_y = ((tan128table[alpha] * (player_x  - curr_v_x)) >> 7) + player_y;
 	}
 
 	// The ray is in quadrant 4 (271 <= ray_angle && ray_angle <= 359)
@@ -207,19 +208,17 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		hit->quadrant = 4;
 
 		// Adjusts the angle so its between 1 and 89.
-		ray_angle = ray_angle - 270;
+		alpha = ray_angle - 270;
 
 		// Computes floor(player_y / 64) * 64 + 64
 		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
 		// Computes (curr_h_y - player_y) * tan(ray_angle) + player_x
-		curr_h_x = (((curr_h_y - player_y) * tan128table[ray_angle]) >> 7) + player_x;
+		curr_h_x = (((curr_h_y - player_y) * tan128table[alpha]) >> 7) + player_x;
 
 		// Computes floor(player_x / 64) * 64 + 64
 		curr_v_x = ((player_x >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
 		// Computes (curr_v_x - player_x) / tan(ray_angle) + player_y.
-		curr_v_y = ((curr_v_x - player_x) << 7) / tan128table[ray_angle] + player_y;
-
-		ray_angle = ray_angle + 270;
+		curr_v_y = ((curr_v_x - player_x) << 7) / tan128table[alpha] + player_y;
 	}
 
 	else {
@@ -282,6 +281,7 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 
 	// Now choose either the horizontal or vertical intersection
 	// point. Or choose -1, -1 to denote an error.
+	// TODO: Figure these angles out.
 	if(hit_h[0] == -1 && hit_h[1] == -1 && hit_v[0] == -1 && hit_v[1] == -1) {
 		hit->hit_pos[0] = -1;
 		hit->hit_pos[1] = -1;
@@ -291,37 +291,62 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		hit->hit_pos[0] = hit_v[0];
 		hit->hit_pos[1] = hit_v[1];
 		hit->is_horiz = 0;
+
+		if(hit->quadrant == 1 || hit->quadrant == 3)
+			hit->dist = (abs(player_y - hit_v[1]) << 7) / sin128table[alpha];
+		else
+			hit->dist = (abs(player_x - hit_v[0]) << 7 ) / sin128table[alpha];
 	}
 
 	else if(hit_v[0] == -1 && hit_v[1] == -1) {
 		hit->hit_pos[0] = hit_h[0];
 		hit->hit_pos[1] = hit_h[1];
 		hit->is_horiz = 1;
+
+		if(hit->quadrant == 1 || hit->quadrant == 3)
+			hit->dist = (abs(player_y - hit_h[1]) << 7) / sin128table[alpha];
+		else
+			hit->dist = (abs(player_x - hit_h[0]) << 7 ) / sin128table[alpha];
 	}
 
 	else {
-		// TODO: Calculate distance more effeciently
-		h_dist = get_dist_sqrd(hit_h[0], hit_h[1], player_x, player_y);
-		v_dist = get_dist_sqrd(hit_v[0], hit_v[1], player_x, player_y);
+		//printf("quadrant for %d is %d\n", ray_angle, hit->quadrant);
+
+		// Compute dist = abs(player_x - hit_x) / cos(alpha).
+		if(hit->quadrant == 1 || hit->quadrant == 3) {
+			h_dist = (abs(player_y - hit_h[1]) << 7) / sin128table[alpha];
+			v_dist = (abs(player_y - hit_v[1]) << 7) / sin128table[alpha];
+		}
+
+		// Compute dist = abs(player_y - hit_y) / cos(alpha).
+		else {
+			h_dist = (abs(player_x - hit_h[0]) << 7 ) / sin128table[alpha];
+			v_dist = (abs(player_x - hit_v[0]) << 7 ) / sin128table[alpha];
+
+			//printf("h_dist, v_dist: %d, %d\n", h_dist, v_dist);
+
+			//h_dist = get_dist_sqrd(hit_h[0], hit_h[1], player_x, player_y);
+			//v_dist = get_dist_sqrd(hit_v[0], hit_v[1], player_x, player_y);
+		}
 
 		if(h_dist < v_dist) {
 			hit->hit_pos[0] = hit_h[0];
 			hit->hit_pos[1] = hit_h[1];
-
+			hit->dist = h_dist;
 			hit->is_horiz = 1;
 		}
 
 		else {
 			hit->hit_pos[0] = hit_v[0];
 			hit->hit_pos[1] = hit_v[1];
-
+			hit->dist = v_dist;
 			hit->is_horiz = 0;
 		}
 	}
 
 	//printf("Final hit: {%d, %d}\n", hit->hit_pos[0], hit->hit_pos[1]);
+	//printf("sin128table[%d] = %d\n", alpha, sin128table[alpha]);
 
-	hit->dist = get_dist_sqrd(hit->hit_pos[0], hit->hit_pos[1], player_x, player_y);
 	hit->wall_type = get_tile(hit->hit_pos[0], hit->hit_pos[1]);
 }
 
@@ -339,7 +364,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 	int i;
 
-	////printf("player_rot: %d\n", player_rot);
+	//printf("player_rot: %d\n", player_rot);
 
 	for(i = 0; i < PROJ_W; ++i) {
 		adj_angle = curr_angle;
@@ -349,17 +374,21 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 		if(adj_angle > 360)
 			adj_angle -= 360;
 
-		correct_angle = (int)adj_angle - player_rot;
-		if(correct_angle < 0)
-			correct_angle += 360;
-		if(correct_angle > 360)
-			correct_angle -= 360;
+		correct_angle = abs((int)adj_angle - player_rot);
 
 		get_ray_hit((int)adj_angle, player_x, player_y, &hit);
 
 		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
 			wall = hit.wall_type;
-			slice_dist = (int)(sqrt(hit.dist) * cos128table[correct_angle]) >> 7;
+			slice_dist = (hit.dist * cos128table[correct_angle]) >> 7;
+
+			//printf("curr_angle: %f | ", curr_angle);
+			//printf("correct angle: %d | ", correct_angle);
+			//printf("true dist: %lf | ", sqrt(get_dist_sqrd(hit.hit_pos[0], hit.hit_pos[1], player_x, player_y)));
+			//printf("approx dist: %d | ", hit.dist);
+			//printf("approx correct dist: %d | ", slice_dist);
+			//printf("true correct dist: %lf\n", hit.dist * cos(correct_angle * M_PI / 180.0));
+
 			//slice_dist = (int)sqrt(hit.dist) + 1;
 
 			//slice_dist *= cos128table[correct_angle];
