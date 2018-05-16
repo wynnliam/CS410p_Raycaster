@@ -47,11 +47,21 @@ void update() {
 			if(event.key.keysym.sym == SDLK_w) {
 				player_y -= (sin128table[player_rot] << 2) >> 7;
 				player_x += (cos128table[player_rot] << 2) >> 7;
+
+				if(get_tile(player_x, player_y) != 0) {
+					player_y += (sin128table[player_rot] << 2) >> 7;
+					player_x -= (cos128table[player_rot] << 2) >> 7;
+				}
 			}
 
 			if(event.key.keysym.sym == SDLK_s) {
 				player_y += (sin128table[player_rot] << 2) >> 7;
 				player_x -= (cos128table[player_rot] << 2) >> 7;
+
+				if(get_tile(player_x, player_y) != 0) {
+					player_y -= (sin128table[player_rot] << 2) >> 7;
+					player_x += (cos128table[player_rot] << 2) >> 7;
+				}
 			}
 		}
 	}

@@ -84,6 +84,8 @@ int delta_v_y[361];
 */
 void initialize_lookup_tables();
 
+int get_tile(int x, int y);
+
 /*
 	Scans through each ray and performs the ray casting algorithm. For each ray,
 	we calculate its angle relative to the player, and use that to quickly
