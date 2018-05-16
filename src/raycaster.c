@@ -350,54 +350,39 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 
 void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_rot) {
 	// Stores the precise angle of our current ray.
-	float curr_angle = (float)player_rot + FOV_HALF;
+	float curr_angle = (float)(player_rot + FOV_HALF);
 	// The curr_angle adjusted to be within 0 and 360.
-	float adj_angle;
+	int adj_angle;
+	// The angle used to compute the "corrected" distance so
+	// we avoid the fisheye effect.
 	int correct_angle;
+	// Distance from player to the wall, adjusted by the correct_angle.
 	int slice_dist;
+	// Height of the line to render.
 	int slice_height;
+	// The type of wall we hit.
 	int wall;
 
+	// Returns info about the hit.
 	struct hitinfo hit;
 
 	int i;
-
-	//printf("player_rot: %d\n", player_rot);
-
 	for(i = 0; i < PROJ_W; ++i) {
-		adj_angle = curr_angle;
+		adj_angle = (int)curr_angle;
 
 		if(adj_angle < 0)
 			adj_angle += 360;
 		if(adj_angle > 360)
 			adj_angle -= 360;
 
-		correct_angle = abs((int)adj_angle - player_rot);
+		correct_angle = abs(adj_angle - player_rot);
 
-		get_ray_hit((int)adj_angle, player_x, player_y, &hit);
+		get_ray_hit(adj_angle, player_x, player_y, &hit);
 
 		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
 			wall = hit.wall_type;
+
 			slice_dist = (hit.dist * cos128table[correct_angle]) >> 7;
-
-			//printf("curr_angle: %f | ", curr_angle);
-			//printf("correct angle: %d | ", correct_angle);
-			//printf("true dist: %lf | ", sqrt(get_dist_sqrd(hit.hit_pos[0], hit.hit_pos[1], player_x, player_y)));
-			//printf("approx dist: %d | ", hit.dist);
-			//printf("approx correct dist: %d | ", slice_dist);
-			//printf("true correct dist: %lf\n", hit.dist * cos(correct_angle * M_PI / 180.0));
-
-			//slice_dist = (int)sqrt(hit.dist) + 1;
-
-			//slice_dist *= cos128table[correct_angle];
-			//slice_dist = slice_dist >> 7;
-
-			//printf("curr angle %f ", curr_angle);
-			//printf("adj angle: %d ", (int)adj_angle);
-			//printf("dist: %d ", slice_dist);
-			//printf("wall: %d ", wall);
-			//printf("\n");
-
 			slice_height = (int)(64.0f / slice_dist * DIST_TO_PROJ);
 
 			SDL_SetRenderDrawColor(renderer, textures[wall][0], textures[wall][1], textures[wall][2], 255);
