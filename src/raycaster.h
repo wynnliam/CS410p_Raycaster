@@ -56,6 +56,9 @@ int cos128table[361];
 // Stores every tan value of every degree from 0 to 360 multiplied by 128.
 // The values for 0, 90, 180, 270, and 360 will be -1.
 int tan128table[361];
+// Stores the value of 1/tan(t) * 128 for every degree between 0 and 360.
+// The values for 0, 90, 180, 270, and 360 will be -1.
+int tan1table[361];
 
 // Stores the delta values for horizontal and vertical increments for each
 // angle.

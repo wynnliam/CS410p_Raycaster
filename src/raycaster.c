@@ -38,14 +38,18 @@ void initialize_lookup_tables() {
 		if(deg == 0 || deg == 90 || deg == 180 || deg == 270 || deg == 360) {
 			curr_tan = -1;
 
+			tan1table[deg] = -1;
 			delta_h_x[deg] = 0;
 			delta_h_y[deg] = 0;
 			delta_v_x[deg] = 0;
 			delta_v_y[deg] = 0;
 		}
 
-		else
+		else {
 			curr_tan = (float)round(tan(curr_angle) * 128);
+
+			tan1table[deg] = (int)round(128.0 / tan(curr_angle));
+		}
 
 		sin128table[deg] = (int)curr_sin;
 		cos128table[deg] = (int)curr_cos;
@@ -158,7 +162,7 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
 		// Multiply player_y and curr_h_y by 128, then divide by the tan * 128. This will
 		// undo the the 128 multiplication without having a divide by 0 (For example, tan128table[1]).
-		curr_h_x = (((player_y - curr_h_y) << 7) / tan128table[alpha]) + player_x;
+		curr_h_x = (((player_y - curr_h_y) * tan1table[alpha]) >> 7) + player_x;
 
 		// Divide player_x by 64, floor the result, multiply by 64 and add 64.
 		curr_v_x = ((player_x >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
@@ -182,7 +186,7 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		// Compute floor(player_x / 64) * 64 - 1.
 		curr_v_x = ((player_x >> UNIT_POWER) << UNIT_POWER) - 1;
 		// Compute player_y - (player_x - curr_v_x) / tan(ray_angle).
-		curr_v_y = player_y - ((player_x - curr_v_x) << 7) / tan128table[alpha];
+		curr_v_y = player_y - (((player_x - curr_v_x) * tan1table[alpha]) >> 7);
 	}
 
 	// The ray is in quadrant 3.
@@ -195,7 +199,7 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		// Computes floor(player_y / 64) * 64 + 64.
 		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
 		// Computes player_x - (curr_h_y - player_y / tan(ray_angle).
-		curr_h_x = player_x - (((curr_h_y - player_y) << 7) / tan128table[alpha]);
+		curr_h_x = player_x - (((curr_h_y - player_y) * tan1table[alpha]) >> 7);
 
 		// Computes floor(player x / 64) * 64 - 1.
 		curr_v_x = ((player_x >> UNIT_POWER) << UNIT_POWER) - 1;
@@ -218,7 +222,8 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		// Computes floor(player_x / 64) * 64 + 64
 		curr_v_x = ((player_x >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
 		// Computes (curr_v_x - player_x) / tan(ray_angle) + player_y.
-		curr_v_y = ((curr_v_x - player_x) << 7) / tan128table[alpha] + player_y;
+		//curr_v_y = ((curr_v_x - player_x) << 7) / tan128table[alpha] + player_y;
+		curr_v_y = (((curr_v_x - player_x) * tan1table[alpha]) >> 7) + player_y;
 	}
 
 	else {
@@ -281,7 +286,6 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 
 	// Now choose either the horizontal or vertical intersection
 	// point. Or choose -1, -1 to denote an error.
-	// TODO: Figure these angles out.
 	if(hit_h[0] == -1 && hit_h[1] == -1 && hit_v[0] == -1 && hit_v[1] == -1) {
 		hit->hit_pos[0] = -1;
 		hit->hit_pos[1] = -1;
