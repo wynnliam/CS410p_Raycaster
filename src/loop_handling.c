@@ -28,18 +28,34 @@ void update() {
 		if(event.type == SDL_KEYDOWN) {
 			if(event.key.keysym.sym == SDLK_a) {
 				player_rot += 1;
+
+				if(player_rot < 0)
+					player_rot += 360;
+				if(player_rot > 360)
+					player_rot -= 360;
 			}
 
 			if(event.key.keysym.sym == SDLK_d) {
 				player_rot -= 1;
+
+				if(player_rot < 0)
+					player_rot += 360;
+				if(player_rot > 360)
+					player_rot -= 360;
+			}
+
+			if(event.key.keysym.sym == SDLK_w) {
+				player_y -= (sin128table[player_rot] << 2) >> 7;
+				player_x += (cos128table[player_rot] << 2) >> 7;
+			}
+
+			if(event.key.keysym.sym == SDLK_s) {
+				player_y += (sin128table[player_rot] << 2) >> 7;
+				player_x -= (cos128table[player_rot] << 2) >> 7;
 			}
 		}
 	}
 
-	if(player_rot < 0)
-		player_rot += 360;
-	if(player_rot > 360)
-		player_rot -= 360;
 }
 
 /*RENDERING PROCEDURES*/
