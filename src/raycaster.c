@@ -55,6 +55,8 @@ void initialize_lookup_tables() {
 		cos128table[deg] = (int)curr_cos;
 		tan128table[deg] = (int)curr_tan;
 
+		sin1table[deg] = (int)(round(128.0 / sin(curr_angle)));
+
 		if(1 <= deg && deg <= 89) {
 			// 64 / tan(ray_angle). We must account for the 128.
 			delta_h_x[deg] = (1 << 13) / tan128table[deg];
@@ -222,7 +224,6 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		// Computes floor(player_x / 64) * 64 + 64
 		curr_v_x = ((player_x >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
 		// Computes (curr_v_x - player_x) / tan(ray_angle) + player_y.
-		//curr_v_y = ((curr_v_x - player_x) << 7) / tan128table[alpha] + player_y;
 		curr_v_y = (((curr_v_x - player_x) * tan1table[alpha]) >> 7) + player_y;
 	}
 
@@ -297,9 +298,9 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		hit->is_horiz = 0;
 
 		if(hit->quadrant == 1 || hit->quadrant == 3)
-			hit->dist = (abs(player_y - hit_v[1]) << 7) / sin128table[alpha];
+			hit->dist = (abs(player_y - hit_v[1]) * sin1table[alpha]) >> 7;
 		else
-			hit->dist = (abs(player_x - hit_v[0]) << 7 ) / sin128table[alpha];
+			hit->dist = (abs(player_x - hit_v[0]) * sin1table[alpha]) >> 7;
 	}
 
 	else if(hit_v[0] == -1 && hit_v[1] == -1) {
@@ -308,29 +309,22 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		hit->is_horiz = 1;
 
 		if(hit->quadrant == 1 || hit->quadrant == 3)
-			hit->dist = (abs(player_y - hit_h[1]) << 7) / sin128table[alpha];
+			hit->dist = (abs(player_y - hit_h[1]) * sin1table[alpha]) >> 7;
 		else
-			hit->dist = (abs(player_x - hit_h[0]) << 7 ) / sin128table[alpha];
+			hit->dist = (abs(player_x - hit_h[0]) * sin1table[alpha]) >> 7;
 	}
 
 	else {
-		//printf("quadrant for %d is %d\n", ray_angle, hit->quadrant);
-
 		// Compute dist = abs(player_x - hit_x) / cos(alpha).
 		if(hit->quadrant == 1 || hit->quadrant == 3) {
-			h_dist = (abs(player_y - hit_h[1]) << 7) / sin128table[alpha];
-			v_dist = (abs(player_y - hit_v[1]) << 7) / sin128table[alpha];
+			h_dist = (abs(player_y - hit_h[1]) * sin1table[alpha]) >> 7;
+			v_dist = (abs(player_y - hit_v[1]) * sin1table[alpha]) >> 7;
 		}
 
 		// Compute dist = abs(player_y - hit_y) / cos(alpha).
 		else {
-			h_dist = (abs(player_x - hit_h[0]) << 7 ) / sin128table[alpha];
-			v_dist = (abs(player_x - hit_v[0]) << 7 ) / sin128table[alpha];
-
-			//printf("h_dist, v_dist: %d, %d\n", h_dist, v_dist);
-
-			//h_dist = get_dist_sqrd(hit_h[0], hit_h[1], player_x, player_y);
-			//v_dist = get_dist_sqrd(hit_v[0], hit_v[1], player_x, player_y);
+			h_dist = (abs(player_x - hit_h[0]) * sin1table[alpha]) >> 7;
+			v_dist = (abs(player_x - hit_v[0]) * sin1table[alpha]) >> 7;
 		}
 
 		if(h_dist < v_dist) {
