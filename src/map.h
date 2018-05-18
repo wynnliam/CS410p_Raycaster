@@ -33,8 +33,18 @@ struct walldef {
 	// Defines the texture for this wall.
 	SDL_Texture* texture;
 	// The color to render for a wall.
+	// TODO: Nix this!
 	int color[3];
 };
+
+// The floor texture loaded into memory.
+SDL_Surface* floor_surf;
+// What we render for the floor.
+SDL_Texture* floor_tex;
+// Where we store the floor pixels before we render.
+unsigned int floor_pixels[32000];
+// Where we draw the floor rectangle.
+SDL_Rect floor_rect;
 
 // Define a "Null" walldef for floors.
 struct walldef walls[3];

@@ -126,6 +126,16 @@ void initialize_map(SDL_Renderer* renderer) {
 	walls[2].color[0] = 255;
 	walls[2].color[1] = 0;
 	walls[2].color[2] = 0;
+
+	// Initialize the floor.
+	floor_surf = SDL_LoadBMP("./src/assests/floor.bmp");
+
+	floor_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, 64, 64);
+
+	floor_rect.x = 0;
+	floor_rect.y = 100;
+	floor_rect.w = 320;
+	floor_rect.h = 100;
 }
 
 // TODO: Add documentation for this
@@ -396,7 +406,25 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 	// Used for rendering textures
 	SDL_Rect src, dest;
 
-	int i;
+	// Used for rendering floors/ceilings.
+	// Straight distance from the player to the floor/ceiling point
+	// to render.
+	int straight_dist;
+	// The actual distance to the floor/ceiling point.
+	int dist_to_point;
+	// The floor/ceiling point in "global space"
+	int p_x, p_y;
+	// The texture point.
+	int t_x, t_y;
+	// RGB value of texture.
+	unsigned char* t_color;
+
+	int i, j;
+
+	// Begin by clearning the floor/ceiling texture.
+	for(i = 0; i < 32000; ++i)
+		floor_pixels[i] = 0;
+
 	for(i = 0; i < PROJ_W; ++i) {
 		adj_angle = (int)curr_angle;
 
@@ -410,6 +438,8 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 		get_ray_hit(adj_angle, player_x, player_y, &hit);
 
 		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
+			
+			// WALL CASTING
 			wall = hit.wall_type;
 
 			slice_dist = (hit.dist * cos128table[correct_angle]) >> 7;
@@ -427,8 +457,23 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 			SDL_RenderCopy(renderer, walls[wall].texture, &src, &dest);
 
-			//SDL_SetRenderDrawColor(renderer, walls[wall].color[0], walls[wall].color[1], walls[wall].color[2], 255);
-			//SDL_RenderDrawLine(renderer, i, 100 - (slice_height >> 1), i, 100 + (slice_height >> 1));
+			// FLOOR/CEILING CASTING.
+			// dest.h + dest.y == bottom of the wall
+			for(j = dest.h + dest.y + 1; j < PROJ_H; ++ j) {
+				straight_dist = (int)(DIST_TO_PROJ * 32 / (j - 50));
+				dist_to_point = (straight_dist << 7) / (1 + cos128table[correct_angle]);
+
+				// Use adjusted so it gives us the direction of the "true" ray angle.
+				p_x = player_x + ((dist_to_point * cos128table[adj_angle]) >> 7);
+				p_y = player_y + ((dist_to_point * sin128table[adj_angle]) >> 7);
+
+				t_x = p_x % UNIT_SIZE;
+				t_y = p_y % UNIT_SIZE;
+				t_color = (unsigned char*)floor_surf->pixels + t_y * floor_surf->pitch + t_x * 3;
+
+				SDL_SetRenderDrawColor(renderer, t_color[0], t_color[1], t_color[2], 255);
+				SDL_RenderDrawPoint(renderer, i, j);
+			}
 		}
 
 		curr_angle -= ANGLE_BETWEEN_RAYS;
