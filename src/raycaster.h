@@ -84,6 +84,34 @@ int delta_v_y[361];
 */
 void initialize_lookup_tables();
 
+/*
+	Initializes data for tiles in map. Includes things like textures, skybox,
+	sprites, etc.
+
+	PRECONDITIONS:
+		None
+
+	POSTCONDITIONS:
+		All textures for map loaded and initialized.
+*/
+void initialize_map();
+
+/*
+	Returns the tile at a given position (x,y). Returns -1 if no tile is at
+	that position.
+
+	ARGUMENTS:
+		x, y - the position to lookup the tile id for.
+
+	PRECONDITIONS:
+		None
+
+	POST CONDITIONS:
+		None
+
+	RETURNS:
+		-1 if invalid position. Otherwise, the tile at (x,y).
+*/
 int get_tile(int x, int y);
 
 /*

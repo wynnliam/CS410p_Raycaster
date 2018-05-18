@@ -16,8 +16,11 @@ void initialize() {
 	player_x = 640;
 	player_y = 320;
 	player_rot = 270;
+
 	// Initializes all the angle lookup tables.
 	initialize_lookup_tables();
+	// Initialize the map data.
+	initialize_map();
 }
 
 /*UPDATE PROCEDURES*/

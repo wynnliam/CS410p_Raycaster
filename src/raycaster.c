@@ -101,6 +101,22 @@ void initialize_lookup_tables() {
 	}
 }
 
+void initialize_map() {
+	// Initialize the map data.
+	// "null" walldef.
+	walls[0].color[0] = 0;
+	walls[0].color[1] = 0;
+	walls[0].color[2] = 0;
+	// first wall.
+	walls[1].color[0] = 0;
+	walls[1].color[1] = 122;
+	walls[1].color[2] = 255;
+	// second wall.
+	walls[2].color[0] = 255;
+	walls[2].color[1] = 0;
+	walls[2].color[2] = 0;
+}
+
 // TODO: Add documentation for this
 int get_tile(int x, int y) {
 	int grid_x = x >> UNIT_POWER;
@@ -385,7 +401,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 			slice_dist = (hit.dist * cos128table[correct_angle]) >> 7;
 			slice_height = (int)(64.0f / slice_dist * DIST_TO_PROJ);
 
-			SDL_SetRenderDrawColor(renderer, textures[wall][0], textures[wall][1], textures[wall][2], 255);
+			SDL_SetRenderDrawColor(renderer, walls[wall].color[0], walls[wall].color[1], walls[wall].color[2], 255);
 			SDL_RenderDrawLine(renderer, i, 100 - (slice_height >> 1), i, 100 + (slice_height >> 1));
 		}
 

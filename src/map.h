@@ -6,6 +6,9 @@
 	color.
 */
 
+#ifndef MAP
+#define MAP
+
 #define MAP_W	20
 #define MAP_H	10
 
@@ -23,12 +26,13 @@ int map[] = {
 	2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 };
 
-// Specifies the colors for the walls. For now, they
-// are solid. Note that the first entry will be a
-// placeholder. 0 denotes "no wall". It is here to make
-// the members of the map array line up nicely.
-char textures[3][3] = {
-	{0,   0, 0},
-	{0,   0, 255},
-	{255, 0, 0}
+// Specifies the data for a given wall tile.
+struct walldef {
+	// The color to render for a wall.
+	int color[3];
 };
+
+// Define a "Null" walldef for floors.
+struct walldef walls[3];
+
+#endif
