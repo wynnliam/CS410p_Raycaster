@@ -101,17 +101,28 @@ void initialize_lookup_tables() {
 	}
 }
 
-void initialize_map() {
+void initialize_map(SDL_Renderer* renderer) {
+	SDL_Surface* surface;
+
 	// Initialize the map data.
 	// "null" walldef.
+	walls[0].texture = NULL;
 	walls[0].color[0] = 0;
 	walls[0].color[1] = 0;
 	walls[0].color[2] = 0;
 	// first wall.
+	surface = SDL_LoadBMP("./src/assests/wall1.bmp");
+	walls[1].texture = SDL_CreateTextureFromSurface(renderer, surface);
+	SDL_FreeSurface(surface);
+
 	walls[1].color[0] = 0;
 	walls[1].color[1] = 122;
 	walls[1].color[2] = 255;
 	// second wall.
+	surface = SDL_LoadBMP("./src/assests/wall2.bmp");
+	walls[2].texture = SDL_CreateTextureFromSurface(renderer, surface);
+	SDL_FreeSurface(surface);
+
 	walls[2].color[0] = 255;
 	walls[2].color[1] = 0;
 	walls[2].color[2] = 0;
@@ -382,6 +393,9 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 	// Returns info about the hit.
 	struct hitinfo hit;
 
+	// Used for rendering textures
+	SDL_Rect src, dest;
+
 	int i;
 	for(i = 0; i < PROJ_W; ++i) {
 		adj_angle = (int)curr_angle;
@@ -401,8 +415,20 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 			slice_dist = (hit.dist * cos128table[correct_angle]) >> 7;
 			slice_height = (int)(64.0f / slice_dist * DIST_TO_PROJ);
 
-			SDL_SetRenderDrawColor(renderer, walls[wall].color[0], walls[wall].color[1], walls[wall].color[2], 255);
-			SDL_RenderDrawLine(renderer, i, 100 - (slice_height >> 1), i, 100 + (slice_height >> 1));
+			src.y = 0;
+			src.w = 1;
+			src.h = 63;
+			src.x = hit.is_horiz ? (hit.hit_pos[0] % UNIT_SIZE) : (hit.hit_pos[1] % UNIT_SIZE);
+
+			dest.x = i;
+			dest.y = 100 - (slice_height >> 1);
+			dest.w = 1;
+			dest.h = (100 + (slice_height >> 1)) - dest.y;
+
+			SDL_RenderCopy(renderer, walls[wall].texture, &src, &dest);
+
+			//SDL_SetRenderDrawColor(renderer, walls[wall].color[0], walls[wall].color[1], walls[wall].color[2], 255);
+			//SDL_RenderDrawLine(renderer, i, 100 - (slice_height >> 1), i, 100 + (slice_height >> 1));
 		}
 
 		curr_angle -= ANGLE_BETWEEN_RAYS;

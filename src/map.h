@@ -9,6 +9,8 @@
 #ifndef MAP
 #define MAP
 
+#include <SDL2/SDL.h>
+
 #define MAP_W	20
 #define MAP_H	10
 
@@ -28,6 +30,8 @@ int map[] = {
 
 // Specifies the data for a given wall tile.
 struct walldef {
+	// Defines the texture for this wall.
+	SDL_Texture* texture;
 	// The color to render for a wall.
 	int color[3];
 };

@@ -93,8 +93,11 @@ void initialize_lookup_tables();
 
 	POSTCONDITIONS:
 		All textures for map loaded and initialized.
+
+	ARGUMENTS:
+		renderer - needed to convert surfaces to textures.
 */
-void initialize_map();
+void initialize_map(SDL_Renderer* renderer);
 
 /*
 	Returns the tile at a given position (x,y). Returns -1 if no tile is at

@@ -12,7 +12,7 @@
 #include <SDL2/SDL.h>
 
 // Handles any pre-loop logic we need.
-void initialize();
+void initialize(SDL_Renderer* renderer);
 
 // Handles any non-rendering logic we need
 // per frame.

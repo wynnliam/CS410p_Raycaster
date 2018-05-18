@@ -12,7 +12,7 @@ int player_rot;
 
 /*INITIALIZATION PROCEDURES*/
 
-void initialize() {
+void initialize(SDL_Renderer* renderer) {
 	player_x = 640;
 	player_y = 320;
 	player_rot = 270;
@@ -20,7 +20,7 @@ void initialize() {
 	// Initializes all the angle lookup tables.
 	initialize_lookup_tables();
 	// Initialize the map data.
-	initialize_map();
+	initialize_map(renderer);
 }
 
 /*UPDATE PROCEDURES*/

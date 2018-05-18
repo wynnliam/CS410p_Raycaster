@@ -51,7 +51,7 @@ int main() {
 	}*/
 
 	// Initialize any non-SDL logic
-	initialize();
+	initialize(renderer);
 
 	// Actually sets the rendering loop.
 	emscripten_set_main_loop_arg(loop, &ctx, fps_count, run_infinite);
