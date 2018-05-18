@@ -39,6 +39,17 @@ int main() {
 
 	ctx.renderer = renderer;
 
+	/*SDL_Surface* wall1 = SDL_LoadBMP("./src/assests/wall1.bmp");
+	if(wall1) {
+		printf("Ye wall!\n");
+		SDL_FreeSurface(wall1);
+	}
+
+	else {
+		printf("No wall!\n");
+		printf("ERROR: %s\n", SDL_GetError());
+	}*/
+
 	// Initialize any non-SDL logic
 	initialize();
 
