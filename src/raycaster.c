@@ -185,13 +185,6 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 	int v_dist;
 	int tile;
 
-	// First, we must deal with bad angles. These angles will break the raycaster, since
-	// it will produce NaN's.
-	if(ray_angle == 360)
-		ray_angle = 0;
-	if(ray_angle == 0 || ray_angle == 90 || ray_angle == 180 || ray_angle == 270)
-		ray_angle += 1;
-
 	// Next, we choose our curr and delta vectors according to the quadrant
 	// our angle is in.
 
@@ -436,12 +429,18 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 		if(adj_angle > 360)
 			adj_angle -= 360;
 
+		// First, we must deal with bad angles. These angles will break the raycaster, since
+		// it will produce NaN's.
+		if(adj_angle == 360)
+			adj_angle = 0;
+		if(adj_angle == 0 || adj_angle == 90 || adj_angle == 180 || adj_angle == 270)
+			adj_angle += 1;
+
 		correct_angle = abs(adj_angle - player_rot);
 
 		get_ray_hit(adj_angle, player_x, player_y, &hit);
 
 		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
-			
 			// WALL CASTING
 			wall = hit.wall_type;
 
@@ -464,7 +463,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 			// dest.h + dest.y == bottom of the wall
 			for(j = dest.h + dest.y + 1; j < PROJ_H; ++j) {
 				straight_dist = (int)(DIST_TO_PROJ * 32 / (j - 50));
-				dist_to_point = (straight_dist << 7) / (1 + cos128table[correct_angle]);
+				dist_to_point = (straight_dist << 7) / (cos128table[correct_angle]);
 
 				// Use adjusted so it gives us the direction of the "true" ray angle.
 				p_x = player_x + ((dist_to_point * cos128table[adj_angle]) >> 7);
