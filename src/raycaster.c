@@ -130,12 +130,15 @@ void initialize_map(SDL_Renderer* renderer) {
 	// Initialize the floor.
 	floor_surf = SDL_LoadBMP("./src/assests/floor.bmp");
 
-	floor_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, 64, 64);
+	floor_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
 
 	floor_rect.x = 0;
 	floor_rect.y = 100;
 	floor_rect.w = 320;
 	floor_rect.h = 100;
+
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureBlendMode(floor_tex, SDL_BLENDMODE_BLEND);
 }
 
 // TODO: Add documentation for this
@@ -422,7 +425,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 	int i, j;
 
 	// Begin by clearning the floor/ceiling texture.
-	for(i = 0; i < 32000; ++i)
+	for(i = 0; i < 64000; ++i)
 		floor_pixels[i] = 0;
 
 	for(i = 0; i < PROJ_W; ++i) {
@@ -459,7 +462,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 			// FLOOR/CEILING CASTING.
 			// dest.h + dest.y == bottom of the wall
-			for(j = dest.h + dest.y + 1; j < PROJ_H; ++ j) {
+			for(j = dest.h + dest.y + 1; j < PROJ_H; ++j) {
 				straight_dist = (int)(DIST_TO_PROJ * 32 / (j - 50));
 				dist_to_point = (straight_dist << 7) / (1 + cos128table[correct_angle]);
 
@@ -470,12 +473,15 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 				t_x = p_x % UNIT_SIZE;
 				t_y = p_y % UNIT_SIZE;
 				t_color = (unsigned char*)floor_surf->pixels + t_y * floor_surf->pitch + t_x * 3;
-
-				SDL_SetRenderDrawColor(renderer, t_color[0], t_color[1], t_color[2], 255);
-				SDL_RenderDrawPoint(renderer, i, j);
+				floor_pixels[j * PROJ_W + i] = 0xFF000000 | t_color[0] << 16 | t_color[1] << 8 | t_color[2];
+				//SDL_SetRenderDrawColor(renderer, t_color[0], t_color[1], t_color[2], 255);
+				//SDL_RenderDrawPoint(renderer, i, j);
 			}
 		}
 
 		curr_angle -= ANGLE_BETWEEN_RAYS;
 	}
+
+	SDL_UpdateTexture(floor_tex, NULL, floor_pixels, 320 * 4);
+	SDL_RenderCopy(renderer, floor_tex, NULL, NULL);
 }

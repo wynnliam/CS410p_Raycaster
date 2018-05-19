@@ -42,7 +42,7 @@ SDL_Surface* floor_surf;
 // What we render for the floor.
 SDL_Texture* floor_tex;
 // Where we store the floor pixels before we render.
-unsigned int floor_pixels[32000];
+unsigned int floor_pixels[64000];
 // Where we draw the floor rectangle.
 SDL_Rect floor_rect;
 
