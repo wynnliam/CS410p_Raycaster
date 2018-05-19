@@ -462,12 +462,12 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 			// FLOOR/CEILING CASTING.
 			// dest.h + dest.y == bottom of the wall
 			for(j = dest.h + dest.y + 1; j < PROJ_H; ++j) {
-				straight_dist = (int)(DIST_TO_PROJ * 32 / (j - 50));
+				straight_dist = (int)(DIST_TO_PROJ * 32 / (j - 100));
 				dist_to_point = (straight_dist << 7) / (cos128table[correct_angle]);
 
 				// Use adjusted so it gives us the direction of the "true" ray angle.
 				p_x = player_x + ((dist_to_point * cos128table[adj_angle]) >> 7);
-				p_y = player_y + ((dist_to_point * sin128table[adj_angle]) >> 7);
+				p_y = player_y - ((dist_to_point * sin128table[adj_angle]) >> 7);
 
 				t_x = p_x % UNIT_SIZE;
 				t_y = p_y % UNIT_SIZE;
