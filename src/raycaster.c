@@ -129,6 +129,8 @@ void initialize_map(SDL_Renderer* renderer) {
 
 	// Initialize the floor.
 	floor_surf = SDL_LoadBMP("./src/assests/floor.bmp");
+	// Initialize the ceiling.
+	ceiling_surf = SDL_LoadBMP("./src/assests/ceiling.bmp");
 
 	floor_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
 
@@ -469,10 +471,16 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 				p_x = player_x + ((dist_to_point * cos128table[adj_angle]) >> 7);
 				p_y = player_y - ((dist_to_point * sin128table[adj_angle]) >> 7);
 
+				// Gives us the texture location.
 				t_x = p_x % UNIT_SIZE;
 				t_y = p_y % UNIT_SIZE;
+
+				// Put floor pixel.
 				t_color = (unsigned char*)floor_surf->pixels + t_y * floor_surf->pitch + t_x * 3;
 				floor_pixels[j * PROJ_W + i] = 0xFF000000 | t_color[0] << 16 | t_color[1] << 8 | t_color[2];
+				// Put ceiling pixel.
+				t_color = (unsigned char*)ceiling_surf->pixels + t_y * ceiling_surf->pitch + t_x * 3;
+				floor_pixels[(-j + 200)  * PROJ_W + i] = 0xFF000000 | t_color[0] << 16 | t_color[1] << 8 | t_color[2];
 				//SDL_SetRenderDrawColor(renderer, t_color[0], t_color[1], t_color[2], 255);
 				//SDL_RenderDrawPoint(renderer, i, j);
 			}
