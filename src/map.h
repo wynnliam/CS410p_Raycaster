@@ -41,12 +41,10 @@ struct walldef {
 SDL_Surface* floor_surf;
 // The ceiling texture loaded into memory.
 SDL_Surface* ceiling_surf;
-// What we render for the floor.
-SDL_Texture* floor_tex;
+// What we render for the floor/ceiling
+SDL_Texture* floor_ceiling_tex;
 // Where we store the floor pixels before we render.
-unsigned int floor_pixels[64000];
-// Where we draw the floor rectangle.
-SDL_Rect floor_rect;
+unsigned int floor_ceiling_pixels[64000];
 
 // Define a "Null" walldef for floors.
 struct walldef walls[3];
