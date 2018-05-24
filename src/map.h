@@ -14,6 +14,32 @@
 #define MAP_W	20
 #define MAP_H	10
 
+// Specifies the data for a given wall tile.
+struct walldef {
+	// Defines the texture for this wall.
+	SDL_Texture* texture;
+	// The color to render for a wall.
+	// TODO: Nix this!
+	int color[3];
+};
+
+// Defines a "thing" in the world. This is for
+// static objects in the world, but can easily
+// be extended for dynamic objects and/or NPCs.
+struct thingdef {
+	SDL_Texture* texture;
+	int position[2];
+};
+
+// The floor texture loaded into memory.
+SDL_Surface* floor_surf;
+// The ceiling texture loaded into memory.
+SDL_Surface* ceiling_surf;
+// What we render for the floor/ceiling
+SDL_Texture* floor_ceiling_tex;
+// Where we store the floor pixels before we render.
+unsigned int floor_ceiling_pixels[64000];
+
 // Specifies the layout of the world.
 int map[] = {
 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -28,25 +54,11 @@ int map[] = {
 	2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 };
 
-// Specifies the data for a given wall tile.
-struct walldef {
-	// Defines the texture for this wall.
-	SDL_Texture* texture;
-	// The color to render for a wall.
-	// TODO: Nix this!
-	int color[3];
-};
-
-// The floor texture loaded into memory.
-SDL_Surface* floor_surf;
-// The ceiling texture loaded into memory.
-SDL_Surface* ceiling_surf;
-// What we render for the floor/ceiling
-SDL_Texture* floor_ceiling_tex;
-// Where we store the floor pixels before we render.
-unsigned int floor_ceiling_pixels[64000];
-
 // Define a "Null" walldef for floors.
 struct walldef walls[3];
+
+// The list of sprites in the world. We sort
+// this every frame by distance from the player.
+struct thingdef* things[3];
 
 #endif

@@ -134,8 +134,28 @@ void initialize_map(SDL_Renderer* renderer) {
 
 	floor_ceiling_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
 
+	// Enables transparent pixel 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetTextureBlendMode(floor_ceiling_tex, SDL_BLENDMODE_BLEND);
+
+	// Initializes the sprites.
+	surface = SDL_LoadBMP("./src/assests/sprite.bmp");
+	things[0]->texture = SDL_CreateTextureFromSurface(renderer, surface);
+	SDL_FreeSurface(surface);
+	things[0]->position[0] = 128;
+	things[0]->position[1] = 128;
+
+	surface = SDL_LoadBMP("./src/assests/sprite.bmp");
+	things[1]->texture = SDL_CreateTextureFromSurface(renderer, surface);
+	SDL_FreeSurface(surface);
+	things[1]->position[0] = 128;
+	things[1]->position[1] = 448;
+
+	surface = SDL_LoadBMP("./src/assests/sprite.bmp");
+	things[2]->texture = SDL_CreateTextureFromSurface(renderer, surface);
+	SDL_FreeSurface(surface);
+	things[2]->position[0] = 672;
+	things[2]->position[1] = 96;
 }
 
 // TODO: Add documentation for this
@@ -486,4 +506,6 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 	SDL_UpdateTexture(floor_ceiling_tex, NULL, floor_ceiling_pixels, 320 * 4);
 	SDL_RenderCopy(renderer, floor_ceiling_tex, NULL, NULL);
+
+	// TODO: Sprite Casting
 }
