@@ -149,4 +149,21 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 		hit - stores all of the data about this hit.
 */
 void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit);
+
+/*
+	Sortes every sprite according to distance from the player. We must order the sprites from
+	farthest to closest so we render the closest ones last. The algorithm used here is quicksort.
+
+	ARGUMENTS:
+		dist - stores the distance of the corresponding thing to the player.
+		s, e - the starting and ending indecies
+
+	PRECONDITIONS:
+		initialize_map was called
+
+	POSTCONDITIONS:
+		Order of things array will be modifief.
+*/
+void sort_things(int dist[3], int s, int e);
+int partition(int* dist, int s, int e);
 #endif

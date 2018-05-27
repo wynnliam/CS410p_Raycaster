@@ -140,22 +140,22 @@ void initialize_map(SDL_Renderer* renderer) {
 
 	// Initializes the sprites.
 	surface = SDL_LoadBMP("./src/assests/sprite.bmp");
-	things[0]->texture = SDL_CreateTextureFromSurface(renderer, surface);
+	things[0].texture = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
-	things[0]->position[0] = 128;
-	things[0]->position[1] = 128;
+	things[0].position[0] = 128;
+	things[0].position[1] = 128;
 
-	surface = SDL_LoadBMP("./src/assests/sprite.bmp");
-	things[1]->texture = SDL_CreateTextureFromSurface(renderer, surface);
+	surface = SDL_LoadBMP("./src/assests/sprite2.bmp");
+	things[1].texture = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
-	things[1]->position[0] = 128;
-	things[1]->position[1] = 448;
+	things[1].position[0] = 128;
+	things[1].position[1] = 448;
 
-	surface = SDL_LoadBMP("./src/assests/sprite.bmp");
-	things[2]->texture = SDL_CreateTextureFromSurface(renderer, surface);
+	surface = SDL_LoadBMP("./src/assests/sprite3.bmp");
+	things[2].texture = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
-	things[2]->position[0] = 672;
-	things[2]->position[1] = 96;
+	things[2].position[0] = 672;
+	things[2].position[1] = 96;
 }
 
 // TODO: Add documentation for this
@@ -398,6 +398,86 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 	hit->wall_type = get_tile(hit->hit_pos[0], hit->hit_pos[1]);
 }
 
+int on_seg(int p[2], int q[2], int r[2]) {
+	if(q[0] <= fmax(p[0], r[0]) && q[0] >= fmin(p[0], r[0]) &&
+	   q[1] <= fmax(p[1], r[1]) && q[1] >= fmin(p[1], r[1]))
+	{
+		return 1;
+	}
+
+	else
+		return 0;
+}
+
+int orientation(int p[2], int q[2], int r[2]) {
+	int val = (q[1] - p[1]) * (r[0] - q[0]) -
+			  (q[0] - p[0]) * (r[1] - q[1]);
+
+	if(val == 0)
+		return 0;
+
+	return val > 0 ? 1 : 2;
+}
+
+int ray_intersects(int t[4], int r[4]) {
+	int o1, o2, o3, o4;
+
+	o1 = orientation(t, r, &t[2]);
+	o2 = orientation(t, r, &r[2]);
+	o3 = orientation(&t[2], &r[2], t);
+	o4 = orientation(&t[2], &r[2], r);
+
+	if(o1 != o2 && o3 != o4)
+		return 1;
+
+	if(o1 == 0 && on_seg(t, &t[2], r))
+		return 1;
+	if(o2 == 0 && on_seg(t, &r[2], r))
+		return 1;
+	if(o3 == 0 && on_seg(&t[2], t, &r[2]))
+		return 1;
+	if(o4 == 0 && on_seg(&t[2], r, &r[2]))
+		return 1;
+
+	return 0;
+}
+
+int can_see_thing(int player_x, int player_y, int hit_pos[2], int thing_pos[2]) {
+	// The line that describes one surface of the thing bounding box.
+	int t[4];
+	// The ray line
+	int r[4];
+
+	r[0] = player_x;   r[1] = player_y;
+	r[2] = hit_pos[0]; r[3] = hit_pos[1];
+
+	// Check top line of thing bounding box.
+	t[0] = thing_pos[0] - 32; t[1] = thing_pos[1] - 32;
+	t[2] = thing_pos[0] + 32; t[3] = thing_pos[3] - 32;
+	if(ray_intersects(t, r))
+		return 1;
+
+	// Check bottom line of thing bounding box.
+	t[0] = thing_pos[0] - 32; t[1] = thing_pos[1] + 32;
+	t[2] = thing_pos[0] + 32; t[3] = thing_pos[3] + 32;
+	if(ray_intersects(t, r))
+		return 1;
+
+	// Check right line of thing bounding box.
+	t[0] = thing_pos[0] - 32; t[1] = thing_pos[1] - 32;
+	t[2] = thing_pos[0] - 32; t[3] = thing_pos[3] + 32;
+	if(ray_intersects(t, r))
+		return 1;
+
+	// Check left line of thing bounding box.
+	t[0] = thing_pos[0] + 32; t[1] = thing_pos[1] - 32;
+	t[2] = thing_pos[0] + 32; t[3] = thing_pos[3] + 32;
+	if(ray_intersects(t, r))
+		return 1;
+
+	return 0;
+}
+
 void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_rot) {
 	// Stores the precise angle of our current ray.
 	float curr_angle = (float)(player_rot + FOV_HALF);
@@ -429,8 +509,11 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 	int p_x, p_y;
 	// The texture point.
 	int t_x, t_y;
-	// RGB value of texture.
+	// RGB value of the floor/ceiling texture.
 	unsigned char* t_color;
+
+	// Stores the squared distance between the player and each thing.
+	int thing_dist[3];
 
 	int i, j;
 
@@ -438,6 +521,19 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 	for(i = 0; i < 64000; ++i)
 		floor_ceiling_pixels[i] = 0;
 
+	// Next, compute the distance between each thing and the player.
+	for(i = 0; i < 3; ++i) {
+		things[i].can_see = 0;
+		thing_dist[i] = (things[i].position[0] - player_x) * (things[i].position[0] - player_x) +
+						(things[i].position[1] - player_y) * (things[i].position[1] - player_y);
+		// Add the thing to the sorted list.
+		things_sorted[i] = &things[i];
+	}
+
+	// Now, sort the things according to distance.
+	sort_things(thing_dist, 0, 2);
+
+	// The actual ray casting step.
 	for(i = 0; i < PROJ_W; ++i) {
 		adj_angle = (int)curr_angle;
 
@@ -476,6 +572,12 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 			SDL_RenderCopy(renderer, walls[wall].texture, &src, &dest);
 
+			// Check if we can see each thing.
+			for(j = 0; j < 3; ++j) {
+				if(things[i].can_see == 0)
+					things[i].can_see = can_see_thing(player_x, player_y, hit.hit_pos, things[i].position);
+			}
+
 			// FLOOR/CEILING CASTING.
 			// dest.h + dest.y == bottom of the wall
 			for(j = dest.h + dest.y + 1; j < PROJ_H; ++j) {
@@ -507,5 +609,66 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 	SDL_UpdateTexture(floor_ceiling_tex, NULL, floor_ceiling_pixels, 320 * 4);
 	SDL_RenderCopy(renderer, floor_ceiling_tex, NULL, NULL);
 
-	// TODO: Sprite Casting
+	
+
+	for(i = 2; i >= 0; --i) {
+		int x_diff = things_sorted[i]->position[0] - player_x;
+		int y_diff = things_sorted[i]->position[1] - player_y;
+
+		int theta_temp = (int)(atan2(-y_diff, x_diff) * 180.0 / M_PI);
+		if(theta_temp < 0)
+			theta_temp += 360;
+
+		int scr_y = player_rot + 30 - theta_temp;
+		if(theta_temp > 270 && player_rot < 90)
+			scr_y = player_rot + 30 - theta_temp + 360;
+		if(player_rot > 270 && theta_temp > 90)
+			scr_y = player_rot + 30 - theta_temp - 360;
+
+		int scr_x = (int)(scr_y * 320.0 / 60.0);
+
+		SDL_Rect thing_rect;
+		thing_rect.x = scr_x;
+		thing_rect.y = 100;
+		thing_rect.w = 64;
+		thing_rect.h = 64;
+		SDL_RenderCopy(renderer, things_sorted[i]->texture, NULL, &thing_rect);
+			//printf("Thing at[%d, %d] is visible!\n", things_sorted[i]->position[0], things_sorted[i]->position[1]);
+	}
+}
+
+void sort_things(int* dist, int s, int e) {
+	if(e <= s)
+		return;
+
+	int m = partition(dist, s, e);
+
+	sort_things(dist, s, m);
+	sort_things(dist, m + 1, e);
+}
+
+int partition(int* dist, int s, int e) {
+	int i = s - 1;
+	int j = e + 1;
+
+	int p_dist = dist[s];
+
+	struct thingdef* temp;
+
+	while(1) {
+		do {
+			i += 1;
+		} while(dist[i] > p_dist);
+
+		do {
+			j -= 1;
+		} while(dist[j] < p_dist);
+
+		if(i >= j)
+			return j;
+
+		temp = things_sorted[i];
+		things_sorted[i] = things_sorted[j];
+		things_sorted[j] = temp;
+	}
 }

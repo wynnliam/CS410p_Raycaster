@@ -29,6 +29,7 @@ struct walldef {
 struct thingdef {
 	SDL_Texture* texture;
 	int position[2];
+	int can_see;
 };
 
 // The floor texture loaded into memory.
@@ -59,6 +60,9 @@ struct walldef walls[3];
 
 // The list of sprites in the world. We sort
 // this every frame by distance from the player.
-struct thingdef* things[3];
+struct thingdef things[3];
+
+// Stores the things in a sorted order.
+struct thingdef* things_sorted[3];
 
 #endif
