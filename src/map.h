@@ -29,6 +29,7 @@ struct walldef {
 struct thingdef {
 	SDL_Texture* texture;
 	int position[2];
+	int dist;
 	int can_see;
 };
 
