@@ -471,9 +471,11 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 		correct_angle = abs(adj_angle - player_rot);
 
+		z_buffer[i] = 0;
 		get_ray_hit(adj_angle, player_x, player_y, &hit);
 
 		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
+			z_buffer[i] = hit.dist;
 			// WALL CASTING
 			wall = hit.wall_type;
 
@@ -540,12 +542,37 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 		int scr_x = (int)(scr_y * 320.0 / 60.0);
 
 		SDL_Rect thing_rect;
+		SDL_Rect thing_src_rect;
+		SDL_Rect thing_dest_rect;
+
 		thing_rect.w = (int)(64.0 / sqrt(things_sorted[i]->dist) * DIST_TO_PROJ);
 		thing_rect.h = thing_rect.w;
-		thing_rect.x = scr_x - (thing_rect.w >> 1);
 		thing_rect.y = 100 - (thing_rect.h >> 1);
-		SDL_RenderCopy(renderer, things_sorted[i]->texture, NULL, &thing_rect);
-			//printf("Thing at[%d, %d] is visible!\n", things_sorted[i]->position[0], things_sorted[i]->position[1]);
+		thing_rect.x = scr_x - (thing_rect.w >> 1);
+
+		// The column for the scaled texture.
+		int m = 0;
+
+		for(j = thing_rect.x; j < thing_rect.x + thing_rect.w; ++j) {
+			if(j >= 0 && j < PROJ_W) {
+				// Render the current slice of sprite only if infront of wall.
+				if(sqrt(things_sorted[i]->dist) - 1 < z_buffer[j]) {
+					thing_src_rect.x = (m << 6) / thing_rect.w;
+					thing_src_rect.y = 0;
+					thing_src_rect.w = 1;
+					thing_src_rect.h = 64;
+
+					thing_dest_rect.x = j;
+					thing_dest_rect.y = thing_rect.y;
+					thing_dest_rect.w = 1;
+					thing_dest_rect.h = thing_rect.h;
+
+					SDL_RenderCopy(renderer, things_sorted[i]->texture, &thing_src_rect, &thing_dest_rect);
+				}
+			}
+
+			++m;
+		}
 	}
 }
 

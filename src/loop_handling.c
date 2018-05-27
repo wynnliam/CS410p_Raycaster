@@ -13,9 +13,9 @@ int player_rot;
 /*INITIALIZATION PROCEDURES*/
 
 void initialize(SDL_Renderer* renderer) {
-	player_x = 640;
-	player_y = 320;
-	player_rot = 140;
+	player_x = 396;
+	player_y = 259;
+	player_rot = 133;
 
 	// Initializes all the angle lookup tables.
 	initialize_lookup_tables();
@@ -65,6 +65,10 @@ void update() {
 					player_y -= (sin128table[player_rot] << 2) >> 7;
 					player_x += (cos128table[player_rot] << 2) >> 7;
 				}
+			}
+
+			if(event.key.keysym.sym == SDLK_c) {
+				printf("Player position = [%d, %d]. Player rotation = %d\n", player_x, player_y, player_rot);
 			}
 		}
 	}

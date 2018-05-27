@@ -71,6 +71,9 @@ int delta_h_y[361];
 int delta_v_x[361];
 int delta_v_y[361];
 
+// Stores the distance each ray is from the player when it hits something.
+int z_buffer[PROJ_W];
+
 /*
 	For angles 0 to 360, computes sin(a) * 128, cos(a) * 128, and tan(a) * 128
 	and stores them in the angle lookup tables. For angles 0, 90, 180, 270, 360,
