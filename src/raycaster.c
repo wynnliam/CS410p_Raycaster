@@ -397,87 +397,6 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 
 	hit->wall_type = get_tile(hit->hit_pos[0], hit->hit_pos[1]);
 }
-
-int on_seg(int p[2], int q[2], int r[2]) {
-	if(q[0] <= fmax(p[0], r[0]) && q[0] >= fmin(p[0], r[0]) &&
-	   q[1] <= fmax(p[1], r[1]) && q[1] >= fmin(p[1], r[1]))
-	{
-		return 1;
-	}
-
-	else
-		return 0;
-}
-
-int orientation(int p[2], int q[2], int r[2]) {
-	int val = (q[1] - p[1]) * (r[0] - q[0]) -
-			  (q[0] - p[0]) * (r[1] - q[1]);
-
-	if(val == 0)
-		return 0;
-
-	return val > 0 ? 1 : 2;
-}
-
-int ray_intersects(int t[4], int r[4]) {
-	int o1, o2, o3, o4;
-
-	o1 = orientation(t, r, &t[2]);
-	o2 = orientation(t, r, &r[2]);
-	o3 = orientation(&t[2], &r[2], t);
-	o4 = orientation(&t[2], &r[2], r);
-
-	if(o1 != o2 && o3 != o4)
-		return 1;
-
-	if(o1 == 0 && on_seg(t, &t[2], r))
-		return 1;
-	if(o2 == 0 && on_seg(t, &r[2], r))
-		return 1;
-	if(o3 == 0 && on_seg(&t[2], t, &r[2]))
-		return 1;
-	if(o4 == 0 && on_seg(&t[2], r, &r[2]))
-		return 1;
-
-	return 0;
-}
-
-int can_see_thing(int player_x, int player_y, int hit_pos[2], int thing_pos[2]) {
-	// The line that describes one surface of the thing bounding box.
-	int t[4];
-	// The ray line
-	int r[4];
-
-	r[0] = player_x;   r[1] = player_y;
-	r[2] = hit_pos[0]; r[3] = hit_pos[1];
-
-	// Check top line of thing bounding box.
-	t[0] = thing_pos[0] - 32; t[1] = thing_pos[1] - 32;
-	t[2] = thing_pos[0] + 32; t[3] = thing_pos[3] - 32;
-	if(ray_intersects(t, r))
-		return 1;
-
-	// Check bottom line of thing bounding box.
-	t[0] = thing_pos[0] - 32; t[1] = thing_pos[1] + 32;
-	t[2] = thing_pos[0] + 32; t[3] = thing_pos[3] + 32;
-	if(ray_intersects(t, r))
-		return 1;
-
-	// Check right line of thing bounding box.
-	t[0] = thing_pos[0] - 32; t[1] = thing_pos[1] - 32;
-	t[2] = thing_pos[0] - 32; t[3] = thing_pos[3] + 32;
-	if(ray_intersects(t, r))
-		return 1;
-
-	// Check left line of thing bounding box.
-	t[0] = thing_pos[0] + 32; t[1] = thing_pos[1] - 32;
-	t[2] = thing_pos[0] + 32; t[3] = thing_pos[3] + 32;
-	if(ray_intersects(t, r))
-		return 1;
-
-	return 0;
-}
-
 void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_rot) {
 	// Stores the precise angle of our current ray.
 	float curr_angle = (float)(player_rot + FOV_HALF);
@@ -572,12 +491,6 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 			dest.h = (100 + (slice_height >> 1)) - dest.y;
 
 			SDL_RenderCopy(renderer, walls[wall].texture, &src, &dest);
-
-			// Check if we can see each thing.
-			for(j = 0; j < 3; ++j) {
-				if(things[i].can_see == 0)
-					things[i].can_see = can_see_thing(player_x, player_y, hit.hit_pos, things[i].position);
-			}
 
 			// FLOOR/CEILING CASTING.
 			// dest.h + dest.y == bottom of the wall
