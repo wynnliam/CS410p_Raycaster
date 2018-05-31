@@ -13,9 +13,9 @@ int player_rot;
 /*INITIALIZATION PROCEDURES*/
 
 void initialize(SDL_Renderer* renderer) {
-	player_x = 396;
-	player_y = 259;
-	player_rot = 133;
+	player_x = 1100;
+	player_y = 256;
+	player_rot = 0;
 
 	// Initializes all the angle lookup tables.
 	initialize_lookup_tables();

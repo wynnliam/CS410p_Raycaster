@@ -340,6 +340,8 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 	if(hit_h[0] == -1 && hit_h[1] == -1 && hit_v[0] == -1 && hit_v[1] == -1) {
 		hit->hit_pos[0] = -1;
 		hit->hit_pos[1] = -1;
+
+		//printf("1\n");
 	}
 
 	else if(hit_h[0] == -1 && hit_h[1] == -1) {
@@ -347,10 +349,15 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		hit->hit_pos[1] = hit_v[1];
 		hit->is_horiz = 0;
 
-		if(hit->quadrant == 1 || hit->quadrant == 3)
+		/*if(hit->quadrant == 1 || hit->quadrant == 3) {
 			hit->dist = (abs(player_y - hit_v[1]) * sin1table[alpha]) >> 7;
+		}
 		else
-			hit->dist = (abs(player_x - hit_v[0]) * sin1table[alpha]) >> 7;
+			hit->dist = (abs(player_x - hit_v[0]) * sin1table[alpha]) >> 7;*/
+
+		hit->dist = sqrt((player_x - hit_v[0]) * (player_x - hit_v[0]) + (player_y - hit_v[1]) * (player_y - hit_v[1]));
+
+		//printf("2\n");
 	}
 
 	else if(hit_v[0] == -1 && hit_v[1] == -1) {
@@ -358,24 +365,31 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		hit->hit_pos[1] = hit_h[1];
 		hit->is_horiz = 1;
 
-		if(hit->quadrant == 1 || hit->quadrant == 3)
+		/*if(hit->quadrant == 1 || hit->quadrant == 3)
 			hit->dist = (abs(player_y - hit_h[1]) * sin1table[alpha]) >> 7;
 		else
-			hit->dist = (abs(player_x - hit_h[0]) * sin1table[alpha]) >> 7;
+			hit->dist = (abs(player_x - hit_h[0]) * sin1table[alpha]) >> 7;*/
+
+		hit->dist = sqrt((player_x - hit_h[0]) * (player_x - hit_h[0]) + (player_y - hit_h[1]) * (player_y - hit_h[1]));
+
+		//printf("3\n");
 	}
 
 	else {
 		// Compute dist = abs(player_x - hit_x) / cos(alpha).
-		if(hit->quadrant == 1 || hit->quadrant == 3) {
+		/*if(hit->quadrant == 1 || hit->quadrant == 3) {
 			h_dist = (abs(player_y - hit_h[1]) * sin1table[alpha]) >> 7;
 			v_dist = (abs(player_y - hit_v[1]) * sin1table[alpha]) >> 7;
-		}
+		}*/
 
 		// Compute dist = abs(player_y - hit_y) / cos(alpha).
-		else {
+		/*else {
 			h_dist = (abs(player_x - hit_h[0]) * sin1table[alpha]) >> 7;
 			v_dist = (abs(player_x - hit_v[0]) * sin1table[alpha]) >> 7;
-		}
+		}*/
+
+		h_dist = sqrt((player_x - hit_h[0]) * (player_x - hit_h[0]) + (player_y - hit_h[1]) * (player_y - hit_h[1]));
+		v_dist = sqrt((player_x - hit_v[0]) * (player_x - hit_v[0]) + (player_y - hit_v[1]) * (player_y - hit_v[1]));
 
 		if(h_dist < v_dist) {
 			hit->hit_pos[0] = hit_h[0];
@@ -390,6 +404,7 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 			hit->dist = v_dist;
 			hit->is_horiz = 0;
 		}
+		//printf("4\n");
 	}
 
 	//printf("Final hit: {%d, %d}\n", hit->hit_pos[0], hit->hit_pos[1]);
@@ -397,6 +412,7 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 
 	hit->wall_type = get_tile(hit->hit_pos[0], hit->hit_pos[1]);
 }
+
 void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_rot) {
 	// Stores the precise angle of our current ray.
 	float curr_angle = (float)(player_rot + FOV_HALF);
@@ -472,6 +488,8 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 		correct_angle = abs(adj_angle - player_rot);
 
 		z_buffer[i] = 0;
+
+		//printf("%d...\n", i);
 		get_ray_hit(adj_angle, player_x, player_y, &hit);
 
 		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
@@ -479,8 +497,12 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 			// WALL CASTING
 			wall = hit.wall_type;
 
-			slice_dist = (hit.dist * cos128table[correct_angle]) >> 7;
-			slice_height = (int)(64.0f / slice_dist * DIST_TO_PROJ);
+			if(cos128table[correct_angle] == 0 || cos128table[correct_angle] == 128)
+				slice_dist = hit.dist;
+			else
+				slice_dist = (hit.dist * cos128table[correct_angle]) >> 7;
+			//slice_height = (int)(64.0f / slice_dist * DIST_TO_PROJ);
+			slice_height = (DIST_TO_PROJ << 6) / slice_dist;
 
 			src.y = 0;
 			src.w = 1;

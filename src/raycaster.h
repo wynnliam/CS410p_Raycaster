@@ -63,7 +63,6 @@ int tan1table[361];
 // Stores the value of 1/sin(t) * 128 for every degree between 0 and 360.
 int sin1table[361];
 
-
 // Stores the delta values for horizontal and vertical increments for each
 // angle.
 int delta_h_x[361];
