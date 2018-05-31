@@ -29,6 +29,9 @@ void update() {
 	SDL_Event event;
 	while(SDL_PollEvent(&event)) {
 		if(event.type == SDL_KEYDOWN) {
+			if(event.key.keysym.sym == SDLK_c)
+				exit(0);
+
 			if(event.key.keysym.sym == SDLK_a) {
 				player_rot += 1;
 
