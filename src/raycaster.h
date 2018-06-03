@@ -26,6 +26,10 @@
 // the PROJECTION PLANE, so I will use that nomenclature instead.
 #define PROJ_W				320
 #define PROJ_H				200
+// We use half of the projection area frequently, so we will just compute
+// those here.
+#define HALF_PROJ_W			160
+#define HALF_PROJ_H			100
 // Distance from the player to the projection plane. This is calculated
 // with some basic trigonometry, but we will have it pre-computed here
 #define DIST_TO_PROJ		277

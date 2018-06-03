@@ -441,6 +441,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 	for(i = 0; i < PROJ_W; ++i) {
 		adj_angle = (int)curr_angle;
 
+		// Make the angle between 0 and 360.
 		if(adj_angle < 0)
 			adj_angle += 360;
 		if(adj_angle > 360)
@@ -453,12 +454,11 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 		if(adj_angle == 0 || adj_angle == 90 || adj_angle == 180 || adj_angle == 270)
 			adj_angle += 1;
 
+		// Computes the angle relative to the player rotation.
 		correct_angle = abs(adj_angle - player_rot);
 
 		z_buffer[i] = 0;
-
 		get_ray_hit(adj_angle, player_x, player_y, &hit);
-
 		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
 			z_buffer[i] = hit.dist;
 			// WALL CASTING
@@ -471,15 +471,18 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 			slice_height = (DIST_TO_PROJ << 6) / slice_dist;
 
+			// Use a single column of pixels based on where the ray hit.
 			src.y = 0;
 			src.w = 1;
-			src.h = 63;
+			src.h = UNIT_SIZE;
 			src.x = hit.is_horiz ? (hit.hit_pos[0] % UNIT_SIZE) : (hit.hit_pos[1] % UNIT_SIZE);
 
+			// Define the part of the screen we render to such that it is a single column with the
+			// slice's middle pixel at the center of the screen.
 			dest.x = i;
-			dest.y = 100 - (slice_height >> 1);
+			dest.y = HALF_PROJ_H - (slice_height >> 1);
 			dest.w = 1;
-			dest.h = (100 + (slice_height >> 1)) - dest.y;
+			dest.h = (HALF_PROJ_H + (slice_height >> 1)) - dest.y;
 
 			SDL_RenderCopy(renderer, walls[wall].texture, &src, &dest);
 
