@@ -107,25 +107,14 @@ void initialize_map(SDL_Renderer* renderer) {
 	// Initialize the map data.
 	// "null" walldef.
 	walls[0].texture = NULL;
-	walls[0].color[0] = 0;
-	walls[0].color[1] = 0;
-	walls[0].color[2] = 0;
 	// first wall.
 	surface = SDL_LoadBMP("./src/assests/wall1.bmp");
 	walls[1].texture = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
-
-	walls[1].color[0] = 0;
-	walls[1].color[1] = 122;
-	walls[1].color[2] = 255;
 	// second wall.
 	surface = SDL_LoadBMP("./src/assests/wall2.bmp");
 	walls[2].texture = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
-
-	walls[2].color[0] = 255;
-	walls[2].color[1] = 0;
-	walls[2].color[2] = 0;
 
 	// Initialize the floor.
 	floor_surf = SDL_LoadBMP("./src/assests/floor.bmp");
@@ -505,7 +494,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 				floor_ceiling_pixels[j * PROJ_W + i] = 0xFF000000 | t_color[0] << 16 | t_color[1] << 8 | t_color[2];
 				// Put ceiling pixel.
 				t_color = (unsigned char*)ceiling_surf->pixels + t_y * ceiling_surf->pitch + t_x * 3;
-				floor_ceiling_pixels[(-j + 200)  * PROJ_W + i] = 0xFF000000 | t_color[0] << 16 | t_color[1] << 8 | t_color[2];
+				floor_ceiling_pixels[(-j + PROJ_H)  * PROJ_W + i] = 0xFF000000 | t_color[0] << 16 | t_color[1] << 8 | t_color[2];
 			}
 		}
 

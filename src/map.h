@@ -18,9 +18,6 @@
 struct walldef {
 	// Defines the texture for this wall.
 	SDL_Texture* texture;
-	// The color to render for a wall.
-	// TODO: Nix this!
-	int color[3];
 };
 
 // Defines a "thing" in the world. This is for
