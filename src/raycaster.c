@@ -104,6 +104,9 @@ void initialize_lookup_tables() {
 void initialize_map(SDL_Renderer* renderer) {
 	SDL_Surface* surface;
 
+	// We define a 0 "Null" wall texture for floors.
+	num_wall_tex = 3;
+
 	// Initialize the map data.
 	// "null" walldef.
 	walls[0].texture = NULL;

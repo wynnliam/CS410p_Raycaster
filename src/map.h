@@ -38,6 +38,11 @@ SDL_Texture* floor_ceiling_tex;
 // Where we store the floor pixels before we render.
 unsigned int floor_ceiling_pixels[64000];
 
+// Stores the number of wall textures used by the system.
+int num_wall_tex;
+// Stores the number of things in the world.
+int num_things;
+
 // Specifies the layout of the world.
 int map[] = {
 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -52,8 +57,8 @@ int map[] = {
 	2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 };
 
-// Define a "Null" walldef for floors.
-struct walldef walls[3];
+// Assume an upper bound of 100 wall textures.
+struct walldef walls[100];
 
 // The list of sprites in the world. We sort
 // this every frame by distance from the player.
@@ -63,8 +68,4 @@ struct thingdef things[1000];
 
 // Stores the things in a sorted order.
 struct thingdef* things_sorted[1000];
-
-// Stores the number of things in the world.
-int num_things;
-
 #endif
