@@ -21,6 +21,10 @@
 // Essentially, UNIT_SIZE = 2 ^ UNIT_POWER. We use this to do effecient
 // multiplication and division.
 #define UNIT_POWER			6
+// Since we use it frequently, we will define half of the unit size and its
+// power here
+#define HALF_UNIT_SIZE		32
+#define HALF_UNIT_POWER		5
 // The size of the projection area, which is our screen. I would call it
 // "SCREEN_W and SCREEN_H", but the underlying math refers to them as
 // the PROJECTION PLANE, so I will use that nomenclature instead.
@@ -35,6 +39,8 @@
 #define DIST_TO_PROJ		277
 // Essentially the FOV / PROJ_W, but we will pre-compute that here.
 #define ANGLE_BETWEEN_RAYS	0.1875
+// Multiply a radian value to get its approximated degree.
+#define RAD_TO_DEG 			57.296
 
 struct hitinfo {
 	// Where we hit.

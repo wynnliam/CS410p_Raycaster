@@ -489,7 +489,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 			// FLOOR/CEILING CASTING.
 			// dest.h + dest.y == bottom of the wall
 			for(j = dest.h + dest.y + 1; j < PROJ_H; ++j) {
-				straight_dist = (int)(DIST_TO_PROJ * 32 / (j - 100));
+				straight_dist = (int)(DIST_TO_PROJ * HALF_UNIT_SIZE / (j - HALF_PROJ_H));
 				dist_to_point = (straight_dist << 7) / (cos128table[correct_angle]);
 
 				// Use adjusted so it gives us the direction of the "true" ray angle.
@@ -506,40 +506,44 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 				// Put ceiling pixel.
 				t_color = (unsigned char*)ceiling_surf->pixels + t_y * ceiling_surf->pitch + t_x * 3;
 				floor_ceiling_pixels[(-j + 200)  * PROJ_W + i] = 0xFF000000 | t_color[0] << 16 | t_color[1] << 8 | t_color[2];
-				//SDL_SetRenderDrawColor(renderer, t_color[0], t_color[1], t_color[2], 255);
-				//SDL_RenderDrawPoint(renderer, i, j);
 			}
 		}
 
 		curr_angle -= ANGLE_BETWEEN_RAYS;
 	}
 
-	SDL_UpdateTexture(floor_ceiling_tex, NULL, floor_ceiling_pixels, 320 * 4);
+	// Now render the floor.
+	SDL_UpdateTexture(floor_ceiling_tex, NULL, floor_ceiling_pixels, PROJ_W << 2);
 	SDL_RenderCopy(renderer, floor_ceiling_tex, NULL, NULL);
 
 	for(i = 2; i >= 0; --i) {
 		int x_diff = things_sorted[i]->position[0] - player_x;
 		int y_diff = things_sorted[i]->position[1] - player_y;
 
-		int theta_temp = (int)(atan2(-y_diff, x_diff) * 180.0 / M_PI);
+		int theta_temp = (int)(atan2(-y_diff, x_diff) * RAD_TO_DEG);
+
+		// Make sure the angle is between 0 and 360.
 		if(theta_temp < 0)
 			theta_temp += 360;
 
-		int scr_y = player_rot + 30 - theta_temp;
+		int scr_y = player_rot + FOV_HALF - theta_temp;
 		if(theta_temp > 270 && player_rot < 90)
-			scr_y = player_rot + 30 - theta_temp + 360;
+			scr_y = player_rot + FOV_HALF - theta_temp + 360;
 		if(player_rot > 270 && theta_temp > 90)
-			scr_y = player_rot + 30 - theta_temp - 360;
+			scr_y = player_rot + FOV_HALF - theta_temp - 360;
 
-		int scr_x = (int)(scr_y * 320.0 / 60.0);
+		int scr_x = scr_y * PROJ_W / FOV;
 
+		// Defines the sprite's screen dimensions and position.
 		SDL_Rect thing_rect;
+		// Defines the column of pixels of the sprite we want.
 		SDL_Rect thing_src_rect;
+		// Defines where we render the column of pixels of the sprite.
 		SDL_Rect thing_dest_rect;
 
-		thing_rect.w = (int)(64.0 / sqrt(things_sorted[i]->dist) * DIST_TO_PROJ);
+		thing_rect.w = (int)(UNIT_SIZE / sqrt(things_sorted[i]->dist) * DIST_TO_PROJ);
 		thing_rect.h = thing_rect.w;
-		thing_rect.y = 100 - (thing_rect.h >> 1);
+		thing_rect.y = HALF_PROJ_H - (thing_rect.h >> 1);
 		thing_rect.x = scr_x - (thing_rect.w >> 1);
 
 		// The column for the scaled texture.
@@ -552,13 +556,14 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 					thing_src_rect.x = (m << 6) / thing_rect.w;
 					thing_src_rect.y = 0;
 					thing_src_rect.w = 1;
-					thing_src_rect.h = 64;
+					thing_src_rect.h = UNIT_SIZE;
 
 					thing_dest_rect.x = j;
 					thing_dest_rect.y = thing_rect.y;
 					thing_dest_rect.w = 1;
 					thing_dest_rect.h = thing_rect.h;
 
+					// Render the column of sprites.
 					SDL_RenderCopy(renderer, things_sorted[i]->texture, &thing_src_rect, &thing_dest_rect);
 				}
 			}
