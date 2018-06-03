@@ -126,9 +126,11 @@ void initialize_map(SDL_Renderer* renderer) {
 	floor_ceils[2].floor_surf = SDL_LoadBMP("./assests/floor.bmp");
 	floor_ceils[2].ceil_surf = NULL;
 
-	printf("Floor 0 BBP: %d, Floor 1 BBP: %d\n", floor_ceils[0].floor_surf->format->BytesPerPixel, floor_ceils[1].floor_surf->format->BytesPerPixel);
-
 	floor_ceiling_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
+
+	surface = SDL_LoadBMP("./assests/skybox.bmp");
+	sky_texture = SDL_CreateTextureFromSurface(renderer, surface);
+	SDL_FreeSurface(surface);
 
 	// Enables transparent pixel 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -459,6 +461,23 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 		z_buffer[i] = 0;
 		get_ray_hit(adj_angle, player_x, player_y, &hit);
 		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
+			// Render sky
+			if(sky_texture) {
+				SDL_Rect sky_src, sky_dest;
+
+				sky_src.x = (adj_angle * 2) % 640;
+				sky_src.y = 0;
+				sky_src.w = 1;
+				sky_src.h = 200;
+
+				sky_dest.x = i;
+				sky_dest.y = 0;
+				sky_dest.w = 1;
+				sky_dest.h = 200;
+
+				SDL_RenderCopy(renderer, sky_texture, &sky_src, &sky_dest);
+			}
+
 			z_buffer[i] = hit.dist;
 			// WALL CASTING
 			wall = hit.wall_type - num_floor_ceils;

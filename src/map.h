@@ -27,6 +27,8 @@ struct floorcielingdef {
 	SDL_Surface* ceil_surf;
 };
 
+SDL_Texture* sky_texture;
+
 // Defines a "thing" in the world. This is for
 // static objects in the world, but can easily
 // be extended for dynamic objects and/or NPCs.
