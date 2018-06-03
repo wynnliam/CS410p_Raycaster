@@ -104,25 +104,29 @@ void initialize_lookup_tables() {
 void initialize_map(SDL_Renderer* renderer) {
 	SDL_Surface* surface;
 
-	// We define a 0 "Null" wall texture for floors.
-	num_wall_tex = 3;
+	num_wall_tex = 2;
 
-	// Initialize the map data.
-	// "null" walldef.
-	walls[0].texture = NULL;
 	// first wall.
-	surface = SDL_LoadBMP("./src/assests/wall1.bmp");
-	walls[1].texture = SDL_CreateTextureFromSurface(renderer, surface);
+	surface = SDL_LoadBMP("./assests/wall1.bmp");
+	walls[0].texture = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
 	// second wall.
-	surface = SDL_LoadBMP("./src/assests/wall2.bmp");
-	walls[2].texture = SDL_CreateTextureFromSurface(renderer, surface);
+	surface = SDL_LoadBMP("./assests/wall2.bmp");
+	walls[1].texture = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
 
-	// Initialize the floor.
-	floor_surf = SDL_LoadBMP("./src/assests/floor.bmp");
-	// Initialize the ceiling.
-	ceiling_surf = SDL_LoadBMP("./src/assests/ceiling.bmp");
+	num_floor_ceils = 3;
+
+	floor_ceils[0].floor_surf = SDL_LoadBMP("./assests/floor.bmp");
+	floor_ceils[0].ceil_surf = SDL_LoadBMP("./assests/ceiling.bmp");
+
+	floor_ceils[1].floor_surf = SDL_LoadBMP("./assests/floor2.bmp");
+	floor_ceils[1].ceil_surf = SDL_LoadBMP("./assests/ceiling2.bmp");
+
+	floor_ceils[2].floor_surf = SDL_LoadBMP("./assests/floor.bmp");
+	floor_ceils[2].ceil_surf = NULL;
+
+	printf("Floor 0 BBP: %d, Floor 1 BBP: %d\n", floor_ceils[0].floor_surf->format->BytesPerPixel, floor_ceils[1].floor_surf->format->BytesPerPixel);
 
 	floor_ceiling_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
 
@@ -133,23 +137,25 @@ void initialize_map(SDL_Renderer* renderer) {
 	// Initializes the sprites.
 	num_things = 3;
 
-	surface = SDL_LoadBMP("./src/assests/sprite.bmp");
+	surface = SDL_LoadBMP("./assests/sprite.bmp");
 	things[0].texture = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
 	things[0].position[0] = 128;
 	things[0].position[1] = 128;
 
-	surface = SDL_LoadBMP("./src/assests/sprite2.bmp");
+	surface = SDL_LoadBMP("./assests/sprite2.bmp");
 	things[1].texture = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
 	things[1].position[0] = 128;
 	things[1].position[1] = 448;
 
-	surface = SDL_LoadBMP("./src/assests/sprite3.bmp");
+	surface = SDL_LoadBMP("./assests/sprite3.bmp");
 	things[2].texture = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
 	things[2].position[0] = 672;
 	things[2].position[1] = 96;
+
+	num_tiles = 5;
 }
 
 // TODO: Add documentation for this
@@ -290,7 +296,7 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 
 	// Now find the point that is a wall by travelling along horizontal gridlines.
 	tile = get_tile(curr_h_x, curr_h_y);
-	while(tile == 0) {
+	while(-1 < tile && tile < num_floor_ceils) {
 		curr_h_x += delt_h_x;
 		curr_h_y += delt_h_y;
 		tile = get_tile(curr_h_x, curr_h_y);
@@ -309,7 +315,7 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 
 	// Now find the point that is a wall by travelling along vertical gridlines.
 	tile = get_tile(curr_v_x, curr_v_y);
-	while(tile == 0) {
+	while(-1 < tile && tile < num_floor_ceils) {
 		curr_v_x += delt_v_x;
 		curr_v_y += delt_v_y;
 		tile = get_tile(curr_v_x, curr_v_y);
@@ -455,7 +461,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
 			z_buffer[i] = hit.dist;
 			// WALL CASTING
-			wall = hit.wall_type;
+			wall = hit.wall_type - num_floor_ceils;
 
 			slice_dist = (hit.dist * cos128table[correct_angle]) >> 7;
 
@@ -489,16 +495,28 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 				p_x = player_x + ((dist_to_point * cos128table[adj_angle]) >> 7);
 				p_y = player_y - ((dist_to_point * sin128table[adj_angle]) >> 7);
 
+				int floor_ceil = get_tile(p_x, p_y);
+
 				// Gives us the texture location.
 				t_x = p_x % UNIT_SIZE;
 				t_y = p_y % UNIT_SIZE;
 
+				if(floor_ceil < 0 || floor_ceil >= num_floor_ceils)
+					continue;
+
 				// Put floor pixel.
-				t_color = (unsigned char*)floor_surf->pixels + t_y * floor_surf->pitch + t_x * 3;
-				floor_ceiling_pixels[j * PROJ_W + i] = 0xFF000000 | t_color[0] << 16 | t_color[1] << 8 | t_color[2];
+				//printf("%d\n", floor_ceil);
+				if(floor_ceils[floor_ceil].floor_surf) {
+					t_color = (unsigned char*)floor_ceils[floor_ceil].floor_surf->pixels + t_y * floor_ceils[floor_ceil].floor_surf->pitch + t_x * 3;
+					//printf("%d %d: %d %d %d\n", t_x, t_y, t_color[0], t_color[1], t_color[2]);
+					floor_ceiling_pixels[j * PROJ_W + i] = 0xFF000000 | t_color[2] << 16 | t_color[1] << 8 | t_color[1];
+				}
+
 				// Put ceiling pixel.
-				t_color = (unsigned char*)ceiling_surf->pixels + t_y * ceiling_surf->pitch + t_x * 3;
-				floor_ceiling_pixels[(-j + PROJ_H)  * PROJ_W + i] = 0xFF000000 | t_color[0] << 16 | t_color[1] << 8 | t_color[2];
+				if(floor_ceils[floor_ceil].ceil_surf) {
+					t_color = (unsigned char*)floor_ceils[floor_ceil].ceil_surf->pixels + t_y * floor_ceils[floor_ceil].ceil_surf->pitch + t_x * 3;
+					floor_ceiling_pixels[(-j + PROJ_H)  * PROJ_W + i] = 0xFF000000 | t_color[2] << 16 | t_color[1] << 8 | t_color[0];
+				}
 			}
 		}
 

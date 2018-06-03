@@ -13,9 +13,9 @@ int player_rot;
 /*INITIALIZATION PROCEDURES*/
 
 void initialize(SDL_Renderer* renderer) {
-	player_x = 1100;
-	player_y = 256;
-	player_rot = 0;
+	player_x = 256;
+	player_y = 160;
+	player_rot = 180;
 
 	// Initializes all the angle lookup tables.
 	initialize_lookup_tables();
@@ -54,7 +54,7 @@ void update() {
 				player_y -= (sin128table[player_rot] << 2) >> 7;
 				player_x += (cos128table[player_rot] << 2) >> 7;
 
-				if(get_tile(player_x, player_y) != 0) {
+				if(get_tile(player_x, player_y) < 0 || get_tile(player_x, player_y) >= 3) {
 					player_y += (sin128table[player_rot] << 2) >> 7;
 					player_x -= (cos128table[player_rot] << 2) >> 7;
 				}
@@ -64,7 +64,7 @@ void update() {
 				player_y += (sin128table[player_rot] << 2) >> 7;
 				player_x -= (cos128table[player_rot] << 2) >> 7;
 
-				if(get_tile(player_x, player_y) != 0) {
+				if(get_tile(player_x, player_y) < 0 || get_tile(player_x, player_y) >= 3) {
 					player_y -= (sin128table[player_rot] << 2) >> 7;
 					player_x += (cos128table[player_rot] << 2) >> 7;
 				}

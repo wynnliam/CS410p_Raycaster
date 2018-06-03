@@ -1,6 +1,6 @@
 // Liam Wynn, 5/11/2018, CS410p: Full Stack Web Development
 
-#include <emscripten.h>
+//#include <emscripten.h>
 #include <stdio.h>
 
 #include "loop_handling.h"
@@ -54,7 +54,12 @@ int main() {
 	initialize(renderer);
 
 	// Actually sets the rendering loop.
-	emscripten_set_main_loop_arg(loop, &ctx, fps_count, run_infinite);
+	//emscripten_set_main_loop_arg(loop, &ctx, fps_count, run_infinite);
+
+	while(1) {
+		update();
+		render(renderer);
+	}
 
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
