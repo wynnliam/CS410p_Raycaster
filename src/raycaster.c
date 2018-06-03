@@ -415,7 +415,6 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 	// Next, compute the distance between each thing and the player.
 	for(i = 0; i < 3; ++i) {
-		things[i].can_see = 0;
 		thing_dist[i] = (things[i].position[0] - player_x) * (things[i].position[0] - player_x) +
 						(things[i].position[1] - player_y) * (things[i].position[1] - player_y);
 		things[i].dist = thing_dist[i];
