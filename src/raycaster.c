@@ -128,6 +128,8 @@ void initialize_map(SDL_Renderer* renderer) {
 	SDL_SetTextureBlendMode(floor_ceiling_tex, SDL_BLENDMODE_BLEND);
 
 	// Initializes the sprites.
+	num_things = 3;
+
 	surface = SDL_LoadBMP("./src/assests/sprite.bmp");
 	things[0].texture = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
@@ -405,7 +407,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 	unsigned char* t_color;
 
 	// Stores the squared distance between the player and each thing.
-	int thing_dist[3];
+	int thing_dist[num_things];
 
 	int i, j;
 
@@ -414,7 +416,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 		floor_ceiling_pixels[i] = 0;
 
 	// Next, compute the distance between each thing and the player.
-	for(i = 0; i < 3; ++i) {
+	for(i = 0; i < num_things; ++i) {
 		thing_dist[i] = (things[i].position[0] - player_x) * (things[i].position[0] - player_x) +
 						(things[i].position[1] - player_y) * (things[i].position[1] - player_y);
 		things[i].dist = thing_dist[i];
@@ -423,7 +425,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 	}
 
 	// Now, sort the things according to distance.
-	sort_things(thing_dist, 0, 2);
+	sort_things(thing_dist, 0, num_things - 1);
 
 	// The actual ray casting step.
 	for(i = 0; i < PROJ_W; ++i) {
@@ -504,7 +506,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 	SDL_UpdateTexture(floor_ceiling_tex, NULL, floor_ceiling_pixels, PROJ_W << 2);
 	SDL_RenderCopy(renderer, floor_ceiling_tex, NULL, NULL);
 
-	for(i = 2; i >= 0; --i) {
+	for(i = num_things - 1; i >= 0; --i) {
 		int x_diff = things_sorted[i]->position[0] - player_x;
 		int y_diff = things_sorted[i]->position[1] - player_y;
 

@@ -57,9 +57,14 @@ struct walldef walls[3];
 
 // The list of sprites in the world. We sort
 // this every frame by distance from the player.
-struct thingdef things[3];
+// We will assume there can be at most 1000 sprites
+// in a level.
+struct thingdef things[1000];
 
 // Stores the things in a sorted order.
-struct thingdef* things_sorted[3];
+struct thingdef* things_sorted[1000];
+
+// Stores the number of things in the world.
+int num_things;
 
 #endif
