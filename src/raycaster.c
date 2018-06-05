@@ -465,7 +465,10 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 			if(sky_texture) {
 				SDL_Rect sky_src, sky_dest;
 
-				sky_src.x = (adj_angle * 2) % 640;
+				sky_src.x = adj_angle << 2;
+				if(sky_src.x > 640)
+					sky_src.x -= 640;
+
 				sky_src.y = 0;
 				sky_src.w = 1;
 				sky_src.h = 200;
