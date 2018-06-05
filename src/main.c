@@ -35,7 +35,11 @@ int main() {
 	const int run_infinite = 1;
 
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
-	SDL_CreateWindowAndRenderer(320, 200, 0, &window, &renderer);
+
+	window = SDL_CreateWindow("CS410p: Raycaster", 0, 0, 320, 200, 0);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
+
+	//SDL_CreateWindowAndRenderer(320, 200, 0, &window, &renderer);
 
 	ctx.renderer = renderer;
 

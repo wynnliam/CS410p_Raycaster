@@ -109,11 +109,14 @@ void initialize_map(SDL_Renderer* renderer) {
 	// first wall.
 	surface = SDL_LoadBMP("./src/assests/wall1.bmp");
 	walls[0].texture = SDL_CreateTextureFromSurface(renderer, surface);
-	SDL_FreeSurface(surface);
+	walls[0].surf = surface;
+	printf("bbp for wall: %d\n", surface->format->BytesPerPixel);
+	//SDL_FreeSurface(surface);
 	// second wall.
 	surface = SDL_LoadBMP("./src/assests/wall2.bmp");
 	walls[1].texture = SDL_CreateTextureFromSurface(renderer, surface);
-	SDL_FreeSurface(surface);
+	walls[1].surf = surface;
+	//SDL_FreeSurface(surface);
 
 	num_floor_ceils = 3;
 
@@ -127,10 +130,12 @@ void initialize_map(SDL_Renderer* renderer) {
 	floor_ceils[2].ceil_surf = NULL;
 
 	floor_ceiling_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
+	raycast_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
 
 	surface = SDL_LoadBMP("./src/assests/skybox.bmp");
 	sky_texture = SDL_CreateTextureFromSurface(renderer, surface);
-	SDL_FreeSurface(surface);
+	sky_surf = surface;
+	//SDL_FreeSurface(surface);
 
 	// Enables transparent pixel 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -422,9 +427,11 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 	int i, j;
 
-	// Begin by clearning the floor/ceiling texture.
-	for(i = 0; i < 64000; ++i)
+	// Begin by clearning the pixel arrays that we copy to.
+	for(i = 0; i < 64000; ++i) {
 		floor_ceiling_pixels[i] = 0;
+		raycast_pixels[i] = 0;
+	}
 
 	// Next, compute the distance between each thing and the player.
 	for(i = 0; i < num_things; ++i) {
@@ -473,12 +480,17 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 				sky_src.w = 1;
 				sky_src.h = 200;
 
-				sky_dest.x = i;
+				for(j = 0; j < 200; ++j) {
+					t_color = (unsigned char*)sky_surf->pixels + j * sky_surf->pitch + sky_src.x * 3;
+					raycast_pixels[j * PROJ_W + i] = 0xFF000000 | t_color[2] << 16 | t_color[1] << 8 | t_color[0];
+				}
+
+				/*sky_dest.x = i;
 				sky_dest.y = 0;
 				sky_dest.w = 1;
 				sky_dest.h = 200;
 
-				SDL_RenderCopy(renderer, sky_texture, &sky_src, &sky_dest);
+				SDL_RenderCopy(renderer, sky_texture, &sky_src, &sky_dest);*/
 			}
 
 			z_buffer[i] = hit.dist;
@@ -505,7 +517,21 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 			dest.w = 1;
 			dest.h = (HALF_PROJ_H + (slice_height >> 1)) - dest.y;
 
-			SDL_RenderCopy(renderer, walls[wall].texture, &src, &dest);
+			// Manually copies texture from source to portion of screen.
+			for(j = 0; j < dest.h; ++j) {
+				if(j + dest.y < 0 || j + dest.y >= 200)
+					continue;
+
+				t_x = src.x;
+				t_y = (j << 6) / dest.h;
+
+				t_color = (unsigned char*)walls[wall].surf->pixels + t_y * walls[wall].surf->pitch + t_x * 3;
+				raycast_pixels[(j + dest.y) * PROJ_W + i] = 0xFF000000 | t_color[2] << 16 | t_color[1] << 8 | t_color[0];
+			}
+
+			//t_color = (unsigned char*)floor_ceils[floor_ceil].floor_surf->pixels + t_y * floor_ceils[floor_ceil].floor_surf->pitch + t_x * 3;
+			//printf("%d %d: %d %d %d\n", t_x, t_y, t_color[0], t_color[1], t_color[2]);
+			//floor_ceiling_pixels[j * PROJ_W + i] = 0xFF000000 | t_color[2] << 16 | t_color[1] << 8 | t_color[1];
 
 			// FLOOR/CEILING CASTING.
 			// dest.h + dest.y == bottom of the wall
@@ -531,7 +557,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 				if(floor_ceils[floor_ceil].floor_surf) {
 					t_color = (unsigned char*)floor_ceils[floor_ceil].floor_surf->pixels + t_y * floor_ceils[floor_ceil].floor_surf->pitch + t_x * 3;
 					//printf("%d %d: %d %d %d\n", t_x, t_y, t_color[0], t_color[1], t_color[2]);
-					floor_ceiling_pixels[j * PROJ_W + i] = 0xFF000000 | t_color[2] << 16 | t_color[1] << 8 | t_color[1];
+					floor_ceiling_pixels[j * PROJ_W + i] = 0xFF000000 | t_color[2] << 16 | t_color[1] << 8 | t_color[0];
 				}
 
 				// Put ceiling pixel.
@@ -544,6 +570,9 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 		curr_angle -= ANGLE_BETWEEN_RAYS;
 	}
+
+	SDL_UpdateTexture(raycast_texture, NULL, raycast_pixels, PROJ_W << 2);
+	SDL_RenderCopy(renderer, raycast_texture, NULL, NULL);
 
 	// Now render the floor.
 	SDL_UpdateTexture(floor_ceiling_tex, NULL, floor_ceiling_pixels, PROJ_W << 2);

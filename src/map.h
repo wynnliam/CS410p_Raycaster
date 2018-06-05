@@ -18,6 +18,7 @@
 struct walldef {
 	// Defines the texture for this wall.
 	SDL_Texture* texture;
+	SDL_Surface* surf;
 };
 
 // Specifies floor and ceiling textures for a given
@@ -28,6 +29,7 @@ struct floorcielingdef {
 };
 
 SDL_Texture* sky_texture;
+SDL_Surface* sky_surf;
 
 // Defines a "thing" in the world. This is for
 // static objects in the world, but can easily
@@ -46,6 +48,10 @@ SDL_Surface* ceiling_surf;
 SDL_Texture* floor_ceiling_tex;
 // Where we store the floor pixels before we render.
 unsigned int floor_ceiling_pixels[64000];
+
+// Where we render for skybox and wall pixels.
+SDL_Texture* raycast_texture;
+unsigned int raycast_pixels[64000];
 
 // Stores the number of tile types (num_wall_tex + num_foor_ceils)
 int num_tiles;
