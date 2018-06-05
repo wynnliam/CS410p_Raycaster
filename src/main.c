@@ -57,6 +57,13 @@ int main() {
 	// Initialize any non-SDL logic
 	initialize(renderer);
 
+	/*while(1) {
+		// Things like keyboard input and user movement.
+		update();
+		// Do a ray-casting rendering step.
+		render(renderer);
+	}*/
+
 	// Actually sets the rendering loop.
 	emscripten_set_main_loop_arg(loop, &ctx, fps_count, run_infinite);
 

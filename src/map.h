@@ -36,6 +36,7 @@ SDL_Surface* sky_surf;
 // be extended for dynamic objects and/or NPCs.
 struct thingdef {
 	SDL_Texture* texture;
+	SDL_Surface* surf;
 	int position[2];
 	int dist;
 };
@@ -52,6 +53,9 @@ unsigned int floor_ceiling_pixels[64000];
 // Where we render for skybox and wall pixels.
 SDL_Texture* raycast_texture;
 unsigned int raycast_pixels[64000];
+
+SDL_Texture* thing_texture;
+unsigned int thing_pixels[64000];
 
 // Stores the number of tile types (num_wall_tex + num_foor_ceils)
 int num_tiles;

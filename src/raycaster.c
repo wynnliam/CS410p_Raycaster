@@ -131,6 +131,7 @@ void initialize_map(SDL_Renderer* renderer) {
 
 	floor_ceiling_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
 	raycast_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
+	thing_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
 
 	surface = SDL_LoadBMP("./src/assests/skybox.bmp");
 	sky_texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -140,25 +141,31 @@ void initialize_map(SDL_Renderer* renderer) {
 	// Enables transparent pixel 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetTextureBlendMode(floor_ceiling_tex, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureBlendMode(raycast_texture, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureBlendMode(thing_texture, SDL_BLENDMODE_BLEND);
 
 	// Initializes the sprites.
 	num_things = 3;
 
 	surface = SDL_LoadBMP("./src/assests/sprite.bmp");
 	things[0].texture = SDL_CreateTextureFromSurface(renderer, surface);
-	SDL_FreeSurface(surface);
+	things[0].surf = surface;
+	printf("bbp: %d\n", things[0].surf->format->BytesPerPixel);
+	//SDL_FreeSurface(surface);
 	things[0].position[0] = 128;
 	things[0].position[1] = 128;
 
 	surface = SDL_LoadBMP("./src/assests/sprite2.bmp");
 	things[1].texture = SDL_CreateTextureFromSurface(renderer, surface);
-	SDL_FreeSurface(surface);
+	things[1].surf = surface;
+	//SDL_FreeSurface(surface);
 	things[1].position[0] = 128;
 	things[1].position[1] = 448;
 
 	surface = SDL_LoadBMP("./src/assests/sprite3.bmp");
 	things[2].texture = SDL_CreateTextureFromSurface(renderer, surface);
-	SDL_FreeSurface(surface);
+	things[2].surf = surface;
+	//SDL_FreeSurface(surface);
 	things[2].position[0] = 672;
 	things[2].position[1] = 96;
 
@@ -431,6 +438,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 	for(i = 0; i < 64000; ++i) {
 		floor_ceiling_pixels[i] = 0;
 		raycast_pixels[i] = 0;
+		thing_pixels[i] = 0;
 	}
 
 	// Next, compute the distance between each thing and the player.
@@ -571,13 +579,8 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 		curr_angle -= ANGLE_BETWEEN_RAYS;
 	}
 
-	SDL_UpdateTexture(raycast_texture, NULL, raycast_pixels, PROJ_W << 2);
-	SDL_RenderCopy(renderer, raycast_texture, NULL, NULL);
 
-	// Now render the floor.
-	SDL_UpdateTexture(floor_ceiling_tex, NULL, floor_ceiling_pixels, PROJ_W << 2);
-	SDL_RenderCopy(renderer, floor_ceiling_tex, NULL, NULL);
-
+	int k;
 	for(i = num_things - 1; i >= 0; --i) {
 		int x_diff = things_sorted[i]->position[0] - player_x;
 		int y_diff = things_sorted[i]->position[1] - player_y;
@@ -626,13 +629,33 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 					thing_dest_rect.h = thing_rect.h;
 
 					// Render the column of sprites.
-					SDL_RenderCopy(renderer, things_sorted[i]->texture, &thing_src_rect, &thing_dest_rect);
+					//SDL_RenderCopy(renderer, things_sorted[i]->texture, &thing_src_rect, &thing_dest_rect);
+					for(k = 0; k < thing_rect.h; ++k) {
+						if(k + thing_rect.y < 0 || k + thing_rect.y >= 200)
+							continue;
+
+						t_x = thing_src_rect.x;
+						t_y = (k << 6) / thing_rect.h;
+						t_color = (unsigned char*)(things_sorted[i]->surf->pixels + t_y * things_sorted[i]->surf->pitch + t_x * 4);
+						thing_pixels[(k + thing_rect.y) * PROJ_W + j] = *(unsigned int*)t_color;
+					}
 				}
 			}
 
 			++m;
 		}
 	}
+
+
+	SDL_UpdateTexture(raycast_texture, NULL, raycast_pixels, PROJ_W << 2);
+	SDL_RenderCopy(renderer, raycast_texture, NULL, NULL);
+
+	// Now render the floor.
+	SDL_UpdateTexture(floor_ceiling_tex, NULL, floor_ceiling_pixels, PROJ_W << 2);
+	SDL_RenderCopy(renderer, floor_ceiling_tex, NULL, NULL);
+
+	SDL_UpdateTexture(thing_texture, NULL, thing_pixels, PROJ_W << 2);
+	SDL_RenderCopy(renderer, thing_texture, NULL, NULL);
 }
 
 void sort_things(int* dist, int s, int e) {
