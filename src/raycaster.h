@@ -167,7 +167,6 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 	farthest to closest so we render the closest ones last. The algorithm used here is quicksort.
 
 	ARGUMENTS:
-		dist - stores the distance of the corresponding thing to the player.
 		s, e - the starting and ending indecies
 
 	PRECONDITIONS:
@@ -176,6 +175,6 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 	POSTCONDITIONS:
 		Order of things array will be modifief.
 */
-void sort_things(int dist[3], int s, int e);
-int partition(int* dist, int s, int e);
+void sort_things(int s, int e);
+int partition(int s, int e);
 #endif

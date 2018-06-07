@@ -412,9 +412,6 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 	// RGB value of the floor/ceiling texture.
 	unsigned char* t_color;
 
-	// Stores the squared distance between the player and each thing.
-	int thing_dist[num_things];
-
 	int i, j;
 
 	// Begin by clearning the pixel arrays that we copy to.
@@ -427,15 +424,12 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 	// Next, compute the distance between each thing and the player.
 	for(i = 0; i < num_things; ++i) {
 		things[i].dist = get_dist_sqrd(things[i].position[0], things[i].position[1], player_x, player_y);
-		thing_dist[i] = (things[i].position[0] - player_x) * (things[i].position[0] - player_x) +
-						(things[i].position[1] - player_y) * (things[i].position[1] - player_y);
-		//things[i].dist = thing_dist[i];
 		// Add the thing to the sorted list.
 		things_sorted[i] = &things[i];
 	}
 
 	// Now, sort the things according to distance.
-	sort_things(thing_dist, 0, num_things - 1);
+	sort_things(0, num_things - 1);
 
 	// The actual ray casting step.
 	for(i = 0; i < PROJ_W; ++i) {
@@ -477,12 +471,6 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 					raycast_pixels[j * PROJ_W + i] = 0xFF000000 | t_color[2] << 16 | t_color[1] << 8 | t_color[0];
 				}
 
-				/*sky_dest.x = i;
-				sky_dest.y = 0;
-				sky_dest.w = 1;
-				sky_dest.h = 200;
-
-				SDL_RenderCopy(renderer, sky_texture, &sky_src, &sky_dest);*/
 			}
 
 			z_buffer[i] = hit.dist;
@@ -644,32 +632,32 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 	SDL_RenderCopy(renderer, thing_texture, NULL, NULL);
 }
 
-void sort_things(int* dist, int s, int e) {
+void sort_things(int s, int e) {
 	if(e <= s)
 		return;
 
-	int m = partition(dist, s, e);
+	int m = partition(s, e);
 
-	sort_things(dist, s, m);
-	sort_things(dist, m + 1, e);
+	sort_things(s, m);
+	sort_things(m + 1, e);
 }
 
-int partition(int* dist, int s, int e) {
+int partition(int s, int e) {
 	int i = s - 1;
 	int j = e + 1;
 
-	int p_dist = dist[s];
+	int p_dist = things[s].dist;
 
 	struct thingdef* temp;
 
 	while(1) {
 		do {
 			i += 1;
-		} while(dist[i] > p_dist);
+		} while(things[i].dist > p_dist);
 
 		do {
 			j -= 1;
-		} while(dist[j] < p_dist);
+		} while(things[j].dist < p_dist);
 
 		if(i >= j)
 			return j;
