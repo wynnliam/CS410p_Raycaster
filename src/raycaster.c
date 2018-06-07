@@ -108,7 +108,7 @@ void initialize_map(SDL_Renderer* renderer) {
 	num_floor_ceils = 3;
 	num_tiles = num_wall_tex + num_floor_ceils;
 
-	num_things = 3;
+	num_things = 4;
 
 	// Load walls into memory.
 	walls[0].surf = SDL_LoadBMP("./src/assests/wall1.bmp");
@@ -136,6 +136,10 @@ void initialize_map(SDL_Renderer* renderer) {
 	things[2].surf = SDL_LoadBMP("./src/assests/sprite3.bmp");
 	things[2].position[0] = 672;
 	things[2].position[1] = 96;
+
+	things[3].surf = SDL_LoadBMP("./src/assests/sprite.bmp");
+	things[3].position[0] = 256;
+	things[3].position[1] = 460;
 
 	floor_ceiling_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
 	raycast_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
@@ -422,9 +426,10 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 	// Next, compute the distance between each thing and the player.
 	for(i = 0; i < num_things; ++i) {
+		things[i].dist = get_dist_sqrd(things[i].position[0], things[i].position[1], player_x, player_y);
 		thing_dist[i] = (things[i].position[0] - player_x) * (things[i].position[0] - player_x) +
 						(things[i].position[1] - player_y) * (things[i].position[1] - player_y);
-		things[i].dist = thing_dist[i];
+		//things[i].dist = thing_dist[i];
 		// Add the thing to the sorted list.
 		things_sorted[i] = &things[i];
 	}
@@ -560,7 +565,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 
 	int k;
-	for(i = num_things - 1; i >= 0; --i) {
+	for(i = 0; i < num_things; ++i) {
 		int x_diff = things_sorted[i]->position[0] - player_x;
 		int y_diff = things_sorted[i]->position[1] - player_y;
 
@@ -616,7 +621,9 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 						t_x = thing_src_rect.x;
 						t_y = (k << 6) / thing_rect.h;
 						t_color = (unsigned char*)(things_sorted[i]->surf->pixels + t_y * things_sorted[i]->surf->pitch + t_x * 4);
-						thing_pixels[(k + thing_rect.y) * PROJ_W + j] = *(unsigned int*)t_color;
+						// Only put a pixel if it is not transparent.
+						if(t_color[3] > 0)
+							thing_pixels[(k + thing_rect.y) * PROJ_W + j] = *(unsigned int*)t_color;
 					}
 				}
 			}
