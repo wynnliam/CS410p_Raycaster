@@ -17,7 +17,6 @@
 // Specifies the data for a given wall tile.
 struct walldef {
 	// Defines the texture for this wall.
-	SDL_Texture* texture;
 	SDL_Surface* surf;
 };
 
@@ -28,23 +27,17 @@ struct floorcielingdef {
 	SDL_Surface* ceil_surf;
 };
 
-SDL_Texture* sky_texture;
 SDL_Surface* sky_surf;
 
 // Defines a "thing" in the world. This is for
 // static objects in the world, but can easily
 // be extended for dynamic objects and/or NPCs.
 struct thingdef {
-	SDL_Texture* texture;
 	SDL_Surface* surf;
 	int position[2];
 	int dist;
 };
 
-// The floor texture loaded into memory.
-SDL_Surface* floor_surf;
-// The ceiling texture loaded into memory.
-SDL_Surface* ceiling_surf;
 // What we render for the floor/ceiling
 SDL_Texture* floor_ceiling_tex;
 // Where we store the floor pixels before we render.

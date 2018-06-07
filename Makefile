@@ -9,4 +9,4 @@ all: $(SRC)
 	$(CMP) $(SRC) $(FLG)
 
 clean:
-	rm public/*.js public/*.js.mem public/*.data
+	rm public/raycaster.*

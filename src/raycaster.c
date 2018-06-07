@@ -101,25 +101,20 @@ void initialize_lookup_tables() {
 	}
 }
 
+// TODO: This whole function should be elsewhere.
 void initialize_map(SDL_Renderer* renderer) {
-	SDL_Surface* surface;
-
+	// Set properties of map.
 	num_wall_tex = 2;
-
-	// first wall.
-	surface = SDL_LoadBMP("./src/assests/wall1.bmp");
-	walls[0].texture = SDL_CreateTextureFromSurface(renderer, surface);
-	walls[0].surf = surface;
-	printf("bbp for wall: %d\n", surface->format->BytesPerPixel);
-	//SDL_FreeSurface(surface);
-	// second wall.
-	surface = SDL_LoadBMP("./src/assests/wall2.bmp");
-	walls[1].texture = SDL_CreateTextureFromSurface(renderer, surface);
-	walls[1].surf = surface;
-	//SDL_FreeSurface(surface);
-
 	num_floor_ceils = 3;
+	num_tiles = num_wall_tex + num_floor_ceils;
 
+	num_things = 3;
+
+	// Load walls into memory.
+	walls[0].surf = SDL_LoadBMP("./src/assests/wall1.bmp");
+	walls[1].surf = SDL_LoadBMP("./src/assests/wall2.bmp");
+
+	// Load floor-ceiling pairs into memory.
 	floor_ceils[0].floor_surf = SDL_LoadBMP("./src/assests/floor.bmp");
 	floor_ceils[0].ceil_surf = SDL_LoadBMP("./src/assests/ceiling.bmp");
 
@@ -129,47 +124,31 @@ void initialize_map(SDL_Renderer* renderer) {
 	floor_ceils[2].floor_surf = SDL_LoadBMP("./src/assests/floor.bmp");
 	floor_ceils[2].ceil_surf = NULL;
 
+	// Initializes the sprites.
+	things[0].surf = SDL_LoadBMP("./src/assests/sprite.bmp");
+	things[0].position[0] = 128;
+	things[0].position[1] = 128;
+
+	things[1].surf = SDL_LoadBMP("./src/assests/sprite2.bmp");
+	things[1].position[0] = 128;
+	things[1].position[1] = 448;
+
+	things[2].surf = SDL_LoadBMP("./src/assests/sprite3.bmp");
+	things[2].position[0] = 672;
+	things[2].position[1] = 96;
+
 	floor_ceiling_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
 	raycast_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
 	thing_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
 
-	surface = SDL_LoadBMP("./src/assests/skybox.bmp");
-	sky_texture = SDL_CreateTextureFromSurface(renderer, surface);
-	sky_surf = surface;
-	//SDL_FreeSurface(surface);
+	// Load sky texture into memory.
+	sky_surf = SDL_LoadBMP("./src/assests/skybox.bmp");
 
 	// Enables transparent pixel 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetTextureBlendMode(floor_ceiling_tex, SDL_BLENDMODE_BLEND);
 	SDL_SetTextureBlendMode(raycast_texture, SDL_BLENDMODE_BLEND);
 	SDL_SetTextureBlendMode(thing_texture, SDL_BLENDMODE_BLEND);
-
-	// Initializes the sprites.
-	num_things = 3;
-
-	surface = SDL_LoadBMP("./src/assests/sprite.bmp");
-	things[0].texture = SDL_CreateTextureFromSurface(renderer, surface);
-	things[0].surf = surface;
-	printf("bbp: %d\n", things[0].surf->format->BytesPerPixel);
-	//SDL_FreeSurface(surface);
-	things[0].position[0] = 128;
-	things[0].position[1] = 128;
-
-	surface = SDL_LoadBMP("./src/assests/sprite2.bmp");
-	things[1].texture = SDL_CreateTextureFromSurface(renderer, surface);
-	things[1].surf = surface;
-	//SDL_FreeSurface(surface);
-	things[1].position[0] = 128;
-	things[1].position[1] = 448;
-
-	surface = SDL_LoadBMP("./src/assests/sprite3.bmp");
-	things[2].texture = SDL_CreateTextureFromSurface(renderer, surface);
-	things[2].surf = surface;
-	//SDL_FreeSurface(surface);
-	things[2].position[0] = 672;
-	things[2].position[1] = 96;
-
-	num_tiles = 5;
 }
 
 // TODO: Add documentation for this
@@ -477,7 +456,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 		get_ray_hit(adj_angle, player_x, player_y, &hit);
 		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
 			// Render sky
-			if(sky_texture) {
+			if(sky_surf) {
 				SDL_Rect sky_src, sky_dest;
 
 				sky_src.x = adj_angle << 2;
