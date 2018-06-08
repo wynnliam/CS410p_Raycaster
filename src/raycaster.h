@@ -178,8 +178,36 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 */
 void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit);
 
+/*
+	Renders a single wall slice for a given ray. When this procedure is called,
+	we assume the ray actually hit a wall.
+
+	ARGUMENTES:
+		args - Please see the draw_wall_slice struct definition above.
+*/
 void draw_wall_slice(struct draw_wall_slice_args* args);
+
+/*
+	Renders the wall and floor for a given column of pixels. This is called by draw_wall_slice.
+
+	ARGUMENTS:
+		screen_slice_y - The y position for a slice on the screen.
+		screen_slice_h - The height of the slice on the screen.
+		dws - We use quite a few of the values stored in the draw_wall_slice_args.
+*/
 void draw_floor_and_ceiling(int screen_slice_y, int screen_slice_h, struct draw_wall_slice_args* dws);
+
+/*
+	Renders every thing (that we can see). We render them from the furthest to the player to
+	the closest. To render them, we do much the same as we would for walls. That is,
+	we render each thing column by column. We only render the ones we can see. That is, only render
+	the columns of sprites where the corresponding value in the z-buffer is larger (this implies the
+	wall slice of a given column is further away).
+
+	ARGUMENTS:
+		player_x, player_y - the position of the player in "world" space.
+		player_rot - the rotation of the player in degrees.
+*/
 void draw_things(int player_x, int player_y, int player_rot);
 
 /*

@@ -372,10 +372,8 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 unsigned int get_pixel(SDL_Surface* surface, int x, int y) {
 	if(!surface)
 		return 0;
-	if(x < 0 || x >= surface->w) {
-		printf("X AAAAA\n");
+	if(x < 0 || x >= surface->w)
 		return 0;
-	}
 	if(y < 0 || y >= surface->h)
 		return 0;
 
