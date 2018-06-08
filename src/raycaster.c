@@ -534,7 +534,7 @@ void draw_things(int player_x, int player_y, int player_rot) {
 		x_diff = things_sorted[i]->position[0] - player_x;
 		y_diff = things_sorted[i]->position[1] - player_y;
 
-		int theta_temp = (int)(atan2(-y_diff, x_diff) * RAD_TO_DEG);
+		theta_temp = (int)(atan2(-y_diff, x_diff) * RAD_TO_DEG);
 
 		// Make sure the angle is between 0 and 360.
 		if(theta_temp < 0)
