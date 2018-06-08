@@ -162,6 +162,8 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 */
 void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit);
 
+void draw_wall_slice(struct hitinfo* hit, int correct_angle, int screen_col);
+
 /*
 	Grabs the pixel of a surface at point (x, y). If the point is within the dimensions
 	of the surface, we return 0. This procedure will construct the unsigned integer

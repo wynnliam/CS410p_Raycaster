@@ -413,6 +413,53 @@ unsigned int get_pixel(SDL_Surface* surface, int x, int y) {
 	return result;
 }
 
+void draw_wall_slice(struct hitinfo* hit, int correct_angle, int screen_col) {
+	// The wall texture we will render.
+	unsigned char wall;
+	// The "correct" distance of the slice. Using this fixes
+	// the fish-eye effect.
+	unsigned int slice_dist;
+	// The height of the slice to render.
+	unsigned int slice_height;
+
+	// Stores the column of pixels from the wall texture we
+	// wish to render.
+	unsigned int tex_col;
+
+	// Where we will render the wall slice along the y axis.
+	int screen_slice_y;
+	// The height of the slice on the screen
+	int screen_slice_h;
+
+	wall = hit->wall_type - num_floor_ceils;
+	slice_dist = (hit->dist * cos128table[correct_angle]) >> 7;
+
+	// Make sure we don't get any issues computing the slice height.
+	if(slice_dist == 0)
+		slice_dist = 1;
+
+	// Dist to projection * 64 / slice dist.
+	slice_height = (DIST_TO_PROJ << 6) / slice_dist;
+
+	// Use a single column of pixels based on where the ray hit.
+	tex_col = hit->is_horiz ? (hit->hit_pos[0] % UNIT_SIZE) : (hit->hit_pos[1] % UNIT_SIZE);
+
+	// Define the part of the screen we render to such that it is a single column with the
+	// slice's middle pixel at the center of the screen.
+	screen_slice_y = HALF_PROJ_H - (slice_height >> 1);
+	screen_slice_h = (HALF_PROJ_H + (slice_height >> 1)) - screen_slice_y;
+
+	// Manually copies texture from source to portion of screen.
+	int j;
+	for(j = 0; j < screen_slice_h; ++j) {
+		// j + screen_slice_y gives us the position to render the current pixel on the screen.
+		if(j + screen_slice_y < 0 || j + screen_slice_y >= 200)
+			continue;
+
+		raycast_pixels[(j + screen_slice_y) * PROJ_W + screen_col] = get_pixel(walls[wall].surf, tex_col, (j << 6) / screen_slice_h);
+	}
+}
+
 void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_rot) {
 	// Stores the precise angle of our current ray.
 	float curr_angle = (float)(player_rot + FOV_HALF);
@@ -499,37 +546,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 			z_buffer[i] = hit.dist;
 			// WALL CASTING
-			wall = hit.wall_type - num_floor_ceils;
-
-			slice_dist = (hit.dist * cos128table[correct_angle]) >> 7;
-
-			// Make sure we don't get any issues computing the slice height.
-			if(slice_dist == 0)
-				slice_dist = 1;
-
-			// Dist to projection * 64 / slice dist.
-			slice_height = (DIST_TO_PROJ << 6) / slice_dist;
-
-			// Use a single column of pixels based on where the ray hit.
-			src.y = 0;
-			src.w = 1;
-			src.h = UNIT_SIZE;
-			src.x = hit.is_horiz ? (hit.hit_pos[0] % UNIT_SIZE) : (hit.hit_pos[1] % UNIT_SIZE);
-
-			// Define the part of the screen we render to such that it is a single column with the
-			// slice's middle pixel at the center of the screen.
-			dest.x = i;
-			dest.y = HALF_PROJ_H - (slice_height >> 1);
-			dest.w = 1;
-			dest.h = (HALF_PROJ_H + (slice_height >> 1)) - dest.y;
-
-			// Manually copies texture from source to portion of screen.
-			for(j = 0; j < dest.h; ++j) {
-				if(j + dest.y < 0 || j + dest.y >= 200)
-					continue;
-
-				raycast_pixels[(j + dest.y) * PROJ_W + i] = get_pixel(walls[wall].surf, src.x, (j << 6) / dest.h);
-			}
+			draw_wall_slice(&hit, correct_angle, i);
 
 			// FLOOR/CEILING CASTING.
 			// dest.h + dest.y == bottom of the wall
