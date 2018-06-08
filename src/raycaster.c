@@ -503,9 +503,11 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 			slice_dist = (hit.dist * cos128table[correct_angle]) >> 7;
 
+			// Make sure we don't get any issues computing the slice height.
 			if(slice_dist == 0)
 				slice_dist = 1;
 
+			// Dist to projection * 64 / slice dist.
 			slice_height = (DIST_TO_PROJ << 6) / slice_dist;
 
 			// Use a single column of pixels based on where the ray hit.
@@ -526,15 +528,8 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 				if(j + dest.y < 0 || j + dest.y >= 200)
 					continue;
 
-				//t_x = src.x;
-				//t_y = (j << 6) / dest.h;
-
 				raycast_pixels[(j + dest.y) * PROJ_W + i] = get_pixel(walls[wall].surf, src.x, (j << 6) / dest.h);
 			}
-
-			//t_color = (unsigned char*)floor_ceils[floor_ceil].floor_surf->pixels + t_y * floor_ceils[floor_ceil].floor_surf->pitch + t_x * 3;
-			//printf("%d %d: %d %d %d\n", t_x, t_y, t_color[0], t_color[1], t_color[2]);
-			//floor_ceiling_pixels[j * PROJ_W + i] = 0xFF000000 | t_color[2] << 16 | t_color[1] << 8 | t_color[1];
 
 			// FLOOR/CEILING CASTING.
 			// dest.h + dest.y == bottom of the wall
