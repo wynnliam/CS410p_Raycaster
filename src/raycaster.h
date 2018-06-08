@@ -56,6 +56,22 @@ struct hitinfo {
 	int quadrant;
 };
 
+// Used in the function draw_wall_slice to reduce number of arguments.
+struct draw_wall_slice_args {
+	// Data for ray hitting wall slice.
+	struct hitinfo* hit;
+	// Used to compute the "correct" distance from the
+	// player to the wall slice so as to avoid the "fish-eye"
+	// effect.
+	int correct_angle;
+	// The angle of the ray adjusted to be from 0 to 360.
+	int adj_angle;
+	// Where we render the wall slice on the screen.
+	int screen_col;
+	// Coordinates of the player in "world" space.
+	int player_x, player_y;
+};
+
 // Stores the sin value of every degree from 0 to 360 multiplied by 128.
 // This will enable us to preserve enough precision for each number as
 // a byte. When we want a value, we can access sin128table[i] >> 7, which
@@ -162,8 +178,8 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 */
 void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit);
 
-void draw_wall_slice(struct hitinfo* hit, int correct_angle, int screen_col, int adj_angle, int player_x, int player_y);
-void draw_floor_and_ceiling(int screen_slice_y, int screen_slice_h, int adj_angle, int correct_angle, int screen_col, int player_x, int player_y);
+void draw_wall_slice(struct draw_wall_slice_args* args);
+void draw_floor_and_ceiling(int screen_slice_y, int screen_slice_h, struct draw_wall_slice_args* dws);
 void draw_things(int player_x, int player_y, int player_rot);
 
 /*

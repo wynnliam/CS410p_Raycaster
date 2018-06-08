@@ -413,7 +413,7 @@ unsigned int get_pixel(SDL_Surface* surface, int x, int y) {
 	return result;
 }
 
-void draw_wall_slice(struct hitinfo* hit, int correct_angle, int screen_col, int adj_angle, int player_x, int player_y) {
+void draw_wall_slice(struct draw_wall_slice_args* args) {
 	// The wall texture we will render.
 	unsigned char wall;
 	// The "correct" distance of the slice. Using this fixes
@@ -431,8 +431,8 @@ void draw_wall_slice(struct hitinfo* hit, int correct_angle, int screen_col, int
 	// The height of the slice on the screen
 	int screen_slice_h;
 
-	wall = hit->wall_type - num_floor_ceils;
-	slice_dist = (hit->dist * cos128table[correct_angle]) >> 7;
+	wall = args->hit->wall_type - num_floor_ceils;
+	slice_dist = (args->hit->dist * cos128table[args->correct_angle]) >> 7;
 
 	// Make sure we don't get any issues computing the slice height.
 	if(slice_dist == 0)
@@ -442,7 +442,8 @@ void draw_wall_slice(struct hitinfo* hit, int correct_angle, int screen_col, int
 	slice_height = (DIST_TO_PROJ << 6) / slice_dist;
 
 	// Use a single column of pixels based on where the ray hit.
-	tex_col = hit->is_horiz ? (hit->hit_pos[0] % UNIT_SIZE) : (hit->hit_pos[1] % UNIT_SIZE);
+	tex_col = args->hit->is_horiz ? (args->hit->hit_pos[0] % UNIT_SIZE) :
+									(args->hit->hit_pos[1] % UNIT_SIZE);
 
 	// Define the part of the screen we render to such that it is a single column with the
 	// slice's middle pixel at the center of the screen.
@@ -456,14 +457,15 @@ void draw_wall_slice(struct hitinfo* hit, int correct_angle, int screen_col, int
 		if(j + screen_slice_y < 0 || j + screen_slice_y >= 200)
 			continue;
 
-		raycast_pixels[(j + screen_slice_y) * PROJ_W + screen_col] = get_pixel(walls[wall].surf, tex_col, (j << 6) / screen_slice_h);
+		raycast_pixels[(j + screen_slice_y) * PROJ_W + args->screen_col] =
+			get_pixel(walls[wall].surf, tex_col, (j << 6) / screen_slice_h);
 	}
 
 	// FLOOR/CEILING CASTING.
-	draw_floor_and_ceiling(screen_slice_y, screen_slice_h, adj_angle, correct_angle, screen_col, player_x, player_y);
+	draw_floor_and_ceiling(screen_slice_y, screen_slice_h, args);
 }
 
-void draw_floor_and_ceiling(int screen_slice_y, int screen_slice_h, int adj_angle, int correct_angle, int screen_col, int player_x, int player_y) {
+void draw_floor_and_ceiling(int screen_slice_y, int screen_slice_h, struct draw_wall_slice_args* dws) {
 	int straight_dist;
 	int dist_to_point;
 
@@ -478,11 +480,11 @@ void draw_floor_and_ceiling(int screen_slice_y, int screen_slice_h, int adj_angl
 	for(j = screen_slice_y + screen_slice_h; j < PROJ_H; ++j) {
 		// Compute the distance from the player to the point.
 		straight_dist = (int)(DIST_TO_PROJ * HALF_UNIT_SIZE / (j - HALF_PROJ_H));
-		dist_to_point = (straight_dist << 7) / (cos128table[correct_angle]);
+		dist_to_point = (straight_dist << 7) / (cos128table[dws->correct_angle]);
 
 		// Use adjusted so it gives us the direction of the "true" ray angle.
-		p_x = player_x + ((dist_to_point * cos128table[adj_angle]) >> 7);
-		p_y = player_y - ((dist_to_point * sin128table[adj_angle]) >> 7);
+		p_x = dws->player_x + ((dist_to_point * cos128table[dws->adj_angle]) >> 7);
+		p_y = dws->player_y - ((dist_to_point * sin128table[dws->adj_angle]) >> 7);
 
 		floor_ceil_type = get_tile(p_x, p_y);
 
@@ -496,13 +498,13 @@ void draw_floor_and_ceiling(int screen_slice_y, int screen_slice_h, int adj_angl
 		// Put floor pixel.
 		//printf("%d\n", floor_ceil);
 		if(floor_ceils[floor_ceil_type].floor_surf) {
-			floor_ceiling_pixels[j * PROJ_W + screen_col] = get_pixel(floor_ceils[floor_ceil_type].floor_surf,
+			floor_ceiling_pixels[j * PROJ_W + dws->screen_col] = get_pixel(floor_ceils[floor_ceil_type].floor_surf,
 															 		  p_x % UNIT_SIZE, p_y % UNIT_SIZE);
 		}
 
 		// Put ceiling pixel.
 		if(floor_ceils[floor_ceil_type].ceil_surf) {
-			floor_ceiling_pixels[(-j + PROJ_H) * PROJ_W + screen_col] = get_pixel(floor_ceils[floor_ceil_type].ceil_surf,
+			floor_ceiling_pixels[(-j + PROJ_H) * PROJ_W + dws->screen_col] = get_pixel(floor_ceils[floor_ceil_type].ceil_surf,
 																				  p_x % UNIT_SIZE, p_y % UNIT_SIZE);
 		}
 	}
@@ -597,6 +599,8 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 	// Returns info about the hit.
 	struct hitinfo hit;
+	// Data needed to render a wall slice.
+	struct draw_wall_slice_args dws;
 
 	int i, j;
 
@@ -650,7 +654,14 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 			z_buffer[i] = hit.dist;
 			// WALL CASTING
-			draw_wall_slice(&hit, correct_angle, i, adj_angle, player_x, player_y);
+			dws.hit = &hit;
+			dws.correct_angle = correct_angle;
+			dws.adj_angle = adj_angle;
+			dws.screen_col = i;
+			dws.player_x = player_x;
+			dws.player_y = player_y;
+			//draw_wall_slice(&hit, correct_angle, i, adj_angle, player_x, player_y);
+			draw_wall_slice(&dws);
 
 		}
 
