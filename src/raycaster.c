@@ -111,33 +111,33 @@ void initialize_map(SDL_Renderer* renderer) {
 	num_things = 4;
 
 	// Load walls into memory.
-	walls[0].surf = SDL_LoadBMP("./src/assests/wall1.bmp");
-	walls[1].surf = SDL_LoadBMP("./src/assests/wall2.bmp");
+	walls[0].surf = SDL_LoadBMP("./assests/wall1.bmp");
+	walls[1].surf = SDL_LoadBMP("./assests/wall2.bmp");
 
 	// Load floor-ceiling pairs into memory.
-	floor_ceils[0].floor_surf = SDL_LoadBMP("./src/assests/floor.bmp");
-	floor_ceils[0].ceil_surf = SDL_LoadBMP("./src/assests/ceiling.bmp");
+	floor_ceils[0].floor_surf = SDL_LoadBMP("./assests/floor.bmp");
+	floor_ceils[0].ceil_surf = SDL_LoadBMP("./assests/ceiling.bmp");
 
-	floor_ceils[1].floor_surf = SDL_LoadBMP("./src/assests/floor2.bmp");
-	floor_ceils[1].ceil_surf = SDL_LoadBMP("./src/assests/ceiling2.bmp");
+	floor_ceils[1].floor_surf = SDL_LoadBMP("./assests/floor2.bmp");
+	floor_ceils[1].ceil_surf = SDL_LoadBMP("./assests/ceiling2.bmp");
 
-	floor_ceils[2].floor_surf = SDL_LoadBMP("./src/assests/floor.bmp");
+	floor_ceils[2].floor_surf = SDL_LoadBMP("./assests/floor.bmp");
 	floor_ceils[2].ceil_surf = NULL;
 
 	// Initializes the sprites.
-	things[0].surf = SDL_LoadBMP("./src/assests/sprite.bmp");
+	things[0].surf = SDL_LoadBMP("./assests/sprite.bmp");
 	things[0].position[0] = 128;
 	things[0].position[1] = 128;
 
-	things[1].surf = SDL_LoadBMP("./src/assests/sprite2.bmp");
+	things[1].surf = SDL_LoadBMP("./assests/sprite2.bmp");
 	things[1].position[0] = 128;
 	things[1].position[1] = 448;
 
-	things[2].surf = SDL_LoadBMP("./src/assests/sprite3.bmp");
+	things[2].surf = SDL_LoadBMP("./assests/sprite3.bmp");
 	things[2].position[0] = 672;
 	things[2].position[1] = 96;
 
-	things[3].surf = SDL_LoadBMP("./src/assests/sprite.bmp");
+	things[3].surf = SDL_LoadBMP("./assests/sprite.bmp");
 	things[3].position[0] = 256;
 	things[3].position[1] = 460;
 
@@ -146,7 +146,7 @@ void initialize_map(SDL_Renderer* renderer) {
 	thing_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
 
 	// Load sky texture into memory.
-	sky_surf = SDL_LoadBMP("./src/assests/skybox.bmp");
+	sky_surf = SDL_LoadBMP("./assests/skybox.bmp");
 
 	// Enables transparent pixel 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -413,7 +413,7 @@ unsigned int get_pixel(SDL_Surface* surface, int x, int y) {
 	return result;
 }
 
-void draw_wall_slice(struct hitinfo* hit, int correct_angle, int screen_col) {
+void draw_wall_slice(struct hitinfo* hit, int correct_angle, int screen_col, int adj_angle, int player_x, int player_y) {
 	// The wall texture we will render.
 	unsigned char wall;
 	// The "correct" distance of the slice. Using this fixes
@@ -458,6 +458,54 @@ void draw_wall_slice(struct hitinfo* hit, int correct_angle, int screen_col) {
 
 		raycast_pixels[(j + screen_slice_y) * PROJ_W + screen_col] = get_pixel(walls[wall].surf, tex_col, (j << 6) / screen_slice_h);
 	}
+
+	// FLOOR/CEILING CASTING.
+	draw_floor_and_ceiling(screen_slice_y, screen_slice_h, adj_angle, correct_angle, screen_col, player_x, player_y);
+}
+
+void draw_floor_and_ceiling(int screen_slice_y, int screen_slice_h, int adj_angle, int correct_angle, int screen_col, int player_x, int player_y) {
+	int straight_dist;
+	int dist_to_point;
+
+	// The floor/ceiling position in "world" space.
+	int p_x, p_y;
+
+	// The floor/ceiling texture type to draw.
+	unsigned int floor_ceil_type;
+
+	// screen_slice_h + screen_slice_y == bottom of the wall
+	int j = 0;
+	for(j = screen_slice_y + screen_slice_h; j < PROJ_H; ++j) {
+		// Compute the distance from the player to the point.
+		straight_dist = (int)(DIST_TO_PROJ * HALF_UNIT_SIZE / (j - HALF_PROJ_H));
+		dist_to_point = (straight_dist << 7) / (cos128table[correct_angle]);
+
+		// Use adjusted so it gives us the direction of the "true" ray angle.
+		p_x = player_x + ((dist_to_point * cos128table[adj_angle]) >> 7);
+		p_y = player_y - ((dist_to_point * sin128table[adj_angle]) >> 7);
+
+		floor_ceil_type = get_tile(p_x, p_y);
+
+		// Gives us the texture location.
+		//t_x = p_x % UNIT_SIZE;
+		//t_y = p_y % UNIT_SIZE;
+
+		if(floor_ceil_type < 0 || floor_ceil_type >= num_floor_ceils)
+			continue;
+
+		// Put floor pixel.
+		//printf("%d\n", floor_ceil);
+		if(floor_ceils[floor_ceil_type].floor_surf) {
+			floor_ceiling_pixels[j * PROJ_W + screen_col] = get_pixel(floor_ceils[floor_ceil_type].floor_surf,
+															 		  p_x % UNIT_SIZE, p_y % UNIT_SIZE);
+		}
+
+		// Put ceiling pixel.
+		if(floor_ceils[floor_ceil_type].ceil_surf) {
+			floor_ceiling_pixels[(-j + PROJ_H) * PROJ_W + screen_col] = get_pixel(floor_ceils[floor_ceil_type].ceil_surf,
+																				  p_x % UNIT_SIZE, p_y % UNIT_SIZE);
+		}
+	}
 }
 
 void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_rot) {
@@ -468,27 +516,11 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 	// The angle used to compute the "corrected" distance so
 	// we avoid the fisheye effect.
 	int correct_angle;
-	// Distance from player to the wall, adjusted by the correct_angle.
-	int slice_dist;
-	// Height of the line to render.
-	int slice_height;
-	// The type of wall we hit.
-	int wall;
 
 	// Returns info about the hit.
 	struct hitinfo hit;
 
-	// Used for rendering textures
-	SDL_Rect src, dest;
-
 	// Used for rendering floors/ceilings.
-	// Straight distance from the player to the floor/ceiling point
-	// to render.
-	int straight_dist;
-	// The actual distance to the floor/ceiling point.
-	int dist_to_point;
-	// The floor/ceiling point in "global space"
-	int p_x, p_y;
 	// The texture point.
 	int t_x, t_y;
 	// RGB value of the floor/ceiling texture.
@@ -546,41 +578,8 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 			z_buffer[i] = hit.dist;
 			// WALL CASTING
-			draw_wall_slice(&hit, correct_angle, i);
+			draw_wall_slice(&hit, correct_angle, i, adj_angle, player_x, player_y);
 
-			// FLOOR/CEILING CASTING.
-			// dest.h + dest.y == bottom of the wall
-			for(j = dest.h + dest.y + 1; j < PROJ_H; ++j) {
-				straight_dist = (int)(DIST_TO_PROJ * HALF_UNIT_SIZE / (j - HALF_PROJ_H));
-				dist_to_point = (straight_dist << 7) / (cos128table[correct_angle]);
-
-				// Use adjusted so it gives us the direction of the "true" ray angle.
-				p_x = player_x + ((dist_to_point * cos128table[adj_angle]) >> 7);
-				p_y = player_y - ((dist_to_point * sin128table[adj_angle]) >> 7);
-
-				int floor_ceil = get_tile(p_x, p_y);
-
-				// Gives us the texture location.
-				t_x = p_x % UNIT_SIZE;
-				t_y = p_y % UNIT_SIZE;
-
-				if(floor_ceil < 0 || floor_ceil >= num_floor_ceils)
-					continue;
-
-				// Put floor pixel.
-				//printf("%d\n", floor_ceil);
-				if(floor_ceils[floor_ceil].floor_surf) {
-					t_color = (unsigned char*)floor_ceils[floor_ceil].floor_surf->pixels + t_y * floor_ceils[floor_ceil].floor_surf->pitch + t_x * 3;
-					//printf("%d %d: %d %d %d\n", t_x, t_y, t_color[0], t_color[1], t_color[2]);
-					floor_ceiling_pixels[j * PROJ_W + i] = 0xFF000000 | t_color[2] << 16 | t_color[1] << 8 | t_color[0];
-				}
-
-				// Put ceiling pixel.
-				if(floor_ceils[floor_ceil].ceil_surf) {
-					t_color = (unsigned char*)floor_ceils[floor_ceil].ceil_surf->pixels + t_y * floor_ceils[floor_ceil].ceil_surf->pitch + t_x * 3;
-					floor_ceiling_pixels[(-j + PROJ_H)  * PROJ_W + i] = 0xFF000000 | t_color[2] << 16 | t_color[1] << 8 | t_color[0];
-				}
-			}
 		}
 
 		curr_angle -= ANGLE_BETWEEN_RAYS;

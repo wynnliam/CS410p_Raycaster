@@ -162,7 +162,8 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 */
 void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit);
 
-void draw_wall_slice(struct hitinfo* hit, int correct_angle, int screen_col);
+void draw_wall_slice(struct hitinfo* hit, int correct_angle, int screen_col, int adj_angle, int player_x, int player_y);
+void draw_floor_and_ceiling(int screen_slice_y, int screen_slice_h, int adj_angle, int correct_angle, int screen_col, int player_x, int player_y);
 
 /*
 	Grabs the pixel of a surface at point (x, y). If the point is within the dimensions
