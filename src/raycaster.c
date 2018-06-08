@@ -111,33 +111,33 @@ void initialize_map(SDL_Renderer* renderer) {
 	num_things = 4;
 
 	// Load walls into memory.
-	walls[0].surf = SDL_LoadBMP("./src/assests/wall1.bmp");
-	walls[1].surf = SDL_LoadBMP("./src/assests/wall2.bmp");
+	walls[0].surf = SDL_LoadBMP("./assests/wall1.bmp");
+	walls[1].surf = SDL_LoadBMP("./assests/wall2.bmp");
 
 	// Load floor-ceiling pairs into memory.
-	floor_ceils[0].floor_surf = SDL_LoadBMP("./src/assests/floor.bmp");
-	floor_ceils[0].ceil_surf = SDL_LoadBMP("./src/assests/ceiling.bmp");
+	floor_ceils[0].floor_surf = SDL_LoadBMP("./assests/floor.bmp");
+	floor_ceils[0].ceil_surf = SDL_LoadBMP("./assests/ceiling.bmp");
 
-	floor_ceils[1].floor_surf = SDL_LoadBMP("./src/assests/floor2.bmp");
-	floor_ceils[1].ceil_surf = SDL_LoadBMP("./src/assests/ceiling2.bmp");
+	floor_ceils[1].floor_surf = SDL_LoadBMP("./assests/floor2.bmp");
+	floor_ceils[1].ceil_surf = SDL_LoadBMP("./assests/ceiling2.bmp");
 
-	floor_ceils[2].floor_surf = SDL_LoadBMP("./src/assests/floor.bmp");
+	floor_ceils[2].floor_surf = SDL_LoadBMP("./assests/floor.bmp");
 	floor_ceils[2].ceil_surf = NULL;
 
 	// Initializes the sprites.
-	things[0].surf = SDL_LoadBMP("./src/assests/sprite.bmp");
+	things[0].surf = SDL_LoadBMP("./assests/sprite.bmp");
 	things[0].position[0] = 128;
 	things[0].position[1] = 128;
 
-	things[1].surf = SDL_LoadBMP("./src/assests/sprite2.bmp");
+	things[1].surf = SDL_LoadBMP("./assests/sprite2.bmp");
 	things[1].position[0] = 128;
 	things[1].position[1] = 448;
 
-	things[2].surf = SDL_LoadBMP("./src/assests/sprite3.bmp");
+	things[2].surf = SDL_LoadBMP("./assests/sprite3.bmp");
 	things[2].position[0] = 672;
 	things[2].position[1] = 96;
 
-	things[3].surf = SDL_LoadBMP("./src/assests/sprite.bmp");
+	things[3].surf = SDL_LoadBMP("./assests/sprite.bmp");
 	things[3].position[0] = 256;
 	things[3].position[1] = 460;
 
@@ -146,7 +146,7 @@ void initialize_map(SDL_Renderer* renderer) {
 	thing_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
 
 	// Load sky texture into memory.
-	sky_surf = SDL_LoadBMP("./src/assests/skybox.bmp");
+	sky_surf = SDL_LoadBMP("./assests/skybox.bmp");
 
 	// Enables transparent pixel 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -285,12 +285,6 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 	delt_v_x = delta_v_x[ray_angle];
 	delt_v_y = delta_v_y[ray_angle];
 
-	//printf("ray angle: %d | ", ray_angle);
-	//printf("ch: %d %d | ", curr_h_x, curr_h_y);
-	//printf("dh: %d %d | ", delt_h_x, delt_h_y);
-	//printf("cv: %d %d | ", curr_v_x, curr_v_y);
-	//printf("dv: %d %d\n", delt_v_x, delt_v_y);
-
 	// Now find the point that is a wall by travelling along horizontal gridlines.
 	tile = get_tile(curr_h_x, curr_h_y);
 	while(-1 < tile && tile < num_floor_ceils) {
@@ -328,9 +322,6 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		hit_v[0] = curr_v_x;
 		hit_v[1] = curr_v_y;
 	}
-
-	//printf("hit h: {%d, %d}\n", hit_h[0], hit_h[1]);
-	//printf("hit v: {%d, %d}\n", hit_v[0], hit_v[1]);
 
 	// Now choose either the horizontal or vertical intersection
 	// point. Or choose -1, -1 to denote an error.
@@ -376,6 +367,50 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 	}
 
 	hit->wall_type = get_tile(hit->hit_pos[0], hit->hit_pos[1]);
+}
+
+unsigned int get_pixel(SDL_Surface* surface, int x, int y) {
+	if(!surface)
+		return 0;
+	if(x < 0 || x >= surface->w) {
+		printf("X AAAAA\n");
+		return 0;
+	}
+	if(y < 0 || y >= surface->h)
+		return 0;
+
+	// Stores the channels of the pixel color.
+	unsigned char* channels;
+	// Used to compute channels and decides how we construct result.
+	int bytes_per_pixel = surface->format->BytesPerPixel;
+	// What we will return.
+	unsigned int result;
+
+	channels = (unsigned char*)surface->pixels + y * surface->pitch + x * bytes_per_pixel;
+
+	switch(bytes_per_pixel) {
+		case 1:
+			result = 0xFF000000 | channels[0] << 16 | channels[1] << 8 | channels[2];
+			break;
+		case 2:
+			if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
+			result = *(unsigned short*)(channels);
+			break;
+		case 3:
+			if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
+				result = 0xFF000000 | channels[0] << 16 | channels[1] << 8 | channels[2];
+			else
+				result = 0xFF000000 | channels[2] << 16 | channels[1] << 8 | channels[0];
+			break;
+		case 4:
+			result = *(unsigned int*)channels;
+			break;
+		default:
+			result = 0;
+			break;
+	}
+
+	return result;
 }
 
 void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_rot) {
@@ -454,23 +489,12 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 		z_buffer[i] = 0;
 		get_ray_hit(adj_angle, player_x, player_y, &hit);
 		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
-			// Render sky
+			// SKY CASTING
 			if(sky_surf) {
-				SDL_Rect sky_src, sky_dest;
-
-				sky_src.x = adj_angle << 2;
-				if(sky_src.x > 640)
-					sky_src.x -= 640;
-
-				sky_src.y = 0;
-				sky_src.w = 1;
-				sky_src.h = 200;
-
-				for(j = 0; j < 200; ++j) {
-					t_color = (unsigned char*)sky_surf->pixels + j * sky_surf->pitch + sky_src.x * 3;
-					raycast_pixels[j * PROJ_W + i] = 0xFF000000 | t_color[2] << 16 | t_color[1] << 8 | t_color[0];
-				}
-
+				// Set the screen pixel at (i, j) to the adjusted angle * 2 modded by the sky texture
+				// width. 2 is roughly what texture width / projection width.
+				for(j = 0; j < 200; ++j)
+					raycast_pixels[j * PROJ_W + i] = get_pixel(sky_surf, (adj_angle << 1) % 640, j);
 			}
 
 			z_buffer[i] = hit.dist;

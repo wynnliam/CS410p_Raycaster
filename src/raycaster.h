@@ -163,6 +163,31 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit);
 
 /*
+	Grabs the pixel of a surface at point (x, y). If the point is within the dimensions
+	of the surface, we return 0. This procedure will construct the unsigned integer
+	representation of the pixel value according to the bytes per pixel and the endian-ness
+	of SDL.
+
+	The algorithm to handle this was originally implemented here:
+	http://sdl.beuc.net/sdl.wiki/Pixel_Access	
+
+	PRECONDITIONS:
+		surface loaded into memory.
+
+	POSTCONDITIONS:
+		none.
+
+	ARGUMENTS:
+		surface - the surface to grab pixels from.
+		x, y - the pixel to access.
+
+	RETURNS:
+		an unsigned integer representation of the pixel value of the surface
+		at (x, y) or 0, if (x, y) is invalid (or surface is NULL).
+*/
+unsigned int get_pixel(SDL_Surface* surface, int x, int y);
+
+/*
 	Sortes every sprite according to distance from the player. We must order the sprites from
 	farthest to closest so we render the closest ones last. The algorithm used here is quicksort.
 

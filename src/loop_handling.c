@@ -33,7 +33,7 @@ void update() {
 				exit(0);
 
 			if(event.key.keysym.sym == SDLK_a) {
-				player_rot += 1;
+				player_rot += 2;
 
 				if(player_rot < 0)
 					player_rot += 360;
@@ -42,7 +42,7 @@ void update() {
 			}
 
 			if(event.key.keysym.sym == SDLK_d) {
-				player_rot -= 1;
+				player_rot -= 2;
 
 				if(player_rot < 0)
 					player_rot += 360;
@@ -51,22 +51,22 @@ void update() {
 			}
 
 			if(event.key.keysym.sym == SDLK_w) {
-				player_y -= (sin128table[player_rot] << 2) >> 7;
-				player_x += (cos128table[player_rot] << 2) >> 7;
+				player_y -= (sin128table[player_rot] << 4) >> 7;
+				player_x += (cos128table[player_rot] << 4) >> 7;
 
 				if(get_tile(player_x, player_y) < 0 || get_tile(player_x, player_y) >= 3) {
-					player_y += (sin128table[player_rot] << 2) >> 7;
-					player_x -= (cos128table[player_rot] << 2) >> 7;
+					player_y += (sin128table[player_rot] << 4) >> 7;
+					player_x -= (cos128table[player_rot] << 4) >> 7;
 				}
 			}
 
 			if(event.key.keysym.sym == SDLK_s) {
-				player_y += (sin128table[player_rot] << 2) >> 7;
-				player_x -= (cos128table[player_rot] << 2) >> 7;
+				player_y += (sin128table[player_rot] << 4) >> 7;
+				player_x -= (cos128table[player_rot] << 4) >> 7;
 
 				if(get_tile(player_x, player_y) < 0 || get_tile(player_x, player_y) >= 3) {
-					player_y -= (sin128table[player_rot] << 2) >> 7;
-					player_x += (cos128table[player_rot] << 2) >> 7;
+					player_y -= (sin128table[player_rot] << 4) >> 7;
+					player_x += (cos128table[player_rot] << 4) >> 7;
 				}
 			}
 
