@@ -508,6 +508,84 @@ void draw_floor_and_ceiling(int screen_slice_y, int screen_slice_h, int adj_angl
 	}
 }
 
+void draw_things(int player_x, int player_y, int player_rot) {
+	// The texture point.
+	int t_x, t_y;
+	// RGB value of the sprite texture.
+	unsigned int t_color;
+
+	int x_diff, y_diff;
+
+	// Used to find the sprite position on the screen.
+	int theta_temp;
+	// The position of the sprite on the screen.
+	int scr_x, scr_y;
+
+	// Defines the sprite's screen dimensions and position.
+	SDL_Rect thing_rect;
+	// Defines the column of pixels of the sprite we want.
+	SDL_Rect thing_src_rect;
+
+	int i, j, k, m;
+
+	for(i = 0; i < num_things; ++i) {
+		x_diff = things_sorted[i]->position[0] - player_x;
+		y_diff = things_sorted[i]->position[1] - player_y;
+
+		int theta_temp = (int)(atan2(-y_diff, x_diff) * RAD_TO_DEG);
+
+		// Make sure the angle is between 0 and 360.
+		if(theta_temp < 0)
+			theta_temp += 360;
+
+		scr_y = player_rot + FOV_HALF - theta_temp;
+		if(theta_temp > 270 && player_rot < 90)
+			scr_y = player_rot + FOV_HALF - theta_temp + 360;
+		if(player_rot > 270 && theta_temp > 90)
+			scr_y = player_rot + FOV_HALF - theta_temp - 360;
+
+		scr_x = scr_y * PROJ_W / FOV;
+
+
+		thing_rect.w = (int)(UNIT_SIZE / sqrt(things_sorted[i]->dist) * DIST_TO_PROJ);
+		thing_rect.h = thing_rect.w;
+		thing_rect.y = HALF_PROJ_H - (thing_rect.h >> 1);
+		thing_rect.x = scr_x - (thing_rect.w >> 1);
+
+		// The column for the scaled texture.
+		m = 0;
+
+		for(j = thing_rect.x; j < thing_rect.x + thing_rect.w; ++j) {
+			if(j >= 0 && j < PROJ_W) {
+				// Render the current slice of sprite only if infront of wall.
+				if(sqrt(things_sorted[i]->dist) - 1 < z_buffer[j]) {
+					thing_src_rect.x = (m << 6) / thing_rect.w;
+					thing_src_rect.y = 0;
+					thing_src_rect.w = 1;
+					thing_src_rect.h = UNIT_SIZE;
+
+					// Render the column of sprites.
+					//SDL_RenderCopy(renderer, things_sorted[i]->texture, &thing_src_rect, &thing_dest_rect);
+					for(k = 0; k < thing_rect.h; ++k) {
+						if(k + thing_rect.y < 0 || k + thing_rect.y >= 200)
+							continue;
+
+						t_x = thing_src_rect.x;
+						t_y = (k << 6) / thing_rect.h;
+						//t_color = (unsigned char*)(things_sorted[i]->surf->pixels + t_y * things_sorted[i]->surf->pitch + t_x * 4);
+						t_color = get_pixel(things_sorted[i]->surf, t_x, t_y);
+						// Only put a pixel if it is not transparent.
+						if(((unsigned char*)(&t_color))[3] > 0)
+							thing_pixels[(k + thing_rect.y) * PROJ_W + j] = t_color;
+					}
+				}
+			}
+
+			++m;
+		}
+	}
+}
+
 void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_rot) {
 	// Stores the precise angle of our current ray.
 	float curr_angle = (float)(player_rot + FOV_HALF);
@@ -519,12 +597,6 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 	// Returns info about the hit.
 	struct hitinfo hit;
-
-	// Used for rendering floors/ceilings.
-	// The texture point.
-	int t_x, t_y;
-	// RGB value of the floor/ceiling texture.
-	unsigned char* t_color;
 
 	int i, j;
 
@@ -545,7 +617,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 	// Now, sort the things according to distance.
 	sort_things(0, num_things - 1);
 
-	// The actual ray casting step.
+	// Now loop through each column of pixels on the screen and do ray casting.
 	for(i = 0; i < PROJ_W; ++i) {
 		adj_angle = (int)curr_angle;
 
@@ -585,80 +657,12 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 		curr_angle -= ANGLE_BETWEEN_RAYS;
 	}
 
+	draw_things(player_x, player_y, player_rot);
 
-	int k;
-	for(i = 0; i < num_things; ++i) {
-		int x_diff = things_sorted[i]->position[0] - player_x;
-		int y_diff = things_sorted[i]->position[1] - player_y;
-
-		int theta_temp = (int)(atan2(-y_diff, x_diff) * RAD_TO_DEG);
-
-		// Make sure the angle is between 0 and 360.
-		if(theta_temp < 0)
-			theta_temp += 360;
-
-		int scr_y = player_rot + FOV_HALF - theta_temp;
-		if(theta_temp > 270 && player_rot < 90)
-			scr_y = player_rot + FOV_HALF - theta_temp + 360;
-		if(player_rot > 270 && theta_temp > 90)
-			scr_y = player_rot + FOV_HALF - theta_temp - 360;
-
-		int scr_x = scr_y * PROJ_W / FOV;
-
-		// Defines the sprite's screen dimensions and position.
-		SDL_Rect thing_rect;
-		// Defines the column of pixels of the sprite we want.
-		SDL_Rect thing_src_rect;
-		// Defines where we render the column of pixels of the sprite.
-		SDL_Rect thing_dest_rect;
-
-		thing_rect.w = (int)(UNIT_SIZE / sqrt(things_sorted[i]->dist) * DIST_TO_PROJ);
-		thing_rect.h = thing_rect.w;
-		thing_rect.y = HALF_PROJ_H - (thing_rect.h >> 1);
-		thing_rect.x = scr_x - (thing_rect.w >> 1);
-
-		// The column for the scaled texture.
-		int m = 0;
-
-		for(j = thing_rect.x; j < thing_rect.x + thing_rect.w; ++j) {
-			if(j >= 0 && j < PROJ_W) {
-				// Render the current slice of sprite only if infront of wall.
-				if(sqrt(things_sorted[i]->dist) - 1 < z_buffer[j]) {
-					thing_src_rect.x = (m << 6) / thing_rect.w;
-					thing_src_rect.y = 0;
-					thing_src_rect.w = 1;
-					thing_src_rect.h = UNIT_SIZE;
-
-					thing_dest_rect.x = j;
-					thing_dest_rect.y = thing_rect.y;
-					thing_dest_rect.w = 1;
-					thing_dest_rect.h = thing_rect.h;
-
-					// Render the column of sprites.
-					//SDL_RenderCopy(renderer, things_sorted[i]->texture, &thing_src_rect, &thing_dest_rect);
-					for(k = 0; k < thing_rect.h; ++k) {
-						if(k + thing_rect.y < 0 || k + thing_rect.y >= 200)
-							continue;
-
-						t_x = thing_src_rect.x;
-						t_y = (k << 6) / thing_rect.h;
-						t_color = (unsigned char*)(things_sorted[i]->surf->pixels + t_y * things_sorted[i]->surf->pitch + t_x * 4);
-						// Only put a pixel if it is not transparent.
-						if(t_color[3] > 0)
-							thing_pixels[(k + thing_rect.y) * PROJ_W + j] = *(unsigned int*)t_color;
-					}
-				}
-			}
-
-			++m;
-		}
-	}
-
-
+	// Draw pixel arrays to screen.
 	SDL_UpdateTexture(raycast_texture, NULL, raycast_pixels, PROJ_W << 2);
 	SDL_RenderCopy(renderer, raycast_texture, NULL, NULL);
 
-	// Now render the floor.
 	SDL_UpdateTexture(floor_ceiling_tex, NULL, floor_ceiling_pixels, PROJ_W << 2);
 	SDL_RenderCopy(renderer, floor_ceiling_tex, NULL, NULL);
 
