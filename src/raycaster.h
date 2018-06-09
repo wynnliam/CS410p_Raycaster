@@ -167,6 +167,29 @@ int get_tile(int x, int y);
 void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_rot);
 
 /*
+	Sorts every thing according to distance from the player. This requires updating
+	the distance for each thing and then doing quicksort according to distance.
+
+	ARUGMENTS:
+		player_x, player_y - the position of the player in "world" space.
+*/
+void preprocess_things(int player_x, int player_y);
+
+/*
+	Computes an angle that is equivalent to the given angle, but adjusted so that
+	the raycaster can use it correctly. This includes making sure the angle is between
+	0 and 359 (inclusive bounds), and not a "bad" angle: 0, 90, 180, and 270. These
+	are bad because they give certain values we cannot divide by or are undefined.
+
+	ARGUMENTS:
+		curr_angle: an integer angle (in degrees) we want to adjust.
+
+	RETURNS:
+		an equivalent angle to curr_angle that is adjusted.
+*/
+int get_adjusted_angle(int curr_angle);
+
+/*
 	Traces a ray along grid columns to find the first wall it hits. We then return
 	this wall slice that is hit so as to render it.
 
@@ -177,6 +200,17 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 		hit - stores all of the data about this hit.
 */
 void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit);
+
+/*
+	Renders the sky at a given column of pixels. Given the adjusted angle,
+	determine the column of texture pixels of the sky texture, and then render them
+	onto the screen.
+
+	ARGUMENTS:
+		screen_col - the column on the screen we want to draw sky pixels to.
+		adj_angle - used to figure out what column of sky pixels to render.
+*/
+void draw_sky(int screen_col, int adj_angle);
 
 /*
 	Renders a single wall slice for a given ray. When this procedure is called,

@@ -155,7 +155,6 @@ void initialize_map(SDL_Renderer* renderer) {
 	SDL_SetTextureBlendMode(thing_texture, SDL_BLENDMODE_BLEND);
 }
 
-// TODO: Add documentation for this
 int get_tile(int x, int y) {
 	int grid_x = x >> UNIT_POWER;
 	int grid_y = y >> UNIT_POWER;
@@ -411,6 +410,15 @@ unsigned int get_pixel(SDL_Surface* surface, int x, int y) {
 	return result;
 }
 
+void draw_sky(int screen_col, int adj_angle) {
+	if(!sky_surf)
+		return;
+
+	int j;
+	for(j = 0; j < 200; ++j)
+		raycast_pixels[j * PROJ_W + screen_col] = get_pixel(sky_surf, (adj_angle << 1) % 640, j);
+}
+
 void draw_wall_slice(struct draw_wall_slice_args* args) {
 	// The wall texture we will render.
 	unsigned char wall;
@@ -586,6 +594,39 @@ void draw_things(int player_x, int player_y, int player_rot) {
 	}
 }
 
+void preprocess_things(int player_x, int player_y) {
+	int i;
+
+	// Compute the distance between each thing and the player.
+	for(i = 0; i < num_things; ++i) {
+		things[i].dist = get_dist_sqrd(things[i].position[0], things[i].position[1], player_x, player_y);
+		// Add the thing to the sorted list.
+		things_sorted[i] = &things[i];
+	}
+
+	// Now, sort the things according to distance.
+	sort_things(0, num_things - 1);
+}
+
+int get_adjusted_angle(int curr_angle) {
+	int adj_angle = curr_angle;
+
+	// Make the angle between 0 and 360.
+	if(adj_angle < 0)
+		adj_angle += 360;
+	if(adj_angle > 360)
+		adj_angle -= 360;
+
+	// First, we must deal with bad angles. These angles will break the raycaster, since
+	// it will produce NaN's.
+	if(adj_angle == 360)
+		adj_angle = 0;
+	if(adj_angle == 0 || adj_angle == 90 || adj_angle == 180 || adj_angle == 270)
+		adj_angle += 1;
+
+	return adj_angle;
+}
+
 void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_rot) {
 	// Stores the precise angle of our current ray.
 	float curr_angle = (float)(player_rot + FOV_HALF);
@@ -600,7 +641,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 	// Data needed to render a wall slice.
 	struct draw_wall_slice_args dws;
 
-	int i, j;
+	int i;
 
 	// Begin by clearning the pixel arrays that we copy to.
 	for(i = 0; i < 64000; ++i) {
@@ -609,32 +650,12 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 		thing_pixels[i] = 0;
 	}
 
-	// Next, compute the distance between each thing and the player.
-	for(i = 0; i < num_things; ++i) {
-		things[i].dist = get_dist_sqrd(things[i].position[0], things[i].position[1], player_x, player_y);
-		// Add the thing to the sorted list.
-		things_sorted[i] = &things[i];
-	}
+	preprocess_things(player_x, player_y);
 
-	// Now, sort the things according to distance.
-	sort_things(0, num_things - 1);
 
 	// Now loop through each column of pixels on the screen and do ray casting.
 	for(i = 0; i < PROJ_W; ++i) {
-		adj_angle = (int)curr_angle;
-
-		// Make the angle between 0 and 360.
-		if(adj_angle < 0)
-			adj_angle += 360;
-		if(adj_angle > 360)
-			adj_angle -= 360;
-
-		// First, we must deal with bad angles. These angles will break the raycaster, since
-		// it will produce NaN's.
-		if(adj_angle == 360)
-			adj_angle = 0;
-		if(adj_angle == 0 || adj_angle == 90 || adj_angle == 180 || adj_angle == 270)
-			adj_angle += 1;
+		adj_angle = get_adjusted_angle((int)curr_angle);
 
 		// Computes the angle relative to the player rotation.
 		correct_angle = abs(adj_angle - player_rot);
@@ -643,22 +664,17 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 		get_ray_hit(adj_angle, player_x, player_y, &hit);
 		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
 			// SKY CASTING
-			if(sky_surf) {
-				// Set the screen pixel at (i, j) to the adjusted angle * 2 modded by the sky texture
-				// width. 2 is roughly what texture width / projection width.
-				for(j = 0; j < 200; ++j)
-					raycast_pixels[j * PROJ_W + i] = get_pixel(sky_surf, (adj_angle << 1) % 640, j);
-			}
+			draw_sky(i, adj_angle);
 
 			z_buffer[i] = hit.dist;
-			// WALL CASTING
+
+			// WALL, FLOOR, CEILING CASTING
 			dws.hit = &hit;
 			dws.correct_angle = correct_angle;
 			dws.adj_angle = adj_angle;
 			dws.screen_col = i;
 			dws.player_x = player_x;
 			dws.player_y = player_y;
-			//draw_wall_slice(&hit, correct_angle, i, adj_angle, player_x, player_y);
 			draw_wall_slice(&dws);
 
 		}
@@ -666,6 +682,7 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 		curr_angle -= ANGLE_BETWEEN_RAYS;
 	}
 
+	// THING CASTING
 	draw_things(player_x, player_y, player_rot);
 
 	// Draw pixel arrays to screen.
