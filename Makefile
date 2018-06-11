@@ -8,5 +8,8 @@ SRC= ./src/*.c
 all: $(SRC)
 	$(CMP) $(SRC) $(FLG)
 
+all_out: $(SRC)
+	gcc -g -Wall $(SRC) -lm -lSDL2 
+
 clean:
 	rm public/raycaster.*

@@ -111,33 +111,33 @@ void initialize_map(SDL_Renderer* renderer) {
 	num_things = 4;
 
 	// Load walls into memory.
-	walls[0].surf = SDL_LoadBMP("./assests/wall1.bmp");
-	walls[1].surf = SDL_LoadBMP("./assests/wall2.bmp");
+	walls[0].surf = SDL_LoadBMP("./src/assests/wall1.bmp");
+	walls[1].surf = SDL_LoadBMP("./src/assests/wall2.bmp");
 
 	// Load floor-ceiling pairs into memory.
-	floor_ceils[0].floor_surf = SDL_LoadBMP("./assests/floor.bmp");
-	floor_ceils[0].ceil_surf = SDL_LoadBMP("./assests/ceiling.bmp");
+	floor_ceils[0].floor_surf = SDL_LoadBMP("./src/assests/floor.bmp");
+	floor_ceils[0].ceil_surf = SDL_LoadBMP("./src/assests/ceiling.bmp");
 
-	floor_ceils[1].floor_surf = SDL_LoadBMP("./assests/floor2.bmp");
-	floor_ceils[1].ceil_surf = SDL_LoadBMP("./assests/ceiling2.bmp");
+	floor_ceils[1].floor_surf = SDL_LoadBMP("./src/assests/floor2.bmp");
+	floor_ceils[1].ceil_surf = SDL_LoadBMP("./src/assests/ceiling2.bmp");
 
-	floor_ceils[2].floor_surf = SDL_LoadBMP("./assests/floor.bmp");
+	floor_ceils[2].floor_surf = SDL_LoadBMP("./src/assests/floor.bmp");
 	floor_ceils[2].ceil_surf = NULL;
 
 	// Initializes the sprites.
-	things[0].surf = SDL_LoadBMP("./assests/sprite.bmp");
+	things[0].surf = SDL_LoadBMP("./src/assests/sprite.bmp");
 	things[0].position[0] = 128;
 	things[0].position[1] = 128;
 
-	things[1].surf = SDL_LoadBMP("./assests/sprite2.bmp");
+	things[1].surf = SDL_LoadBMP("./src/assests/sprite2.bmp");
 	things[1].position[0] = 128;
 	things[1].position[1] = 448;
 
-	things[2].surf = SDL_LoadBMP("./assests/sprite3.bmp");
+	things[2].surf = SDL_LoadBMP("./src/assests/sprite3.bmp");
 	things[2].position[0] = 672;
 	things[2].position[1] = 96;
 
-	things[3].surf = SDL_LoadBMP("./assests/sprite.bmp");
+	things[3].surf = SDL_LoadBMP("./src/assests/sprite.bmp");
 	things[3].position[0] = 256;
 	things[3].position[1] = 460;
 
@@ -146,7 +146,7 @@ void initialize_map(SDL_Renderer* renderer) {
 	thing_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
 
 	// Load sky texture into memory.
-	sky_surf = SDL_LoadBMP("./assests/skybox.bmp");
+	sky_surf = SDL_LoadBMP("./src/assests/skybox.bmp");
 
 	// Enables transparent pixel 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
