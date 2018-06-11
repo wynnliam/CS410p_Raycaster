@@ -652,7 +652,6 @@ void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_ro
 
 	preprocess_things(player_x, player_y);
 
-
 	// Now loop through each column of pixels on the screen and do ray casting.
 	for(i = 0; i < PROJ_W; ++i) {
 		adj_angle = get_adjusted_angle((int)curr_angle);
