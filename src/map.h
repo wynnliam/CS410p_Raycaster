@@ -67,17 +67,8 @@ struct mapdef {
 	unsigned int num_things;
 };
 
-// Stores the number of tile types (num_wall_tex + num_foor_ceils)
-int num_tiles;
-// Stores the number of wall textures used by the system.
-int num_wall_tex;
-// Stores the number of floor ceiling pairs used in the map.
-int num_floor_ceils;
-// Stores the number of things in the world.
-int num_things;
-
 // Specifies the layout of the world.
-int map[200] = {
+/*int map[200] = {
 	3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
 	3,1,1,1,3,0,0,0,0,3,0,0,0,0,0,0,0,0,0,3,
 	3,1,1,1,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,3,
@@ -88,17 +79,5 @@ int map[200] = {
 	4,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
 	4,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
 	4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3
-};
-
-// Assume an upper bound of 100 wall textures.
-struct walldef walls[100];
-// Assume also an upper bound of 100 floor and ceiling textures.
-struct floorcielingdef floor_ceils[100];
-
-// The list of sprites in the world. We sort
-// this every frame by distance from the player.
-// We will assume there can be at most 1000 sprites
-// in a level.
-struct thingdef things[1000];
-
+};*/
 #endif

@@ -132,21 +132,6 @@ struct thingdef* things_sorted[1000];
 void initialize_lookup_tables();
 
 /*
-	Initializes data for tiles in map. Includes things like textures, skybox,
-	sprites, etc.
-
-	PRECONDITIONS:
-		None
-
-	POSTCONDITIONS:
-		All textures for map loaded and initialized.
-
-	ARGUMENTS:
-		renderer - needed to convert surfaces to textures.
-*/
-void initialize_map(SDL_Renderer* renderer);
-
-/*
 	Returns the tile at a given position (x,y). Returns -1 if no tile is at
 	that position.
 
