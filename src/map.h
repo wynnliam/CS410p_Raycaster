@@ -27,8 +27,6 @@ struct floorcielingdef {
 	SDL_Surface* ceil_surf;
 };
 
-SDL_Surface* sky_surf;
-
 // Defines a "thing" in the world. This is for
 // static objects in the world, but can easily
 // be extended for dynamic objects and/or NPCs.
@@ -40,12 +38,15 @@ struct thingdef {
 
 struct mapdef {
 	// Specifies the layout of the world.
-	unsigned int* map;
+	unsigned int* layout;
 
 	// Assume an upper bound of 100 wall textures.
 	struct walldef walls[100];
 	// Assume also an upper bound of 100 floor and ceiling textures.
 	struct floorcielingdef floor_ceils[100];
+
+	// Stores the sky texture used for the map.
+	SDL_Surface* sky_surf;
 
 	// The list of sprites in the world. We sort
 	// this every frame by distance from the player.

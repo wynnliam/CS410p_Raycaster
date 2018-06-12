@@ -10,55 +10,74 @@ int player_x, player_y;
 // The player rotation.
 int player_rot;
 
+// Temporary storage for map.
+struct mapdef* map;
+
 /*INITIALIZATION PROCEDURES*/
 
 // TODO: This whole function should be elsewhere.
-void initialize_map(SDL_Renderer* renderer) {
+void initialize_map(struct mapdef* map, SDL_Renderer* renderer) {
+	unsigned int temp_layout[200] = {
+		3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
+		3,1,1,1,3,0,0,0,0,3,0,0,0,0,0,0,0,0,0,3,
+		3,1,1,1,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,3,
+		3,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
+		3,1,1,1,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
+		4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
+		4,2,2,2,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
+		4,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
+		4,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
+		4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3
+	};
+
+	map->map_w = 20;
+	map->map_h = 10;
+	map->layout = (unsigned int*)malloc(sizeof(unsigned int) * 200);
+
+	int i;
+	for(i = 0; i < 200; ++i)
+		map->layout[i] = temp_layout[i];
 
 	// Set properties of map.
-	num_wall_tex = 2;
-	num_floor_ceils = 3;
-	num_tiles = num_wall_tex + num_floor_ceils;
-
-	num_things = 4;
+	map->num_wall_tex = 2;
+	map->num_floor_ceils = 3;
+	map->num_tiles = map->num_wall_tex + map->num_floor_ceils;
+	map->num_things = 4;
 
 	// Load walls into memory.
-	walls[0].surf = SDL_LoadBMP("./src/assests/wall1.bmp");
-	walls[1].surf = SDL_LoadBMP("./src/assests/wall2.bmp");
+	map->walls[0].surf = SDL_LoadBMP("./src/assests/wall1.bmp");
+	map->walls[1].surf = SDL_LoadBMP("./src/assests/wall2.bmp");
 
 	// Load floor-ceiling pairs into memory.
-	floor_ceils[0].floor_surf = SDL_LoadBMP("./src/assests/floor.bmp");
-	floor_ceils[0].ceil_surf = SDL_LoadBMP("./src/assests/ceiling.bmp");
+	map->floor_ceils[0].floor_surf = SDL_LoadBMP("./src/assests/floor.bmp");
+	map->floor_ceils[0].ceil_surf = SDL_LoadBMP("./src/assests/ceiling.bmp");
 
-	floor_ceils[1].floor_surf = SDL_LoadBMP("./src/assests/floor2.bmp");
-	floor_ceils[1].ceil_surf = SDL_LoadBMP("./src/assests/ceiling2.bmp");
+	map->floor_ceils[1].floor_surf = SDL_LoadBMP("./src/assests/floor2.bmp");
+	map->floor_ceils[1].ceil_surf = SDL_LoadBMP("./src/assests/ceiling2.bmp");
 
-	floor_ceils[2].floor_surf = SDL_LoadBMP("./src/assests/floor.bmp");
-	floor_ceils[2].ceil_surf = NULL;
+	map->floor_ceils[2].floor_surf = SDL_LoadBMP("./src/assests/floor.bmp");
+	map->floor_ceils[2].ceil_surf = NULL;
 
 	// Initializes the sprites.
-	things[0].surf = SDL_LoadBMP("./src/assests/sprite.bmp");
-	things[0].position[0] = 128;
-	things[0].position[1] = 128;
+	map->things[0].surf = SDL_LoadBMP("./src/assests/sprite.bmp");
+	map->things[0].position[0] = 128;
+	map->things[0].position[1] = 128;
 
-	things[1].surf = SDL_LoadBMP("./src/assests/sprite2.bmp");
-	things[1].position[0] = 128;
-	things[1].position[1] = 448;
+	map->things[1].surf = SDL_LoadBMP("./src/assests/sprite2.bmp");
+	map->things[1].position[0] = 128;
+	map->things[1].position[1] = 448;
 
-	things[2].surf = SDL_LoadBMP("./src/assests/sprite3.bmp");
-	things[2].position[0] = 672;
-	things[2].position[1] = 96;
+	map->things[2].surf = SDL_LoadBMP("./src/assests/sprite3.bmp");
+	map->things[2].position[0] = 672;
+	map->things[2].position[1] = 96;
 
-	things[3].surf = SDL_LoadBMP("./src/assests/sprite.bmp");
-	things[3].position[0] = 256;
-	things[3].position[1] = 460;
+	map->things[3].surf = SDL_LoadBMP("./src/assests/sprite.bmp");
+	map->things[3].position[0] = 256;
+	map->things[3].position[1] = 460;
 
-	floor_ceiling_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
-	raycast_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
-	thing_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
 
 	// Load sky texture into memory.
-	sky_surf = SDL_LoadBMP("./src/assests/skybox.bmp");
+	map->sky_surf = SDL_LoadBMP("./src/assests/skybox.bmp");
 
 	// Enables transparent pixel 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -72,10 +91,12 @@ void initialize(SDL_Renderer* renderer) {
 	player_y = 160;
 	player_rot = 180;
 
+	map = (struct mapdef*)malloc(sizeof(struct mapdef));
+
 	// Initializes all the angle lookup tables.
 	initialize_lookup_tables();
 	// Initialize the map data.
-	initialize_map(renderer);
+	initialize_map(map, renderer);
 }
 
 /*UPDATE PROCEDURES*/
