@@ -64,7 +64,7 @@ struct mapdef {
 	unsigned int num_floor_ceils;
 
 	// Stores the number of things in the world.
-	int num_things;
+	unsigned int num_things;
 };
 
 // Stores the number of tile types (num_wall_tex + num_foor_ceils)
@@ -77,7 +77,7 @@ int num_floor_ceils;
 int num_things;
 
 // Specifies the layout of the world.
-int map[] = {
+int map[200] = {
 	3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
 	3,1,1,1,3,0,0,0,0,3,0,0,0,0,0,0,0,0,0,3,
 	3,1,1,1,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,3,
@@ -101,6 +101,4 @@ struct floorcielingdef floor_ceils[100];
 // in a level.
 struct thingdef things[1000];
 
-// Stores the things in a sorted order.
-struct thingdef* things_sorted[1000];
 #endif

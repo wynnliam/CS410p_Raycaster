@@ -1,7 +1,7 @@
 // Liam Wynn, 5/13/2018, CS410p: Full Stack Web Development
 
 #include "raycaster.h"
-#include "map.h"
+//#include "map.h"
 
 #include <stdio.h>
 #include <math.h>

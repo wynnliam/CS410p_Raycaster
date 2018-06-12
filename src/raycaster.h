@@ -5,9 +5,10 @@
 	the raycast algorithm.
 */
 
+#include "map.h"
+
 #ifndef RAYCASTER
 #define RAYCASTER
-#include <SDL2/SDL.h>
 
 // Field of view, in radians. This specifies the angle of what we can
 // view. It is also important for computing the rays themselves.
@@ -101,15 +102,21 @@ int z_buffer[PROJ_W];
 
 // What we render for the floor/ceiling
 SDL_Texture* floor_ceiling_tex;
-// Where we store the floor pixels before we render.
+// Where we store the floor and ceiling pixels before we render.
 unsigned int floor_ceiling_pixels[64000];
 
 // Where we render for skybox and wall pixels.
 SDL_Texture* raycast_texture;
+// Where we store sky and wall textures before we render.
 unsigned int raycast_pixels[64000];
 
+// What we render for the things.
 SDL_Texture* thing_texture;
+// Where we store thing pixels before we render.
 unsigned int thing_pixels[64000];
+
+// Stores the things in a sorted order.
+struct thingdef* things_sorted[1000];
 
 /*
 	For angles 0 to 360, computes sin(a) * 128, cos(a) * 128, and tan(a) * 128
