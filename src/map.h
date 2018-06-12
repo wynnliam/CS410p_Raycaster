@@ -38,6 +38,34 @@ struct thingdef {
 	int dist;
 };
 
+struct mapdef {
+	// Specifies the layout of the world.
+	unsigned int* map;
+
+	// Assume an upper bound of 100 wall textures.
+	struct walldef walls[100];
+	// Assume also an upper bound of 100 floor and ceiling textures.
+	struct floorcielingdef floor_ceils[100];
+
+	// The list of sprites in the world. We sort
+	// this every frame by distance from the player.
+	// We will assume there can be at most 1000 sprites
+	// in a level.
+	struct thingdef things[1000];
+
+	// Specifies the dimensions of the world.
+	unsigned int map_w, map_h;
+
+	// Stores the number of tile types (num_wall_tex + num_foor_ceils)
+	unsigned int num_tiles;
+	// Stores the number of wall textures used by the system.
+	unsigned int num_wall_tex;
+	// Stores the number of floor ceiling pairs used in the map.
+	unsigned int num_floor_ceils;
+
+	// Stores the number of things in the world.
+	int num_things;
+};
 
 // Stores the number of tile types (num_wall_tex + num_foor_ceils)
 int num_tiles;
