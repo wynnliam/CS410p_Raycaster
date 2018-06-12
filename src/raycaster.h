@@ -99,6 +99,18 @@ int delta_v_y[361];
 // Stores the distance each ray is from the player when it hits something.
 int z_buffer[PROJ_W];
 
+// What we render for the floor/ceiling
+SDL_Texture* floor_ceiling_tex;
+// Where we store the floor pixels before we render.
+unsigned int floor_ceiling_pixels[64000];
+
+// Where we render for skybox and wall pixels.
+SDL_Texture* raycast_texture;
+unsigned int raycast_pixels[64000];
+
+SDL_Texture* thing_texture;
+unsigned int thing_pixels[64000];
+
 /*
 	For angles 0 to 360, computes sin(a) * 128, cos(a) * 128, and tan(a) * 128
 	and stores them in the angle lookup tables. For angles 0, 90, 180, 270, 360,
