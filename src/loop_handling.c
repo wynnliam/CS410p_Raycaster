@@ -81,9 +81,6 @@ void initialize_map(struct mapdef* map, SDL_Renderer* renderer) {
 
 	// Enables transparent pixel 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-	SDL_SetTextureBlendMode(floor_ceiling_tex, SDL_BLENDMODE_BLEND);
-	SDL_SetTextureBlendMode(raycast_texture, SDL_BLENDMODE_BLEND);
-	SDL_SetTextureBlendMode(thing_texture, SDL_BLENDMODE_BLEND);
 }
 
 void initialize(SDL_Renderer* renderer) {
@@ -132,7 +129,7 @@ void update() {
 				player_y -= (sin128table[player_rot] << 4) >> 7;
 				player_x += (cos128table[player_rot] << 4) >> 7;
 
-				if(get_tile(player_x, player_y) < 0 || get_tile(player_x, player_y) >= 3) {
+				if(get_tile(player_x, player_y, map) < 0 || get_tile(player_x, player_y, map) >= 3) {
 					player_y += (sin128table[player_rot] << 4) >> 7;
 					player_x -= (cos128table[player_rot] << 4) >> 7;
 				}
@@ -142,7 +139,7 @@ void update() {
 				player_y += (sin128table[player_rot] << 4) >> 7;
 				player_x -= (cos128table[player_rot] << 4) >> 7;
 
-				if(get_tile(player_x, player_y) < 0 || get_tile(player_x, player_y) >= 3) {
+				if(get_tile(player_x, player_y, map) < 0 || get_tile(player_x, player_y, map) >= 3) {
 					player_y -= (sin128table[player_rot] << 4) >> 7;
 					player_x += (cos128table[player_rot] << 4) >> 7;
 				}

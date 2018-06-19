@@ -21,7 +21,7 @@ void loop(void* args) {
 	// Do a ray-casting rendering step.
 	render(renderer);
 
-	//emscripten_cancel_main_loop();
+	emscripten_cancel_main_loop();
 }
 
 int main() {
@@ -65,7 +65,7 @@ int main() {
 	}*/
 
 	// Actually sets the rendering loop.
-	//emscripten_set_main_loop_arg(loop, &ctx, fps_count, run_infinite);
+	emscripten_set_main_loop_arg(loop, &ctx, fps_count, run_infinite);
 
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);

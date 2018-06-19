@@ -59,6 +59,8 @@ struct hitinfo {
 
 // Used in the function draw_wall_slice to reduce number of arguments.
 struct draw_wall_slice_args {
+	// Used to access texture and tile data for walls, floors, and ceilings.
+	struct mapdef* map;
 	// Data for ray hitting wall slice.
 	struct hitinfo* hit;
 	// Used to compute the "correct" distance from the
@@ -160,7 +162,7 @@ void initialize_render_textures(SDL_Renderer* renderer);
 	RETURNS:
 		-1 if invalid position. Otherwise, the tile at (x,y).
 */
-int get_tile(int x, int y);
+int get_tile(int x, int y, struct mapdef* map);
 
 /*
 	Scans through each ray and performs the ray casting algorithm. For each ray,
@@ -189,9 +191,10 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* map, int player_x, int pla
 	the distance for each thing and then doing quicksort according to distance.
 
 	ARUGMENTS:
+		map - used to access things.
 		player_x, player_y - the position of the player in "world" space.
 */
-void preprocess_things(int player_x, int player_y);
+void preprocess_things(struct mapdef* map, int player_x, int player_y);
 
 /*
 	Computes an angle that is equivalent to the given angle, but adjusted so that
@@ -216,8 +219,9 @@ int get_adjusted_angle(int curr_angle);
 		value so as to do our lookup's quickly.
 		player_x, player_y - where the ray will originate from.
 		hit - stores all of the data about this hit.
+		map - used to access information about tiles, level, etc.
 */
-void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit);
+void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit, struct mapdef* map);
 
 /*
 	Renders the sky at a given column of pixels. Given the adjusted angle,
@@ -225,10 +229,11 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 	onto the screen.
 
 	ARGUMENTS:
+		map - used to access sky surface.
 		screen_col - the column on the screen we want to draw sky pixels to.
 		adj_angle - used to figure out what column of sky pixels to render.
 */
-void draw_sky(int screen_col, int adj_angle);
+void draw_sky(struct mapdef* map, int screen_col, int adj_angle);
 
 /*
 	Renders a single wall slice for a given ray. When this procedure is called,
@@ -257,10 +262,11 @@ void draw_floor_and_ceiling(int screen_slice_y, int screen_slice_h, struct draw_
 	wall slice of a given column is further away).
 
 	ARGUMENTS:
+		map - used to access the things.
 		player_x, player_y - the position of the player in "world" space.
 		player_rot - the rotation of the player in degrees.
 */
-void draw_things(int player_x, int player_y, int player_rot);
+void draw_things(struct mapdef* map, int player_x, int player_y, int player_rot);
 
 /*
 	Grabs the pixel of a surface at point (x, y). If the point is within the dimensions
@@ -292,6 +298,7 @@ unsigned int get_pixel(SDL_Surface* surface, int x, int y);
 	farthest to closest so we render the closest ones last. The algorithm used here is quicksort.
 
 	ARGUMENTS:
+		map - used to access things to sort.
 		s, e - the starting and ending indecies
 
 	PRECONDITIONS:
@@ -300,6 +307,6 @@ unsigned int get_pixel(SDL_Surface* surface, int x, int y);
 	POSTCONDITIONS:
 		Order of things array will be modifief.
 */
-void sort_things(int s, int e);
-int partition(int s, int e);
+void sort_things(struct mapdef* map, int s, int e);
+int partition(struct mapdef* map, int s, int e);
 #endif

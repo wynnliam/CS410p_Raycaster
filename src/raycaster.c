@@ -105,18 +105,22 @@ void initialize_render_textures(SDL_Renderer* renderer) {
 	floor_ceiling_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
 	raycast_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
 	thing_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
+
+	SDL_SetTextureBlendMode(floor_ceiling_tex, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureBlendMode(raycast_texture, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureBlendMode(thing_texture, SDL_BLENDMODE_BLEND);
 }
 
-int get_tile(int x, int y) {
+int get_tile(int x, int y, struct mapdef* map) {
 	int grid_x = x >> UNIT_POWER;
 	int grid_y = y >> UNIT_POWER;
 
-	if(grid_x < 0 || grid_x > MAP_W - 1)
+	if(grid_x < 0 || grid_x > map->map_w - 1)
 		return -1;
-	if(grid_y < 0 || grid_y > MAP_H - 1)
+	if(grid_y < 0 || grid_y > map->map_h - 1)
 		return -1;
 
-	return map[grid_y * MAP_W + grid_x];
+	return map->layout[grid_y * MAP_W + grid_x];
 }
 
 int get_dist_sqrd(int x1, int y1, int x2, int y2) {
@@ -131,7 +135,7 @@ int get_dist_sqrd(int x1, int y1, int x2, int y2) {
 	return d_x + d_y;
 }
 
-void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit) {
+void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit, struct mapdef* map) {
 	// Stores the position of the ray as it moved
 	// from one grid line to the next.
 	int curr_h_x, curr_h_y;
@@ -237,11 +241,11 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 	delt_v_y = delta_v_y[ray_angle];
 
 	// Now find the point that is a wall by travelling along horizontal gridlines.
-	tile = get_tile(curr_h_x, curr_h_y);
-	while(-1 < tile && tile < num_floor_ceils) {
+	tile = get_tile(curr_h_x, curr_h_y, map);
+	while(-1 < tile && tile < map->num_floor_ceils) {
 		curr_h_x += delt_h_x;
 		curr_h_y += delt_h_y;
-		tile = get_tile(curr_h_x, curr_h_y);
+		tile = get_tile(curr_h_x, curr_h_y, map);
 	}
 
 	// We went outside the bounds of the map.
@@ -256,11 +260,11 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 	}
 
 	// Now find the point that is a wall by travelling along vertical gridlines.
-	tile = get_tile(curr_v_x, curr_v_y);
-	while(-1 < tile && tile < num_floor_ceils) {
+	tile = get_tile(curr_v_x, curr_v_y, map);
+	while(-1 < tile && tile < map->num_floor_ceils) {
 		curr_v_x += delt_v_x;
 		curr_v_y += delt_v_y;
-		tile = get_tile(curr_v_x, curr_v_y);
+		tile = get_tile(curr_v_x, curr_v_y, map);
 	}
 
 	// We went outside the bounds of the map.
@@ -317,7 +321,7 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit)
 		}
 	}
 
-	hit->wall_type = get_tile(hit->hit_pos[0], hit->hit_pos[1]);
+	hit->wall_type = get_tile(hit->hit_pos[0], hit->hit_pos[1], map);
 }
 
 unsigned int get_pixel(SDL_Surface* surface, int x, int y) {
@@ -362,13 +366,13 @@ unsigned int get_pixel(SDL_Surface* surface, int x, int y) {
 	return result;
 }
 
-void draw_sky(int screen_col, int adj_angle) {
-	if(!sky_surf)
+void draw_sky(struct mapdef* map, int screen_col, int adj_angle) {
+	if(!map || !map->sky_surf)
 		return;
 
 	int j;
 	for(j = 0; j < 200; ++j)
-		raycast_pixels[j * PROJ_W + screen_col] = get_pixel(sky_surf, (adj_angle << 1) % 640, j);
+		raycast_pixels[j * PROJ_W + screen_col] = get_pixel(map->sky_surf, (adj_angle << 1) % 640, j);
 }
 
 void draw_wall_slice(struct draw_wall_slice_args* args) {
@@ -389,7 +393,7 @@ void draw_wall_slice(struct draw_wall_slice_args* args) {
 	// The height of the slice on the screen
 	int screen_slice_h;
 
-	wall = args->hit->wall_type - num_floor_ceils;
+	wall = args->hit->wall_type - args->map->num_floor_ceils;
 	slice_dist = (args->hit->dist * cos128table[args->correct_angle]) >> 7;
 
 	// Make sure we don't get any issues computing the slice height.
@@ -416,7 +420,7 @@ void draw_wall_slice(struct draw_wall_slice_args* args) {
 			continue;
 
 		raycast_pixels[(j + screen_slice_y) * PROJ_W + args->screen_col] =
-			get_pixel(walls[wall].surf, tex_col, (j << 6) / screen_slice_h);
+			get_pixel(args->map->walls[wall].surf, tex_col, (j << 6) / screen_slice_h);
 	}
 
 	// FLOOR/CEILING CASTING.
@@ -444,31 +448,31 @@ void draw_floor_and_ceiling(int screen_slice_y, int screen_slice_h, struct draw_
 		p_x = dws->player_x + ((dist_to_point * cos128table[dws->adj_angle]) >> 7);
 		p_y = dws->player_y - ((dist_to_point * sin128table[dws->adj_angle]) >> 7);
 
-		floor_ceil_type = get_tile(p_x, p_y);
+		floor_ceil_type = get_tile(p_x, p_y, dws->map);
 
 		// Gives us the texture location.
 		//t_x = p_x % UNIT_SIZE;
 		//t_y = p_y % UNIT_SIZE;
 
-		if(floor_ceil_type < 0 || floor_ceil_type >= num_floor_ceils)
+		if(floor_ceil_type >= dws->map->num_floor_ceils)
 			continue;
 
 		// Put floor pixel.
 		//printf("%d\n", floor_ceil);
-		if(floor_ceils[floor_ceil_type].floor_surf) {
-			floor_ceiling_pixels[j * PROJ_W + dws->screen_col] = get_pixel(floor_ceils[floor_ceil_type].floor_surf,
+		if(dws->map->floor_ceils[floor_ceil_type].floor_surf) {
+			floor_ceiling_pixels[j * PROJ_W + dws->screen_col] = get_pixel(dws->map->floor_ceils[floor_ceil_type].floor_surf,
 															 		  p_x % UNIT_SIZE, p_y % UNIT_SIZE);
 		}
 
 		// Put ceiling pixel.
-		if(floor_ceils[floor_ceil_type].ceil_surf) {
-			floor_ceiling_pixels[(-j + PROJ_H) * PROJ_W + dws->screen_col] = get_pixel(floor_ceils[floor_ceil_type].ceil_surf,
+		if(dws->map->floor_ceils[floor_ceil_type].ceil_surf) {
+			floor_ceiling_pixels[(-j + PROJ_H) * PROJ_W + dws->screen_col] = get_pixel(dws->map->floor_ceils[floor_ceil_type].ceil_surf,
 																				  p_x % UNIT_SIZE, p_y % UNIT_SIZE);
 		}
 	}
 }
 
-void draw_things(int player_x, int player_y, int player_rot) {
+void draw_things(struct mapdef* map, int player_x, int player_y, int player_rot) {
 	// The texture point.
 	int t_x, t_y;
 	// RGB value of the sprite texture.
@@ -488,7 +492,7 @@ void draw_things(int player_x, int player_y, int player_rot) {
 
 	int i, j, k, m;
 
-	for(i = 0; i < num_things; ++i) {
+	for(i = 0; i < map->num_things; ++i) {
 		x_diff = things_sorted[i]->position[0] - player_x;
 		y_diff = things_sorted[i]->position[1] - player_y;
 
@@ -546,18 +550,19 @@ void draw_things(int player_x, int player_y, int player_rot) {
 	}
 }
 
-void preprocess_things(int player_x, int player_y) {
-	int i;
+void preprocess_things(struct mapdef* map, int player_x, int player_y) {
+	unsigned int i;
 
 	// Compute the distance between each thing and the player.
-	for(i = 0; i < num_things; ++i) {
-		things[i].dist = get_dist_sqrd(things[i].position[0], things[i].position[1], player_x, player_y);
+	for(i = 0; i < map->num_things; ++i) {
+		map->things[i].dist = get_dist_sqrd(map->things[i].position[0], map->things[i].position[1],
+											player_x, player_y);
 		// Add the thing to the sorted list.
-		things_sorted[i] = &things[i];
+		things_sorted[i] = &(map->things[i]);
 	}
 
 	// Now, sort the things according to distance.
-	sort_things(0, num_things - 1);
+	sort_things(map, 0, map->num_things - 1);
 }
 
 int get_adjusted_angle(int curr_angle) {
@@ -602,7 +607,7 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* map, int player_x, int pla
 		thing_pixels[i] = 0;
 	}
 
-	preprocess_things(player_x, player_y);
+	preprocess_things(map, player_x, player_y);
 
 	// Now loop through each column of pixels on the screen and do ray casting.
 	for(i = 0; i < PROJ_W; ++i) {
@@ -612,14 +617,15 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* map, int player_x, int pla
 		correct_angle = abs(adj_angle - player_rot);
 
 		z_buffer[i] = 0;
-		get_ray_hit(adj_angle, player_x, player_y, &hit);
+		get_ray_hit(adj_angle, player_x, player_y, &hit, map);
 		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
 			// SKY CASTING
-			draw_sky(i, adj_angle);
+			draw_sky(map, i, adj_angle);
 
 			z_buffer[i] = hit.dist;
 
 			// WALL, FLOOR, CEILING CASTING
+			dws.map = map;
 			dws.hit = &hit;
 			dws.correct_angle = correct_angle;
 			dws.adj_angle = adj_angle;
@@ -634,7 +640,7 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* map, int player_x, int pla
 	}
 
 	// THING CASTING
-	draw_things(player_x, player_y, player_rot);
+	draw_things(map, player_x, player_y, player_rot);
 
 	// Draw pixel arrays to screen.
 	SDL_UpdateTexture(raycast_texture, NULL, raycast_pixels, PROJ_W << 2);
@@ -647,32 +653,32 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* map, int player_x, int pla
 	SDL_RenderCopy(renderer, thing_texture, NULL, NULL);
 }
 
-void sort_things(int s, int e) {
+void sort_things(struct mapdef* map, int s, int e) {
 	if(e <= s)
 		return;
 
-	int m = partition(s, e);
+	int m = partition(map, s, e);
 
-	sort_things(s, m);
-	sort_things(m + 1, e);
+	sort_things(map, s, m);
+	sort_things(map, m + 1, e);
 }
 
-int partition(int s, int e) {
+int partition(struct mapdef* map, int s, int e) {
 	int i = s - 1;
 	int j = e + 1;
 
-	int p_dist = things[s].dist;
+	int p_dist = map->things[s].dist;
 
 	struct thingdef* temp;
 
 	while(1) {
 		do {
 			i += 1;
-		} while(things[i].dist > p_dist);
+		} while(map->things[i].dist > p_dist);
 
 		do {
 			j -= 1;
-		} while(things[j].dist < p_dist);
+		} while(map->things[j].dist < p_dist);
 
 		if(i >= j)
 			return j;
