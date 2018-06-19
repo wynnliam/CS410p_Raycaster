@@ -18,7 +18,7 @@ struct mapdef* map;
 // TODO: This whole function should be elsewhere.
 void initialize_map(struct mapdef* map, SDL_Renderer* renderer) {
 	unsigned int temp_layout[200] = {
-		3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
+		3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,5,3,6,3,3,
 		3,1,1,1,3,0,0,0,0,3,0,0,0,0,0,0,0,0,0,3,
 		3,1,1,1,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,3,
 		3,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
@@ -39,45 +39,47 @@ void initialize_map(struct mapdef* map, SDL_Renderer* renderer) {
 		map->layout[i] = temp_layout[i];
 
 	// Set properties of map.
-	map->num_wall_tex = 2;
+	map->num_wall_tex = 4;
 	map->num_floor_ceils = 3;
 	map->num_tiles = map->num_wall_tex + map->num_floor_ceils;
 	map->num_things = 4;
 
 	// Load walls into memory.
-	map->walls[0].surf = SDL_LoadBMP("./src/assests/wall1.bmp");
-	map->walls[1].surf = SDL_LoadBMP("./src/assests/wall2.bmp");
+	map->walls[0].surf = SDL_LoadBMP("./src/assests/textures/test/wall1.bmp");
+	map->walls[1].surf = SDL_LoadBMP("./src/assests/textures/test/wall2.bmp");
+	map->walls[2].surf = SDL_LoadBMP("./src/assests/textures/art/art29.bmp");
+	map->walls[3].surf = SDL_LoadBMP("./src/assests/textures/art/ctm1.bmp");
 
 	// Load floor-ceiling pairs into memory.
-	map->floor_ceils[0].floor_surf = SDL_LoadBMP("./src/assests/floor.bmp");
-	map->floor_ceils[0].ceil_surf = SDL_LoadBMP("./src/assests/ceiling.bmp");
+	map->floor_ceils[0].floor_surf = SDL_LoadBMP("./src/assests/textures/test/floor.bmp");
+	map->floor_ceils[0].ceil_surf = SDL_LoadBMP("./src/assests/textures/test/ceiling.bmp");
 
-	map->floor_ceils[1].floor_surf = SDL_LoadBMP("./src/assests/floor2.bmp");
-	map->floor_ceils[1].ceil_surf = SDL_LoadBMP("./src/assests/ceiling2.bmp");
+	map->floor_ceils[1].floor_surf = SDL_LoadBMP("./src/assests/textures/test/floor2.bmp");
+	map->floor_ceils[1].ceil_surf = SDL_LoadBMP("./src/assests/textures/test/ceiling2.bmp");
 
-	map->floor_ceils[2].floor_surf = SDL_LoadBMP("./src/assests/floor.bmp");
+	map->floor_ceils[2].floor_surf = SDL_LoadBMP("./src/assests/textures/test/floor.bmp");
 	map->floor_ceils[2].ceil_surf = NULL;
 
 	// Initializes the sprites.
-	map->things[0].surf = SDL_LoadBMP("./src/assests/sprite.bmp");
+	map->things[0].surf = SDL_LoadBMP("./src/assests/textures/test/sprite.bmp");
 	map->things[0].position[0] = 128;
 	map->things[0].position[1] = 128;
 
-	map->things[1].surf = SDL_LoadBMP("./src/assests/sprite2.bmp");
+	map->things[1].surf = SDL_LoadBMP("./src/assests/textures/test/sprite2.bmp");
 	map->things[1].position[0] = 128;
 	map->things[1].position[1] = 448;
 
-	map->things[2].surf = SDL_LoadBMP("./src/assests/sprite3.bmp");
+	map->things[2].surf = SDL_LoadBMP("./src/assests/textures/test/sprite3.bmp");
 	map->things[2].position[0] = 672;
 	map->things[2].position[1] = 96;
 
-	map->things[3].surf = SDL_LoadBMP("./src/assests/sprite.bmp");
+	map->things[3].surf = SDL_LoadBMP("./src/assests/textures/test/sprite.bmp");
 	map->things[3].position[0] = 256;
 	map->things[3].position[1] = 460;
 
 
 	// Load sky texture into memory.
-	map->sky_surf = SDL_LoadBMP("./src/assests/skybox.bmp");
+	map->sky_surf = SDL_LoadBMP("./src/assests/textures/test/skybox.bmp");
 
 	// Enables transparent pixel 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
