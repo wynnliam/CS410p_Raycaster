@@ -99,13 +99,13 @@ void initialize_lookup_tables() {
 
 		//printf("deg %d. Sin: %d, Cos: %d, tan: %d\n", deg, sin128table[deg], cos128table[deg], tan128table[deg]);
 	}
+}
 
-	// TODO: Put this in seperate procedure.
+void initialize_render_textures(SDL_Renderer* renderer) {
 	floor_ceiling_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
 	raycast_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
 	thing_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
 }
-
 
 int get_tile(int x, int y) {
 	int grid_x = x >> UNIT_POWER;
@@ -579,7 +579,7 @@ int get_adjusted_angle(int curr_angle) {
 	return adj_angle;
 }
 
-void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_rot) {
+void cast_rays(SDL_Renderer* renderer, struct mapdef* map, int player_x, int player_y, int player_rot) {
 	// Stores the precise angle of our current ray.
 	float curr_angle = (float)(player_rot + FOV_HALF);
 	// The curr_angle adjusted to be within 0 and 360.

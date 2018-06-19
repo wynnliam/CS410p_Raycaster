@@ -95,6 +95,8 @@ void initialize(SDL_Renderer* renderer) {
 
 	// Initializes all the angle lookup tables.
 	initialize_lookup_tables();
+	// Intializes the rendering textures.
+	initialize_render_textures(renderer);
 	// Initialize the map data.
 	initialize_map(map, renderer);
 }
@@ -161,7 +163,7 @@ void render(SDL_Renderer* renderer) {
 	// cornflower blue.
 	SDL_RenderClear(renderer);
 
-	cast_rays(renderer, player_x, player_y, player_rot);
+	cast_rays(renderer, map, player_x, player_y, player_rot);
 
 	// Forces the screen to be updated.
 	SDL_RenderPresent(renderer);

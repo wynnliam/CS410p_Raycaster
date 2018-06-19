@@ -132,6 +132,19 @@ struct thingdef* things_sorted[1000];
 void initialize_lookup_tables();
 
 /*
+	Initialzies the textures that we render pixels to before we render the
+	scene.
+
+	PRECONDITIONS:
+		SDL Initialized.
+
+	POSTCONDITIONS:
+		floor_ceiling_tex, raycast_texture, thing_texture initialized.
+		Can now begin raycasting scene.
+*/
+void initialize_render_textures(SDL_Renderer* renderer);
+
+/*
 	Returns the tile at a given position (x,y). Returns -1 if no tile is at
 	that position.
 
@@ -158,6 +171,7 @@ int get_tile(int x, int y);
 
 	ARGUMENTS:
 		renderer - used to draw lines in SDL.
+		map - the map we are rendering in.
 		player_x, player_y - the position of the player.
 		player_rot - the rotation of the player in degrees.
 
@@ -168,7 +182,7 @@ int get_tile(int x, int y);
 		A single raycasted scene is rendered.
 		
 */
-void cast_rays(SDL_Renderer* renderer, int player_x, int player_y, int player_rot);
+void cast_rays(SDL_Renderer* renderer, struct mapdef* map, int player_x, int player_y, int player_rot);
 
 /*
 	Sorts every thing according to distance from the player. This requires updating
