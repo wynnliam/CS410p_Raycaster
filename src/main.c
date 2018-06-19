@@ -21,7 +21,7 @@ void loop(void* args) {
 	// Do a ray-casting rendering step.
 	render(renderer);
 
-	emscripten_cancel_main_loop();
+	//emscripten_cancel_main_loop();
 }
 
 int main() {
