@@ -120,7 +120,7 @@ int get_tile(int x, int y, struct mapdef* map) {
 	if(grid_y < 0 || grid_y > map->map_h - 1)
 		return -1;
 
-	return map->layout[grid_y * MAP_W + grid_x];
+	return map->layout[grid_y * map->map_w + grid_x];
 }
 
 int get_dist_sqrd(int x1, int y1, int x2, int y2) {
