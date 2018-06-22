@@ -72,7 +72,7 @@ void initialize_map(struct mapdef* map, SDL_Renderer* renderer) {
 	map->num_wall_tex = 100;
 	map->num_floor_ceils = 100;
 	map->num_tiles = map->num_wall_tex + map->num_floor_ceils;
-	map->num_things = 0;
+	map->num_things = 4;
 
 	// Load walls into memory.
 	map->walls[0].surf = SDL_LoadBMP("./src/assests/textures/test/wall1.bmp");
@@ -157,7 +157,8 @@ void initialize_map(struct mapdef* map, SDL_Renderer* renderer) {
 
 	// Load floor-ceiling pairs into memory.
 	map->floor_ceils[0].floor_surf = SDL_LoadBMP("./src/assests/textures/test/floor.bmp");
-	map->floor_ceils[0].ceil_surf = SDL_LoadBMP("./src/assests/textures/test/ceiling.bmp");
+	//map->floor_ceils[0].ceil_surf = SDL_LoadBMP("./src/assests/textures/test/ceiling.bmp");
+	map->floor_ceils[0].ceil_surf = NULL;
 
 	map->floor_ceils[1].floor_surf = SDL_LoadBMP("./src/assests/textures/test/floor2.bmp");
 	map->floor_ceils[1].ceil_surf = SDL_LoadBMP("./src/assests/textures/test/ceiling2.bmp");
@@ -166,7 +167,7 @@ void initialize_map(struct mapdef* map, SDL_Renderer* renderer) {
 	map->floor_ceils[2].ceil_surf = NULL;
 
 	// Initializes the sprites.
-	/*map->things[0].surf = SDL_LoadBMP("./src/assests/textures/test/sprite.bmp");
+	map->things[0].surf = SDL_LoadBMP("./src/assests/textures/test/sprite.bmp");
 	map->things[0].position[0] = 128;
 	map->things[0].position[1] = 128;
 
@@ -180,20 +181,20 @@ void initialize_map(struct mapdef* map, SDL_Renderer* renderer) {
 
 	map->things[3].surf = SDL_LoadBMP("./src/assests/textures/test/sprite.bmp");
 	map->things[3].position[0] = 256;
-	map->things[3].position[1] = 460;*/
+	map->things[3].position[1] = 460;
 
 
 	// Load sky texture into memory.
-	map->sky_surf = SDL_LoadBMP("./src/assests/textures/test/skybox.bmp");
+	map->sky_surf = SDL_LoadBMP("./src/assests/textures/skybox/sky1.bmp");
 
 	// Enables transparent pixel 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 }
 
 void initialize(SDL_Renderer* renderer) {
-	player_x = 100;
-	player_y = 100;
-	player_rot = 180;
+	player_x = 158;
+	player_y = 500;
+	player_rot = 358;
 
 	map = (struct mapdef*)malloc(sizeof(struct mapdef));
 
@@ -211,7 +212,7 @@ void update() {
 	SDL_Event event;
 	while(SDL_PollEvent(&event)) {
 		if(event.type == SDL_KEYDOWN) {
-			if(event.key.keysym.sym == SDLK_c)
+			if(event.key.keysym.sym == SDLK_p)
 				exit(0);
 
 			if(event.key.keysym.sym == SDLK_a) {

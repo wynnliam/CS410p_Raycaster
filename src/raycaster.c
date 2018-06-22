@@ -503,13 +503,13 @@ void draw_things(struct mapdef* map, int player_x, int player_y, int player_rot)
 			theta_temp += 360;
 
 		scr_y = player_rot + FOV_HALF - theta_temp;
+
 		if(theta_temp > 270 && player_rot < 90)
 			scr_y = player_rot + FOV_HALF - theta_temp + 360;
-		if(player_rot > 270 && theta_temp > 90)
+		if(player_rot > 270 && theta_temp < 90)
 			scr_y = player_rot + FOV_HALF - theta_temp - 360;
 
 		scr_x = scr_y * PROJ_W / FOV;
-
 
 		thing_rect.w = (int)(UNIT_SIZE / sqrt(things_sorted[i]->dist) * DIST_TO_PROJ);
 		thing_rect.h = thing_rect.w;
