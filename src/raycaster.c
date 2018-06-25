@@ -372,7 +372,7 @@ void draw_sky(struct mapdef* map, int screen_col, int adj_angle) {
 
 	int j;
 	for(j = 0; j < 200; ++j)
-		raycast_pixels[j * PROJ_W + screen_col] = get_pixel(map->sky_surf, (adj_angle << 1) % 640, j);
+		raycast_pixels[j * PROJ_W + screen_col] = get_pixel(map->sky_surf, (int)(adj_angle * 1.77) % 640, j);
 }
 
 void draw_wall_slice(struct draw_wall_slice_args* args) {
