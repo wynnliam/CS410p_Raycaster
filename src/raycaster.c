@@ -537,7 +537,7 @@ void draw_things(struct mapdef* map, int player_x, int player_y, int player_rot)
 						t_x = thing_src_rect.x;
 						t_y = (k << 6) / thing_rect.h;
 						//t_color = (unsigned char*)(things_sorted[i]->surf->pixels + t_y * things_sorted[i]->surf->pitch + t_x * 4);
-						t_color = get_pixel(things_sorted[i]->surf, t_x, t_y);
+						t_color = get_pixel(things_sorted[i]->surf, t_x + 64, t_y);
 						// Only put a pixel if it is not transparent.
 						if(((unsigned char*)(&t_color))[3] > 0)
 							thing_pixels[(k + thing_rect.y) * PROJ_W + j] = t_color;
