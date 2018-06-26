@@ -183,7 +183,6 @@ void initialize_map(struct mapdef* map, SDL_Renderer* renderer) {
 	map->things[3].position[0] = 256;
 	map->things[3].position[1] = 460;
 
-
 	// Load sky texture into memory.
 	map->sky_surf = SDL_LoadBMP("./src/assests/textures/skybox/sky1.bmp");
 
