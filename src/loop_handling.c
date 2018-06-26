@@ -167,11 +167,11 @@ void initialize_map(struct mapdef* map, SDL_Renderer* renderer) {
 	map->floor_ceils[2].ceil_surf = NULL;
 
 	// Initializes the sprites.
-	map->things[0].surf = SDL_LoadBMP("./src/assests/textures/test/sprite.bmp");
+	map->things[0].surf = SDL_LoadBMP("./src/assests/sprites/officer.bmp");
 	map->things[0].position[0] = 128;
 	map->things[0].position[1] = 128;
 
-	map->things[1].surf = SDL_LoadBMP("./src/assests/textures/test/sprite2.bmp");
+	/*map->things[1].surf = SDL_LoadBMP("./src/assests/textures/test/sprite2.bmp");
 	map->things[1].position[0] = 128;
 	map->things[1].position[1] = 448;
 
@@ -181,7 +181,7 @@ void initialize_map(struct mapdef* map, SDL_Renderer* renderer) {
 
 	map->things[3].surf = SDL_LoadBMP("./src/assests/textures/test/sprite.bmp");
 	map->things[3].position[0] = 256;
-	map->things[3].position[1] = 460;
+	map->things[3].position[1] = 460;*/
 
 	// Load sky texture into memory.
 	map->sky_surf = SDL_LoadBMP("./src/assests/textures/skybox/sky1.bmp");
