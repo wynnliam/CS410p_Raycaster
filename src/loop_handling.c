@@ -168,8 +168,8 @@ void initialize_map(struct mapdef* map, SDL_Renderer* renderer) {
 
 	// Initializes the sprites.
 	map->things[0].surf = SDL_LoadBMP("./src/assests/sprites/officer.bmp");
-	map->things[0].position[0] = 128;
-	map->things[0].position[1] = 128;
+	map->things[0].position[0] = 256;
+	map->things[0].position[1] = 256;
 	map->things[0].rotation = 224;
 
 	/*map->things[1].surf = SDL_LoadBMP("./src/assests/textures/test/sprite2.bmp");

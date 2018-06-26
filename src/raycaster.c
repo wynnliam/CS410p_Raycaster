@@ -490,6 +490,16 @@ void draw_things(struct mapdef* map, int player_x, int player_y, int player_rot)
 	// Defines the column of pixels of the sprite we want.
 	SDL_Rect thing_src_rect;
 
+	// For handling orientation of thing relative to player.
+	// How much we add to t_x such that we render the correct frame.
+	int frame_offset;
+	// Figures out what the thing rotation is relative to 90 degrees.
+	// We pick 90 degrees because the sprite orientation will make sense
+	// visually.
+	int transformed_rotation;
+	// A number from 0 to 7 that tells us what orientation to use.
+	int orientation;
+
 	int i, j, k, m;
 
 	for(i = 0; i < map->num_things; ++i) {
@@ -519,6 +529,32 @@ void draw_things(struct mapdef* map, int player_x, int player_y, int player_rot)
 		// The column for the scaled texture.
 		m = 0;
 
+		// Compute orientation data.
+		// Get relative angle of thing assuming player was facing 90 degrees.
+		transformed_rotation = (things_sorted[i]->rotation - player_rot) + 90;
+		// Correct transformed_rotation
+		if(transformed_rotation < 0)
+			transformed_rotation += 360;
+		if(transformed_rotation >= 360)
+			transformed_rotation -= 360;
+
+		if(0 <= transformed_rotation && transformed_rotation <= 22)
+			orientation = 6;
+		else if(23 <= transformed_rotation && transformed_rotation <= 68)
+			orientation = 5;
+		else if(69 <= transformed_rotation && transformed_rotation <= 113)
+			orientation = 4;
+		else if(114 <= transformed_rotation && transformed_rotation <= 158)
+			orientation = 3;
+		else if(159 <= transformed_rotation && transformed_rotation <= 203)
+			orientation = 2;
+		else if(204 <= transformed_rotation && transformed_rotation <= 249)
+			orientation = 1;
+		else if(250 <= transformed_rotation && transformed_rotation <= 295)
+			orientation = 0;
+		else
+			orientation = 6;
+
 		for(j = thing_rect.x; j < thing_rect.x + thing_rect.w; ++j) {
 			if(j >= 0 && j < PROJ_W) {
 				// Render the current slice of sprite only if infront of wall.
@@ -537,7 +573,7 @@ void draw_things(struct mapdef* map, int player_x, int player_y, int player_rot)
 						t_x = thing_src_rect.x;
 						t_y = (k << 6) / thing_rect.h;
 						//t_color = (unsigned char*)(things_sorted[i]->surf->pixels + t_y * things_sorted[i]->surf->pitch + t_x * 4);
-						t_color = get_pixel(things_sorted[i]->surf, t_x + 448, t_y);
+						t_color = get_pixel(things_sorted[i]->surf, t_x + (orientation << 6), t_y);
 						// Only put a pixel if it is not transparent.
 						if(((unsigned char*)(&t_color))[3] > 0)
 							thing_pixels[(k + thing_rect.y) * PROJ_W + j] = t_color;
