@@ -31,8 +31,13 @@ struct floorcielingdef {
 // static objects in the world, but can easily
 // be extended for dynamic objects and/or NPCs.
 struct thingdef {
+	// The texture to render.
 	SDL_Surface* surf;
+	// The global position.
 	int position[2];
+	// The global rotation in degrees.
+	int rotation;
+	// The distance from the player.
 	int dist;
 };
 
