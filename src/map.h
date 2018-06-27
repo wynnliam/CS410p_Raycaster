@@ -10,6 +10,7 @@
 #define MAP
 
 #include <SDL2/SDL.h>
+#include "animation.h"
 
 #define MAP_W	20
 #define MAP_H	10
@@ -33,12 +34,16 @@ struct floorcielingdef {
 struct thingdef {
 	// The texture to render.
 	SDL_Surface* surf;
+	struct animdef anims[100];
 	// The global position.
 	int position[2];
 	// The global rotation in degrees.
 	int rotation;
 	// The distance from the player.
 	int dist;
+
+	unsigned int num_anims;
+	unsigned int curr_anim;
 };
 
 struct mapdef {

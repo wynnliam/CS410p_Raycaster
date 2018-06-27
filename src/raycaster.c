@@ -490,6 +490,11 @@ void draw_things(struct mapdef* map, int player_x, int player_y, int player_rot)
 	// Defines the column of pixels of the sprite we want.
 	SDL_Rect thing_src_rect;
 
+	// For handling animations.
+	unsigned int curr_anim;
+	// How much we add to t_x, t_y to get the correct animation frame.
+	int frame_offset_x, frame_offset_y;
+
 	// For handling orientation of thing relative to player.
 	// How much we add to t_x such that we render the correct frame.
 	int frame_offset;
@@ -531,7 +536,7 @@ void draw_things(struct mapdef* map, int player_x, int player_y, int player_rot)
 
 		// Compute orientation data.
 		// Get relative angle of thing assuming player was facing 90 degrees.
-		transformed_rotation = (things_sorted[i]->rotation - player_rot) + 90;
+		/*transformed_rotation = (things_sorted[i]->rotation - player_rot) + 90;
 		// Correct transformed_rotation
 		if(transformed_rotation < 0)
 			transformed_rotation += 360;
@@ -553,7 +558,15 @@ void draw_things(struct mapdef* map, int player_x, int player_y, int player_rot)
 		else if(250 <= transformed_rotation && transformed_rotation <= 295)
 			orientation = 0;
 		else
-			orientation = 6;
+			orientation = 6;*/
+
+		curr_anim = things_sorted[i]->curr_anim;
+		// Take starting position and multiply by 64 to go from unit coordinates to pixel coordinates.
+		// This puts us in the correct position for the animation as a whole.
+		frame_offset_x = (int)(things_sorted[i]->anims[curr_anim].start_x) << 6;
+		// Add the current frame to the offset so that we have the correct frame.
+		frame_offset_x += things_sorted[i]->anims[curr_anim].curr_frame << 6;
+		frame_offset_y = 0;
 
 		for(j = thing_rect.x; j < thing_rect.x + thing_rect.w; ++j) {
 			if(j >= 0 && j < PROJ_W) {
@@ -573,7 +586,7 @@ void draw_things(struct mapdef* map, int player_x, int player_y, int player_rot)
 						t_x = thing_src_rect.x;
 						t_y = (k << 6) / thing_rect.h;
 						//t_color = (unsigned char*)(things_sorted[i]->surf->pixels + t_y * things_sorted[i]->surf->pitch + t_x * 4);
-						t_color = get_pixel(things_sorted[i]->surf, t_x + (orientation << 6), t_y);
+						t_color = get_pixel(things_sorted[i]->surf, t_x + frame_offset_x, t_y + frame_offset_y);
 						// Only put a pixel if it is not transparent.
 						if(((unsigned char*)(&t_color))[3] > 0)
 							thing_pixels[(k + thing_rect.y) * PROJ_W + j] = t_color;

@@ -1,4 +1,4 @@
-// Liam Wynn, 5/12/2018, CS410p: Full Stack Web Development
+// Liam Wynn, 6/26/2018, CS410p: Full Stack Web Development
 
 /*
 	Defines data structures and procedures relating to
@@ -17,6 +17,9 @@
 	of an animation sequence is the left most 64 by 64 pixel square. The rightmost
 	one is its last.
 */
+
+#ifndef ANIMATION
+#define ANIMATION
 
 struct animdef {
 	// TODO: Finish me!
@@ -38,3 +41,35 @@ struct animdef {
 	// sprite sheet in unit values. That is, 1 is 64 pixels, 2 is 128, etc.
 	unsigned char start_x, start_y;
 };
+
+/*
+	Begins to play an animation. It does so by setting bRunning to true,
+	and setting the value of start_tick to the current value SDL has.
+
+	ARGUMENTS:
+		anim - the animation to start/unpause.
+
+	PRECONDITIONS:
+		SDL Initialized, and animation set.
+
+	POSTCONDITIONS:
+		Animation is now running (can use it in update_anim);
+*/
+void start_anim(struct animdef* anim);
+
+/*
+	Handles the logic of updating an animation. This is where the curr_frame
+	gets updated and whatnot.
+
+	ARGUMENTS:
+		anim - the animation to update.
+
+	PRECONDITIONS:
+		anim is running.
+
+	POSTCONDITIONS:
+		anim is updated. Curr_frame may be different, as well as start_tick.
+*/
+void update_anim(struct animdef* anim);
+
+#endif
