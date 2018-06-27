@@ -20,4 +20,21 @@
 
 struct animdef {
 	// TODO: Finish me!
+	// The number of 64 x 64 pixel square.
+	unsigned int num_frames;
+	// The time in milliseconds between frames.
+	unsigned int frame_time;
+	unsigned int curr_frame;
+	// If we repeat the animation or not.
+	int bRepeats;
+	// If the animation is currently running or not.
+	int bRunning;
+
+	// When (SDL_GetTicks() - start_tick) >= frame_time, we update
+	// our current frame.
+	unsigned int start_tick;
+
+	// The position of where this animation sequence starts on the
+	// sprite sheet in unit values. That is, 1 is 64 pixels, 2 is 128, etc.
+	unsigned char start_x, start_y;
 };
