@@ -564,9 +564,11 @@ void draw_things(struct mapdef* map, int player_x, int player_y, int player_rot)
 		// Take starting position and multiply by 64 to go from unit coordinates to pixel coordinates.
 		// This puts us in the correct position for the animation as a whole.
 		frame_offset_x = (int)(things_sorted[i]->anims[curr_anim].start_x) << 6;
+		frame_offset_y = (int)(things_sorted[i]->anims[curr_anim].start_y) << 6;
 		// Add the current frame to the offset so that we have the correct frame.
+		// Note that since animations progress only horizontally, we don't need to
+		// do anything to the y part of the offset.
 		frame_offset_x += things_sorted[i]->anims[curr_anim].curr_frame << 6;
-		frame_offset_y = 0;
 
 		for(j = thing_rect.x; j < thing_rect.x + thing_rect.w; ++j) {
 			if(j >= 0 && j < PROJ_W) {
