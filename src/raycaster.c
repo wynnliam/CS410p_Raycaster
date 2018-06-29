@@ -495,15 +495,6 @@ void draw_things(struct mapdef* map, int player_x, int player_y, int player_rot)
 	// How much we add to t_x, t_y to get the correct animation frame.
 	int frame_offset_x, frame_offset_y;
 
-	// For handling orientation of thing relative to player.
-	// How much we add to t_x such that we render the correct frame.
-	int frame_offset;
-	// Figures out what the thing rotation is relative to 90 degrees.
-	// We pick 90 degrees because the sprite orientation will make sense
-	// visually.
-	int transformed_rotation;
-	// A number from 0 to 7 that tells us what orientation to use.
-	int orientation;
 
 	int i, j, k, m;
 

@@ -173,101 +173,101 @@ void initialize_map(struct mapdef* map, SDL_Renderer* renderer) {
 	map->things[0].rotation = 224;
 
 	// Initialize animation for sprite.
-	map->things[0].curr_anim = 15;
+	map->things[0].curr_anim = 0;
 
 	map->things[0].anims[0].num_frames = 1;
 	map->things[0].anims[0].frame_time = 0;
-	map->things[0].anims[0].bRepeats = 0;
+	map->things[0].anims[0].bRepeats = 1;
 	map->things[0].anims[0].start_x = 0;
 	map->things[0].anims[0].start_y = 0;
 
 	map->things[0].anims[1].num_frames = 4;
-	map->things[0].anims[1].frame_time = 1000;
-	map->things[0].anims[1].bRepeats = 0;
+	map->things[0].anims[1].frame_time = 250;
+	map->things[0].anims[1].bRepeats = 1;
 	map->things[0].anims[1].start_x = 0;
 	map->things[0].anims[1].start_y = 1;
 
 	map->things[0].anims[2].num_frames = 1;
 	map->things[0].anims[2].frame_time = 0;
-	map->things[0].anims[2].bRepeats = 0;
+	map->things[0].anims[2].bRepeats = 1;
 	map->things[0].anims[2].start_x = 0;
 	map->things[0].anims[2].start_y = 2;
 
 	map->things[0].anims[3].num_frames = 4;
-	map->things[0].anims[3].frame_time = 1000;
-	map->things[0].anims[3].bRepeats = 0;
+	map->things[0].anims[3].frame_time = 250;
+	map->things[0].anims[3].bRepeats = 1;
 	map->things[0].anims[3].start_x = 0;
 	map->things[0].anims[3].start_y = 3;
 
 	map->things[0].anims[4].num_frames = 1;
 	map->things[0].anims[4].frame_time = 0;
-	map->things[0].anims[4].bRepeats = 0;
+	map->things[0].anims[4].bRepeats = 1;
 	map->things[0].anims[4].start_x = 0;
 	map->things[0].anims[4].start_y = 4;
 
 	map->things[0].anims[5].num_frames = 4;
-	map->things[0].anims[5].frame_time = 1000;
-	map->things[0].anims[5].bRepeats = 0;
+	map->things[0].anims[5].frame_time = 250;
+	map->things[0].anims[5].bRepeats = 1;
 	map->things[0].anims[5].start_x = 0;
 	map->things[0].anims[5].start_y = 5;
 
 	map->things[0].anims[6].num_frames = 1;
 	map->things[0].anims[6].frame_time = 0;
-	map->things[0].anims[6].bRepeats = 0;
+	map->things[0].anims[6].bRepeats = 1;
 	map->things[0].anims[6].start_x = 0;
 	map->things[0].anims[6].start_y = 6;
 
 	map->things[0].anims[7].num_frames = 4;
-	map->things[0].anims[7].frame_time = 1000;
-	map->things[0].anims[7].bRepeats = 0;
+	map->things[0].anims[7].frame_time = 250;
+	map->things[0].anims[7].bRepeats = 1;
 	map->things[0].anims[7].start_x = 0;
 	map->things[0].anims[7].start_y = 7;
 
 	map->things[0].anims[8].num_frames = 1;
 	map->things[0].anims[8].frame_time = 0;
-	map->things[0].anims[8].bRepeats = 0;
+	map->things[0].anims[8].bRepeats = 1;
 	map->things[0].anims[8].start_x = 0;
 	map->things[0].anims[8].start_y = 8;
 
 	map->things[0].anims[9].num_frames = 4;
-	map->things[0].anims[9].frame_time = 1000;
-	map->things[0].anims[9].bRepeats = 0;
+	map->things[0].anims[9].frame_time = 250;
+	map->things[0].anims[9].bRepeats = 1;
 	map->things[0].anims[9].start_x = 0;
 	map->things[0].anims[9].start_y = 9;
 
 	map->things[0].anims[10].num_frames = 1;
 	map->things[0].anims[10].frame_time = 0;
-	map->things[0].anims[10].bRepeats = 0;
+	map->things[0].anims[10].bRepeats = 1;
 	map->things[0].anims[10].start_x = 0;
 	map->things[0].anims[10].start_y = 10;
 
 	map->things[0].anims[11].num_frames = 4;
-	map->things[0].anims[11].frame_time = 1000;
-	map->things[0].anims[11].bRepeats = 0;
+	map->things[0].anims[11].frame_time = 250;
+	map->things[0].anims[11].bRepeats = 1;
 	map->things[0].anims[11].start_x = 0;
 	map->things[0].anims[11].start_y = 11;
 
 	map->things[0].anims[12].num_frames = 1;
 	map->things[0].anims[12].frame_time = 0;
-	map->things[0].anims[12].bRepeats = 0;
+	map->things[0].anims[12].bRepeats = 1;
 	map->things[0].anims[12].start_x = 0;
 	map->things[0].anims[12].start_y = 12;
 
 	map->things[0].anims[13].num_frames = 4;
-	map->things[0].anims[13].frame_time = 1000;
-	map->things[0].anims[13].bRepeats = 0;
+	map->things[0].anims[13].frame_time = 250;
+	map->things[0].anims[13].bRepeats = 1;
 	map->things[0].anims[13].start_x = 0;
 	map->things[0].anims[13].start_y = 13;
 
 	map->things[0].anims[14].num_frames = 1;
 	map->things[0].anims[14].frame_time = 0;
-	map->things[0].anims[14].bRepeats = 0;
+	map->things[0].anims[14].bRepeats = 1;
 	map->things[0].anims[14].start_x = 0;
 	map->things[0].anims[14].start_y = 14;
 
 	map->things[0].anims[15].num_frames = 4;
-	map->things[0].anims[15].frame_time = 1000;
-	map->things[0].anims[15].bRepeats = 0;
+	map->things[0].anims[15].frame_time = 250;
+	map->things[0].anims[15].bRepeats = 1;
 	map->things[0].anims[15].start_x = 0;
 	map->things[0].anims[15].start_y = 15;
 
@@ -356,6 +356,19 @@ void update() {
 				printf("Player position = [%d, %d]. Player rotation = %d\n", player_x, player_y, player_rot);
 			}
 		}
+	}
+
+	// Get the orientation of the thing. Add one to it to get the walking animation
+	// for that orientation.
+	int orientation = get_thing_orientation(map->things[0].rotation, player_rot);
+	int anim = (orientation << 1) + 1;
+
+	// If the animation the thing should have is not the same as its current,
+	// stop the current animation, then set the current animation to the correct one.
+	if(anim != map->things[0].curr_anim) {
+		stop_anim(&map->things[0].anims[map->things[0].curr_anim]);
+		map->things[0].curr_anim = anim;
+		start_anim(&map->things[0].anims[map->things[0].curr_anim]);
 	}
 
 	update_anim(&map->things[0].anims[map->things[0].curr_anim]);
