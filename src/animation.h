@@ -50,7 +50,7 @@ struct animdef {
 		anim - the animation to start/unpause.
 
 	PRECONDITIONS:
-		SDL Initialized, and animation set.
+		SDL Initialized, and animation set, and animation not already running.
 
 	POSTCONDITIONS:
 		Animation is now running (can use it in update_anim);
@@ -71,5 +71,20 @@ void start_anim(struct animdef* anim);
 		anim is updated. Curr_frame may be different, as well as start_tick.
 */
 void update_anim(struct animdef* anim);
+
+/*
+	Stops an animation that is currently playing. Resets animation by setting
+	bRunning to false.
+
+	ARGUMENTS:
+		anim - the animation to stop.
+
+	PRECONDITIONS:
+		bRunning must be true.
+
+	POSTCONDITIONS:
+		bRunning set to false, thus stopping the animation.
+*/
+void stop_anim(struct animdef* anim);
 
 #endif

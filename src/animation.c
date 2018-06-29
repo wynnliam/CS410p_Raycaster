@@ -4,9 +4,10 @@
 #include <SDL2/SDL.h>
 
 void start_anim(struct animdef* anim) {
-	if(!anim)
+	if(!anim || anim->bRunning)
 		return;
 
+	anim->curr_frame = 0;
 	anim->bRunning = 1;
 	anim->start_tick = SDL_GetTicks();
 }
@@ -24,6 +25,8 @@ void update_anim(struct animdef* anim) {
 			// If not, we freeze, as the animation is done.
 			if(anim->bRepeats)
 				anim->curr_frame = 0;
+			else
+				stop_anim(anim);
 		}
 
 		else
@@ -31,4 +34,11 @@ void update_anim(struct animdef* anim) {
 
 		anim->start_tick = curr_tick;
 	}
+}
+
+void stop_anim(struct animdef* anim) {
+	if(!anim || !anim->bRunning)
+		return;
+
+	anim->bRunning = 0;
 }
