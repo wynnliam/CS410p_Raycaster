@@ -78,21 +78,21 @@ int get_thing_orientation(int thing_rot, int player_rot) {
 	if(transformed_rotation >= 360)
 		transformed_rotation -= 360;
 
-	if(0 <= transformed_rotation && transformed_rotation <= 22)
+	if(0 <= transformed_rotation && transformed_rotation <= 5)
 		orientation = 6;
-	else if(23 <= transformed_rotation && transformed_rotation <= 68)
+	else if(6 <= transformed_rotation && transformed_rotation <= 84)
 		orientation = 5;
-	else if(69 <= transformed_rotation && transformed_rotation <= 113)
+	else if(85 <= transformed_rotation && transformed_rotation <= 95)
 		orientation = 4;
-	else if(114 <= transformed_rotation && transformed_rotation <= 158)
+	else if(96 <= transformed_rotation && transformed_rotation <= 174)
 		orientation = 3;
-	else if(159 <= transformed_rotation && transformed_rotation <= 203)
+	else if(175 <= transformed_rotation && transformed_rotation <= 185)
 		orientation = 2;
-	else if(204 <= transformed_rotation && transformed_rotation <= 249)
+	else if(186 <= transformed_rotation && transformed_rotation <= 264)
 		orientation = 1;
-	else if(250 <= transformed_rotation && transformed_rotation <= 295)
+	else if(265 <= transformed_rotation && transformed_rotation <= 275)
 		orientation = 0;
-	else if(296 <= transformed_rotation && transformed_rotation <= 340)
+	else if(276 <= transformed_rotation && transformed_rotation <= 354)
 		orientation = 7;
 	else
 		orientation = 6;
