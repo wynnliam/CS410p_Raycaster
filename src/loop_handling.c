@@ -167,19 +167,26 @@ void initialize_map(struct mapdef* map, SDL_Renderer* renderer) {
 	map->floor_ceils[2].ceil_surf = NULL;
 
 	// Initializes the sprites.
-	map->things[0].surf = SDL_LoadBMP("./src/assests/sprites/officer.bmp");
+	map->things[0].surf = SDL_LoadBMP("./src/assests/sprites/guard.bmp");
 	map->things[0].position[0] = 256;
 	map->things[0].position[1] = 256;
 	map->things[0].rotation = 224;
 
 	// Initialize animation for sprite.
-	map->things[0].curr_anim = 0;
-	map->things[0].anims[0].num_frames = 8;
-	map->things[0].anims[0].frame_time = 1000;
+	map->things[0].curr_anim = 1;
+	map->things[0].anims[0].num_frames = 1;
+	map->things[0].anims[0].frame_time = 0;
 	map->things[0].anims[0].bRepeats = 1;
 	map->things[0].anims[0].start_x = 0;
 	map->things[0].anims[0].start_y = 0;
-	start_anim(&map->things[0].anims[0]);
+
+	map->things[0].anims[1].num_frames = 4;
+	map->things[0].anims[1].frame_time = 300;
+	map->things[0].anims[1].bRepeats = 1;
+	map->things[0].anims[1].start_x = 0;
+	map->things[0].anims[1].start_y = 1;
+
+	start_anim(&map->things[0].anims[1]);
 
 	/*map->things[1].surf = SDL_LoadBMP("./src/assests/textures/test/sprite2.bmp");
 	map->things[1].position[0] = 128;
@@ -268,7 +275,7 @@ void update() {
 		}
 	}
 
-	update_anim(&map->things[0].anims[0]);
+	update_anim(&map->things[0].anims[1]);
 }
 
 /*RENDERING PROCEDURES*/
