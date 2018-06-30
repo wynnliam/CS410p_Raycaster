@@ -495,7 +495,6 @@ void draw_things(struct mapdef* map, int player_x, int player_y, int player_rot)
 	// How much we add to t_x, t_y to get the correct animation frame.
 	int frame_offset_x, frame_offset_y;
 
-
 	int i, j, k, m;
 
 	for(i = 0; i < map->num_things; ++i) {
@@ -509,6 +508,7 @@ void draw_things(struct mapdef* map, int player_x, int player_y, int player_rot)
 			theta_temp += 360;
 
 		scr_y = player_rot + FOV_HALF - theta_temp;
+
 
 		if(theta_temp > 270 && player_rot < 90)
 			scr_y = player_rot + FOV_HALF - theta_temp + 360;
@@ -599,6 +599,10 @@ void preprocess_things(struct mapdef* map, int player_x, int player_y) {
 	for(i = 0; i < map->num_things; ++i) {
 		map->things[i].dist = get_dist_sqrd(map->things[i].position[0], map->things[i].position[1],
 											player_x, player_y);
+
+		if(map->things[i].dist == 0)
+			map->things[i].dist = 1;
+
 		// Add the thing to the sorted list.
 		things_sorted[i] = &(map->things[i]);
 	}

@@ -291,8 +291,8 @@ void initialize_map(struct mapdef* map, SDL_Renderer* renderer) {
 }
 
 void initialize(SDL_Renderer* renderer) {
-	player_x = 158;
-	player_y = 500;
+	player_x = 256;
+	player_y = 256;
 	player_rot = 0;
 
 	map = (struct mapdef*)malloc(sizeof(struct mapdef));
