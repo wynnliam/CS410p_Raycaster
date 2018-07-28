@@ -10,7 +10,9 @@
 #define MAP
 
 #include <SDL2/SDL.h>
+
 #include "animation.h"
+#include "./parse/map_data.h"
 
 #define MAP_W	20
 #define MAP_H	10
@@ -78,17 +80,25 @@ struct mapdef {
 	unsigned int num_things;
 };
 
-// Specifies the layout of the world.
-/*int map[200] = {
-	3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
-	3,1,1,1,3,0,0,0,0,3,0,0,0,0,0,0,0,0,0,3,
-	3,1,1,1,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,3,
-	3,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
-	3,1,1,1,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
-	4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
-	4,2,2,2,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
-	4,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
-	4,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
-	4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3
-};*/
+/*
+	Main driver for constructing a mapdef from a map_data.
+
+	PRECONDITIONS:
+	mapdef and map_data are not NULL, and the data inside map_data is valid (files
+	can be found, no inappropriate values for members, etc).
+
+	POSTCONDITIONS:
+	The player position might be changed.
+
+	ARGUMENTS:
+	mapdef - the mapdef structure that will have data added to it.
+	map_data - who we transform into mapdef.
+	player_x and player_y - temporary values so that we can set the player's position.
+
+	RETURNS:
+	1 - Successfully built mapdef from map_data.
+	0 - Failed to build mapdef from map_data.
+*/
+int build_mapdef_from_map_data(struct mapdef* mapdef, struct map_data* map_data, int* player_x, int* player_y);
+
 #endif
