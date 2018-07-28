@@ -11,6 +11,9 @@
 
 #include "map_data.h"
 
+#ifndef MAP_DATA_PARSER
+#define MAP_DATA_PARSER
+
 // The parser is looking to read in a recipe's header (basically its name)
 #define PARSING_HEADER		0
 // The parser has read a recipe header and is now reading its attribute list.
@@ -310,3 +313,5 @@ void set_curr_attribute_type(char* attribute_name);
 		match to anything in the map_data structure.
 */
 int set_map_data_val(struct map_data* map_data, char* attribute_name, char* attribute_val);
+
+#endif

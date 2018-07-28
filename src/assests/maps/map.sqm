@@ -1,0 +1,65 @@
+# Liam Wynn, 7/10/2018, Raycaster
+# This is a demo map.'
+
+# Metadata about the map.
+properties {
+	# String
+	name = "demo world";
+	# String - 0 will denote "NULL"
+	sky_tex = "./src/assests/textures/skybox/sky1.bmp";
+}
+
+component {
+	x = "1";
+	y = "1";
+	w = "8";
+	h = "5";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/test/floor.bmp";
+	tex_1 = "./src/assests/textures/test/ceiling.bmp";
+}
+
+component {
+	x = "1";
+	y = "0";
+	w = "8";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/texture/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "1";
+	y = "6";
+	w = "8";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/texture/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "1";
+	w = "1";
+	h = "5";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/texture/test/wall2.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "9";
+	y = "1";
+	w = "2";
+	h = "5";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/texture/test/wall2.bmp";
+	tex_1 = "0";
+}

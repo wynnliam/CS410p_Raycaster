@@ -1,5 +1,8 @@
 // Liam Wynn, 7/17/2018, Raycaster: Map File Loader
 
+#ifndef MAP_DATA
+#define MAP_DATA
+
 /*
 	Stores a structure that is similar to a map, but
 	basically stores a "raw" format of the level. That is,
@@ -81,3 +84,5 @@ int add_component(struct map_data* add_to);
 		0 - the map data was null.
 */
 int add_thing_data(struct map_data* add_to);
+
+#endif

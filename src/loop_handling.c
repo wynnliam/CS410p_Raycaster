@@ -2,6 +2,7 @@
 
 #include "loop_handling.h"
 #include "raycaster.h"
+#include "./parse/parser.h"
 
 #include <stdio.h>
 
@@ -17,6 +18,14 @@ struct mapdef* map;
 
 // TODO: This whole function should be elsewhere.
 void initialize_map(struct mapdef* map, SDL_Renderer* renderer) {
+	FILE* demo_map_file = fopen("./src/assests/maps/map.sqm", "r");
+	struct map_data* map_data = parse_to_map_data(demo_map_file);
+
+	build_mapdef_from_map_data(map, map_data, &player_x, &player_y);
+	fclose(demo_map_file);
+
+	return;
+
 	/*map->map_w = 20;
 	map->map_h = 10;
 	unsigned int temp_layout[200] = {
