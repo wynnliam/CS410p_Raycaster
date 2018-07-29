@@ -24,6 +24,9 @@ void initialize_map(struct mapdef* map, SDL_Renderer* renderer) {
 	build_mapdef_from_map_data(map, map_data, &player_x, &player_y);
 	fclose(demo_map_file);
 
+	// Enables transparent pixel 
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
 	return;
 
 	/*map->map_w = 20;

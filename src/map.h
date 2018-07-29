@@ -19,6 +19,8 @@
 
 // Specifies the data for a given wall tile.
 struct walldef {
+	// To do a quick lookup of the path for a given texture.
+	char* path;
 	// Defines the texture for this wall.
 	SDL_Surface* surf;
 };
@@ -26,6 +28,9 @@ struct walldef {
 // Specifies floor and ceiling textures for a given
 // point. If a texture is NULL, we do not render it.
 struct floorcielingdef {
+	// To do a quick lookup of the path for a given texture.
+	char* floor_path;
+	char* ceil_path;
 	SDL_Surface* floor_surf;
 	SDL_Surface* ceil_surf;
 };

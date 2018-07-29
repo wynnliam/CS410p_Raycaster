@@ -16,6 +16,9 @@ struct map_data* parse_to_map_data(FILE* map_file) {
 	// Used to read in characters from map_file.
 	char c;
 
+	result->component_head = NULL;
+	result->thing_head = NULL;
+
 	reset();
 	while(1) {
 		c = fgetc(map_file);
