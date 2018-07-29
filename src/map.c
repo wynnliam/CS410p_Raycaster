@@ -25,6 +25,12 @@ int tex_match(char* mapdef_tex, char* map_data_tex);
 int add_floor_ceil_tex(char* tex_0, char* tex_1, struct floorcielingdef floor_ceils[100], int index);
 int add_wall_tex(char* tex_0, struct walldef walls[100], int index);
 
+int add_things_to_map(struct mapdef* map, struct thing_data* things);
+
+// Different thing factories
+int add_thing_type_0(struct thingdef* thing, struct thing_data* data);
+int add_thing_type_1(struct thingdef* thing, struct thing_data* data);
+
 /*
 	Adds each component into the map level.
 */
@@ -55,12 +61,17 @@ int build_mapdef_from_map_data(struct mapdef* mapdef, struct map_data* map_data,
 	build_texture_lists(map_data->component_head, mapdef);
 	place_components_into_mapdef(mapdef, map_data->component_head);
 
+	add_things_to_map(mapdef, map_data->thing_head);
+	for(i = 0; i < mapdef->num_things; ++i) {
+		if(mapdef->things[i].type == 0) {
+			*player_x = mapdef->things[i].position[0];
+			*player_y = mapdef->things[i].position[1];
+		}
+	}
+
 	// TODO: Everything below here is unfinished!
-	// TODO: Add things
 	mapdef->sky_surf = SDL_LoadBMP("./src/assests/textures/skybox/sky1.bmp");
 
-	*player_x = 64;
-	*player_y = 64;
 
 	return 1;
 }
@@ -225,6 +236,150 @@ int place_components_into_mapdef(struct mapdef* map, struct component* component
 
 		curr = curr->next;
 	}
+
+	return 1;
+}
+
+int add_things_to_map(struct mapdef* map, struct thing_data* things) {
+	if(!map || !things)
+		return 0;
+
+	struct thing_data* curr = things;
+	int index = 0;
+
+	while(curr) {
+		if(curr->type == 0)
+			add_thing_type_0(&map->things[index], curr);
+		else if(curr->type == 1)
+			add_thing_type_1(&map->things[index], curr);
+
+		curr = curr->next;
+		++index;
+	}
+
+	map->num_things = index;
+
+	return 1;
+}
+
+int add_thing_type_0(struct thingdef* thing, struct thing_data* data) {
+	if(!thing)
+		return 0;
+
+	thing->type = 0;
+	thing->position[0] = data->x;
+	thing->position[1] = data->y;
+
+	return 1;
+}
+
+int add_thing_type_1(struct thingdef* thing, struct thing_data* data) {
+	if(!thing || !data)
+		return 0;
+
+	thing->type = 1;
+	thing->surf = SDL_LoadBMP("./src/assests/sprites/guard.bmp");
+	thing->position[0] = data->x;
+	thing->position[1] = data->y;
+	thing->rotation = 224;
+
+	thing->curr_anim = 0;
+
+	thing->anims[0].num_frames = 1;
+	thing->anims[0].frame_time = 0;
+	thing->anims[0].bRepeats = 1;
+	thing->anims[0].start_x = 0;
+	thing->anims[0].start_y = 0;
+
+	thing->anims[1].num_frames = 4;
+	thing->anims[1].frame_time = 250;
+	thing->anims[1].bRepeats = 1;
+	thing->anims[1].start_x = 0;
+	thing->anims[1].start_y = 1;
+
+	thing->anims[2].num_frames = 1;
+	thing->anims[2].frame_time = 0;
+	thing->anims[2].bRepeats = 1;
+	thing->anims[2].start_x = 0;
+	thing->anims[2].start_y = 2;
+
+	thing->anims[3].num_frames = 4;
+	thing->anims[3].frame_time = 250;
+	thing->anims[3].bRepeats = 1;
+	thing->anims[3].start_x = 0;
+	thing->anims[3].start_y = 3;
+
+	thing->anims[4].num_frames = 1;
+	thing->anims[4].frame_time = 0;
+	thing->anims[4].bRepeats = 1;
+	thing->anims[4].start_x = 0;
+	thing->anims[4].start_y = 4;
+
+	thing->anims[5].num_frames = 4;
+	thing->anims[5].frame_time = 250;
+	thing->anims[5].bRepeats = 1;
+	thing->anims[5].start_x = 0;
+	thing->anims[5].start_y = 5;
+
+	thing->anims[6].num_frames = 1;
+	thing->anims[6].frame_time = 0;
+	thing->anims[6].bRepeats = 1;
+	thing->anims[6].start_x = 0;
+	thing->anims[6].start_y = 6;
+
+	thing->anims[7].num_frames = 4;
+	thing->anims[7].frame_time = 250;
+	thing->anims[7].bRepeats = 1;
+	thing->anims[7].start_x = 0;
+	thing->anims[7].start_y = 7;
+
+	thing->anims[8].num_frames = 1;
+	thing->anims[8].frame_time = 0;
+	thing->anims[8].bRepeats = 1;
+	thing->anims[8].start_x = 0;
+	thing->anims[8].start_y = 8;
+
+	thing->anims[9].num_frames = 4;
+	thing->anims[9].frame_time = 250;
+	thing->anims[9].bRepeats = 1;
+	thing->anims[9].start_x = 0;
+	thing->anims[9].start_y = 9;
+
+	thing->anims[10].num_frames = 1;
+	thing->anims[10].frame_time = 0;
+	thing->anims[10].bRepeats = 1;
+	thing->anims[10].start_x = 0;
+	thing->anims[10].start_y = 10;
+
+	thing->anims[11].num_frames = 4;
+	thing->anims[11].frame_time = 250;
+	thing->anims[11].bRepeats = 1;
+	thing->anims[11].start_x = 0;
+	thing->anims[11].start_y = 11;
+
+	thing->anims[12].num_frames = 1;
+	thing->anims[12].frame_time = 0;
+	thing->anims[12].bRepeats = 1;
+	thing->anims[12].start_x = 0;
+	thing->anims[12].start_y = 12;
+
+	thing->anims[13].num_frames = 4;
+	thing->anims[13].frame_time = 250;
+	thing->anims[13].bRepeats = 1;
+	thing->anims[13].start_x = 0;
+	thing->anims[13].start_y = 13;
+
+	thing->anims[14].num_frames = 1;
+	thing->anims[14].frame_time = 0;
+	thing->anims[14].bRepeats = 1;
+	thing->anims[14].start_x = 0;
+	thing->anims[14].start_y = 14;
+
+	thing->anims[15].num_frames = 4;
+	thing->anims[15].frame_time = 250;
+	thing->anims[15].bRepeats = 1;
+	thing->anims[15].start_x = 0;
+	thing->anims[15].start_y = 15;
 
 	return 1;
 }

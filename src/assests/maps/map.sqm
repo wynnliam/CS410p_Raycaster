@@ -74,3 +74,15 @@ component {
 	tex_0 = "./src/assests/textures/test/wall2.bmp";
 	tex_1 = "0";
 }
+
+thing {
+	type = "0";
+	x = "128";
+	y = "64";
+}
+
+thing {
+	type = "1";
+	x = "128";
+	y = "256";
+}

@@ -498,6 +498,9 @@ void draw_things(struct mapdef* map, int player_x, int player_y, int player_rot)
 	int i, j, k, m;
 
 	for(i = 0; i < map->num_things; ++i) {
+		if(things_sorted[i]->type == 0)
+			continue;
+
 		x_diff = things_sorted[i]->position[0] - player_x;
 		y_diff = things_sorted[i]->position[1] - player_y;
 

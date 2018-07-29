@@ -51,6 +51,8 @@ struct thingdef {
 
 	unsigned int num_anims;
 	unsigned int curr_anim;
+
+	int type;
 };
 
 struct mapdef {

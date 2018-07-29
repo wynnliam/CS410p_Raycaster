@@ -370,20 +370,29 @@ void update() {
 		}
 	}
 
-	// Get the orientation of the thing. Add one to it to get the walking animation
-	// for that orientation.
-	int orientation = get_thing_orientation(map->things[0].rotation, player_rot);
-	int anim = (orientation << 1) + 1;
+	int orientation;
+	int anim;
 
-	// If the animation the thing should have is not the same as its current,
-	// stop the current animation, then set the current animation to the correct one.
-	if(anim != map->things[0].curr_anim) {
-		stop_anim(&map->things[0].anims[map->things[0].curr_anim]);
-		map->things[0].curr_anim = anim;
-		start_anim(&map->things[0].anims[map->things[0].curr_anim]);
+	int i;
+	for(i = 0; i < map->num_things; ++i) {
+		if(map->things[i].type == 1) {
+			// Get the orientation of the thing. Add one to it to get the walking animation
+			// for that orientation.
+			orientation = get_thing_orientation(map->things[i].rotation, player_rot);
+			anim = (orientation << 1) + 1;
+
+			// If the animation the thing should have is not the same as its current,
+			// stop the current animation, then set the current animation to the correct one.
+			if(anim != map->things[i].curr_anim) {
+				stop_anim(&map->things[i].anims[map->things[i].curr_anim]);
+				map->things[i].curr_anim = anim;
+				start_anim(&map->things[i].anims[map->things[i].curr_anim]);
+			}
+
+			update_anim(&map->things[i].anims[map->things[i].curr_anim]);
+		}
 	}
 
-	update_anim(&map->things[0].anims[map->things[0].curr_anim]);
 }
 
 /*RENDERING PROCEDURES*/
