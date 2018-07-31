@@ -28,7 +28,7 @@ void initialize_map(struct mapdef* map, SDL_Renderer* renderer) {
 	FILE* demo_map_file = fopen("./src/assests/maps/map.sqm", "r");
 	struct map_data* map_data = parse_to_map_data(demo_map_file);
 
-	build_mapdef_from_map_data(map, map_data, &player_x, &player_y);
+	build_mapdef_from_map_data(map, map_data, &player_x, &player_y, &player_rot);
 	fclose(demo_map_file);
 
 	// Enables transparent pixel 

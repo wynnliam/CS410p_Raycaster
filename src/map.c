@@ -41,7 +41,7 @@ int add_anim_class_2(struct thingdef* thing);
 */
 int place_components_into_mapdef(struct mapdef* map, struct component* components);
 
-int build_mapdef_from_map_data(struct mapdef* mapdef, struct map_data* map_data, int* player_x, int* player_y) {
+int build_mapdef_from_map_data(struct mapdef* mapdef, struct map_data* map_data, int* player_x, int* player_y, int* player_rot) {
 	struct map_bounds bounds;
 
 	if(!calculate_map_bounds(map_data->component_head, &bounds))
@@ -71,6 +71,7 @@ int build_mapdef_from_map_data(struct mapdef* mapdef, struct map_data* map_data,
 		if(mapdef->things[i].type == 0) {
 			*player_x = mapdef->things[i].position[0];
 			*player_y = mapdef->things[i].position[1];
+			*player_rot = mapdef->things[i].rotation;
 		}
 	}
 

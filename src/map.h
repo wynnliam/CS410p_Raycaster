@@ -104,12 +104,12 @@ struct mapdef {
 	ARGUMENTS:
 	mapdef - the mapdef structure that will have data added to it.
 	map_data - who we transform into mapdef.
-	player_x and player_y - temporary values so that we can set the player's position.
+	player_x and player_y and player_rot- temporary values so that we can set the player's position and rotation
 
 	RETURNS:
 	1 - Successfully built mapdef from map_data.
 	0 - Failed to build mapdef from map_data.
 */
-int build_mapdef_from_map_data(struct mapdef* mapdef, struct map_data* map_data, int* player_x, int* player_y);
+int build_mapdef_from_map_data(struct mapdef* mapdef, struct map_data* map_data, int* player_x, int* player_y, int* player_rot);
 
 #endif
