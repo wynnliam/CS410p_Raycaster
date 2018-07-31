@@ -281,7 +281,7 @@ int add_thing_type_1(struct thingdef* thing, struct thing_data* data) {
 	thing->surf = SDL_LoadBMP("./src/assests/sprites/guard.bmp");
 	thing->position[0] = data->x;
 	thing->position[1] = data->y;
-	thing->rotation = 224;
+	thing->rotation = data->rot;
 
 	thing->curr_anim = 0;
 

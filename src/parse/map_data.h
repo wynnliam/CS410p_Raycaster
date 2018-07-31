@@ -29,6 +29,8 @@ struct thing_data {
 	int type;
 	// Done in global coordinates. That is, x = 64 is 64 pixels.
 	int x, y;
+	// In degrees
+	int rot;
 
 	struct thing_data* next;
 };

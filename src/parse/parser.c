@@ -320,6 +320,8 @@ void set_curr_attribute_type(char* attribute_name) {
 			curr_attribute_type = ATYPE_INTEGER;
 		else if(strcmp(attribute_name, "y") == 0)
 			curr_attribute_type = ATYPE_INTEGER;
+		else if(strcmp(attribute_name, "rot") == 0)
+			curr_attribute_type = ATYPE_INTEGER;
 		else
 			curr_attribute_type = ATYPE_INVALID;
 	}
@@ -416,6 +418,10 @@ int set_map_data_val(struct map_data* map_data, char* attribute_name, char* attr
 		else if(strcmp(attribute_name, "y") == 0) {
 			map_data->thing_head->y = attrib_val_as_int;
 			result = 1;
+		}
+
+		else if(strcmp(attribute_name, "rot") == 0) {
+			map_data->thing_head->rot = attrib_val_as_int;
 		}
 
 		else
