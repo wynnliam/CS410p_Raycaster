@@ -410,7 +410,12 @@ void update_anim_class_0(struct thingdef* thing) {
 }
 
 void update_anim_class_1(struct thingdef* thing) {
-	// TODO: Deal with orientation
+	int orientation;
+
+	orientation = get_thing_orientation(thing->rotation, player_rot);
+	thing->curr_anim = 0;
+	thing->anims[0].curr_frame = orientation;
+	thing->anims[0].start_x = 0;
 }
 
 void update_anim_class_2(struct thingdef* thing) {

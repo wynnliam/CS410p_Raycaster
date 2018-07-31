@@ -98,3 +98,14 @@ thing {
 	anim_class = "2";
 	sprite_sheet = "./src/assests/sprites/guard.bmp";
 }
+
+thing {
+	type = "1";
+
+	x = "190";
+	y = "128";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/officer.bmp";
+}

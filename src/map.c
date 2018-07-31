@@ -78,7 +78,6 @@ int build_mapdef_from_map_data(struct mapdef* mapdef, struct map_data* map_data,
 	// TODO: Everything below here is unfinished!
 	mapdef->sky_surf = SDL_LoadBMP("./src/assests/textures/skybox/sky1.bmp");
 
-
 	return 1;
 }
 
@@ -305,7 +304,17 @@ int add_anim_class_0(struct thingdef* thing) {
 }
 
 int add_anim_class_1(struct thingdef* thing) {
-	// TODO: Implement this!
+	if(!thing)
+		return 0;
+
+	// A single animation where each frame is for a orientation.
+	thing->curr_anim = 0;
+	thing->anims[0].num_frames = 8;
+	thing->anims[0].frame_time = 0;
+	thing->anims[0].bRepeats = 1;
+	thing->anims[0].start_x = 0;
+	thing->anims[0].start_y = 0;
+
 	return 1;
 }
 
