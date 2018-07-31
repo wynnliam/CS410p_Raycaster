@@ -75,16 +75,26 @@ component {
 	tex_1 = "0";
 }
 
+# Type 0 - player spawn.
 thing {
 	type = "0";
 	x = "128";
 	y = "64";
 	rot = "90";
+
+	anim_class = "0";
+	sprite_sheet = "0";
 }
 
+# Type 1 - Generic prop
 thing {
 	type = "1";
 	x = "128";
 	y = "256";
 	rot = "0";
+
+	# TODO: Make animation data into a seperate property.
+	# anim_class 2 - animation with orientation and many frames.
+	anim_class = "2";
+	sprite_sheet = "./src/assests/sprites/guard.bmp";
 }

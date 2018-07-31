@@ -31,6 +31,11 @@ int add_things_to_map(struct mapdef* map, struct thing_data* things);
 int add_thing_type_0(struct thingdef* thing, struct thing_data* data);
 int add_thing_type_1(struct thingdef* thing, struct thing_data* data);
 
+// Different animation factories TODO: put in anim.c
+int add_anim_class_0(struct thingdef* thing);
+int add_anim_class_1(struct thingdef* thing);
+int add_anim_class_2(struct thingdef* thing);
+
 /*
 	Adds each component into the map level.
 */
@@ -248,10 +253,24 @@ int add_things_to_map(struct mapdef* map, struct thing_data* things) {
 	int index = 0;
 
 	while(curr) {
+		// Sets all properties that are independent of the type.
+		map->things[index].position[0] = curr->x;
+		map->things[index].position[1] = curr->y;
+		map->things[index].rotation = curr->rot;
+
+		map->things[index].type = curr->type;
 		if(curr->type == 0)
 			add_thing_type_0(&map->things[index], curr);
 		else if(curr->type == 1)
 			add_thing_type_1(&map->things[index], curr);
+
+		map->things[index].anim_class = curr->anim_class;
+		if(curr->anim_class == 0)
+			add_anim_class_0(&map->things[index]);
+		else if(curr->anim_class == 1)
+			add_anim_class_1(&map->things[index]);
+		else if(curr->anim_class == 2)
+			add_anim_class_2(&map->things[index]);
 
 		curr = curr->next;
 		++index;
@@ -266,10 +285,6 @@ int add_thing_type_0(struct thingdef* thing, struct thing_data* data) {
 	if(!thing)
 		return 0;
 
-	thing->type = 0;
-	thing->position[0] = data->x;
-	thing->position[1] = data->y;
-
 	return 1;
 }
 
@@ -277,11 +292,25 @@ int add_thing_type_1(struct thingdef* thing, struct thing_data* data) {
 	if(!thing || !data)
 		return 0;
 
-	thing->type = 1;
-	thing->surf = SDL_LoadBMP("./src/assests/sprites/guard.bmp");
-	thing->position[0] = data->x;
-	thing->position[1] = data->y;
-	thing->rotation = data->rot;
+	// TODO: Set according to 
+	thing->surf = SDL_LoadBMP(data->sprite_sheet);
+
+	return 1;
+}
+
+int add_anim_class_0(struct thingdef* thing) {
+	// Nothing to do here
+	return 1;
+}
+
+int add_anim_class_1(struct thingdef* thing) {
+	// TODO: Implement this!
+	return 1;
+}
+
+int add_anim_class_2(struct thingdef* thing) {
+	if(!thing)
+		return 0;
 
 	thing->curr_anim = 0;
 

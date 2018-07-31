@@ -49,6 +49,10 @@ struct thingdef {
 	// The distance from the player.
 	int dist;
 
+	// 0 is no animations. 1 is frame per orientation. 2 is
+	// animations for each orientation. This is a value that
+	// is set/interpreted on a per game basis.
+	int anim_class;
 	unsigned int num_anims;
 	unsigned int curr_anim;
 

@@ -32,6 +32,9 @@ struct thing_data {
 	// In degrees
 	int rot;
 
+	int anim_class;
+	char* sprite_sheet;
+
 	struct thing_data* next;
 };
 

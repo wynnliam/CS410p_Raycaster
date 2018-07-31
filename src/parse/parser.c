@@ -322,6 +322,10 @@ void set_curr_attribute_type(char* attribute_name) {
 			curr_attribute_type = ATYPE_INTEGER;
 		else if(strcmp(attribute_name, "rot") == 0)
 			curr_attribute_type = ATYPE_INTEGER;
+		else if(strcmp(attribute_name, "anim_class") == 0)
+			curr_attribute_type = ATYPE_INTEGER;
+		else if(strcmp(attribute_name, "sprite_sheet") == 0)
+			curr_attribute_type = ATYPE_STRING;
 		else
 			curr_attribute_type = ATYPE_INVALID;
 	}
@@ -422,6 +426,18 @@ int set_map_data_val(struct map_data* map_data, char* attribute_name, char* attr
 
 		else if(strcmp(attribute_name, "rot") == 0) {
 			map_data->thing_head->rot = attrib_val_as_int;
+			result = 1;
+		}
+
+		else if(strcmp(attribute_name, "anim_class") == 0) {
+			map_data->thing_head->anim_class = attrib_val_as_int;
+			result = 1;
+		}
+
+		else if(strcmp(attribute_name, "sprite_sheet") == 0) {
+			map_data->thing_head->sprite_sheet = (char*)malloc(strlen(attribute_val) + 1);
+			strcpy(map_data->thing_head->sprite_sheet, attribute_val);
+			result = 1;
 		}
 
 		else

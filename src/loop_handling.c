@@ -14,6 +14,13 @@ int player_rot;
 // Temporary storage for map.
 struct mapdef* map;
 
+void update_thing_type_0(struct mapdef* map, struct thingdef* thing);
+void update_thing_type_1(struct mapdef* map, struct thingdef* thing);
+
+void update_anim_class_0(struct thingdef* thing);
+void update_anim_class_1(struct thingdef* thing);
+void update_anim_class_2(struct thingdef* thing);
+
 /*INITIALIZATION PROCEDURES*/
 
 // TODO: This whole function should be elsewhere.
@@ -370,29 +377,60 @@ void update() {
 		}
 	}
 
-	int orientation;
-	int anim;
 
 	int i;
 	for(i = 0; i < map->num_things; ++i) {
-		if(map->things[i].type == 1) {
-			// Get the orientation of the thing. Add one to it to get the walking animation
-			// for that orientation.
-			orientation = get_thing_orientation(map->things[i].rotation, player_rot);
-			anim = (orientation << 1) + 1;
+		// Update according to type.
+		if(map->things[i].type == 0)
+			update_thing_type_0(map, &map->things[i]);
+		else if(map->things[i].type == 1)
+			update_thing_type_1(map, &map->things[i]);
 
-			// If the animation the thing should have is not the same as its current,
-			// stop the current animation, then set the current animation to the correct one.
-			if(anim != map->things[i].curr_anim) {
-				stop_anim(&map->things[i].anims[map->things[i].curr_anim]);
-				map->things[i].curr_anim = anim;
-				start_anim(&map->things[i].anims[map->things[i].curr_anim]);
-			}
-
-			update_anim(&map->things[i].anims[map->things[i].curr_anim]);
-		}
+		// Update animation according to class
+		if(map->things[i].anim_class == 0)
+			update_anim_class_0(&map->things[i]);
+		else if(map->things[i].anim_class == 1)
+			update_anim_class_1(&map->things[i]);
+		else if(map->things[i].anim_class == 2)
+			update_anim_class_2(&map->things[i]);
 	}
 
+}
+
+void update_thing_type_0(struct mapdef* map, struct thingdef* thing) {
+	// Nothing to do since this is just a player spawn.
+}
+
+void update_thing_type_1(struct mapdef* map, struct thingdef* thing) {
+	// Nothing to do since this is just a static prop.
+}
+
+void update_anim_class_0(struct thingdef* thing) {
+	// Nothing to do since this is just a single frame.
+}
+
+void update_anim_class_1(struct thingdef* thing) {
+	// TODO: Deal with orientation
+}
+
+void update_anim_class_2(struct thingdef* thing) {
+	int orientation;
+	int anim;
+
+	// Get the orientation of the thing. Add one to it to get the walking animation
+	// for that orientation.
+	orientation = get_thing_orientation(thing->rotation, player_rot);
+	anim = (orientation << 1) + 1;
+
+	// If the animation the thing should have is not the same as its current,
+	// stop the current animation, then set the current animation to the correct one.
+	if(anim != thing->curr_anim) {
+		stop_anim(&thing->anims[thing->curr_anim]);
+		thing->curr_anim = anim;
+		start_anim(&thing->anims[thing->curr_anim]);
+	}
+
+	update_anim(&thing->anims[thing->curr_anim]);
 }
 
 /*RENDERING PROCEDURES*/
