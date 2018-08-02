@@ -6,7 +6,7 @@ properties {
 	# String
 	name = "demo world";
 	# String - 0 will denote "NULL"
-	sky_tex = "./src/assests/textures/skybox/sky1.bmp";
+	sky_tex = "./src/assests/textures/skybox/demo_sky.bmp";
 }
 
 component {

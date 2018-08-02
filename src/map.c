@@ -41,6 +41,11 @@ int add_anim_class_2(struct thingdef* thing);
 */
 int place_components_into_mapdef(struct mapdef* map, struct component* components);
 
+/*
+	Initializes all properties for map.
+*/
+int initialize_map_properties(struct mapdef* map, struct map_data* map_data);
+
 int build_mapdef_from_map_data(struct mapdef* mapdef, struct map_data* map_data, int* player_x, int* player_y, int* player_rot) {
 	struct map_bounds bounds;
 
@@ -50,7 +55,6 @@ int build_mapdef_from_map_data(struct mapdef* mapdef, struct map_data* map_data,
 	mapdef->map_w = bounds.x_max - bounds.x_min;
 	mapdef->map_h = bounds.y_max - bounds.y_min;
 	mapdef->layout = (unsigned int*)malloc(mapdef->map_w * mapdef->map_h * sizeof(unsigned int));
-
 
 	int i;
 	for(i = 0; i < 100; ++i) {
@@ -75,8 +79,7 @@ int build_mapdef_from_map_data(struct mapdef* mapdef, struct map_data* map_data,
 		}
 	}
 
-	// TODO: Everything below here is unfinished!
-	mapdef->sky_surf = SDL_LoadBMP("./src/assests/textures/skybox/sky1.bmp");
+	initialize_map_properties(mapdef, map_data);
 
 	return 1;
 }
@@ -419,6 +422,19 @@ int add_anim_class_2(struct thingdef* thing) {
 	thing->anims[15].bRepeats = 1;
 	thing->anims[15].start_x = 0;
 	thing->anims[15].start_y = 15;
+
+	return 1;
+}
+
+int initialize_map_properties(struct mapdef* map, struct map_data* map_data) {
+	if(!map || !map_data)
+		return 0;
+
+	if(strcmp(map_data->sky_tex, "0")) {
+		map->sky_surf = SDL_LoadBMP(map_data->sky_tex);
+	} else {
+		map->sky_surf = NULL;
+	}
 
 	return 1;
 }
