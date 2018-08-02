@@ -57,6 +57,10 @@ int build_mapdef_from_map_data(struct mapdef* mapdef, struct map_data* map_data,
 	mapdef->layout = (unsigned int*)malloc(mapdef->map_w * mapdef->map_h * sizeof(unsigned int));
 
 	int i;
+	// Fills in the entire map with the first walldef.
+	for(i = 0; i < mapdef->map_w * mapdef->map_h; ++i)
+		mapdef->layout[i] = 100;
+
 	for(i = 0; i < 100; ++i) {
 		mapdef->walls[i].path = NULL;
 		mapdef->floor_ceils[i].floor_path = NULL;
