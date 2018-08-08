@@ -12,7 +12,7 @@ properties {
 component {
 	x = "2";
 	y = "1";
-	w = "21";
+	w = "22";
 	h = "6";
 
 	is_floor_ciel = "1";
@@ -20,10 +20,242 @@ component {
 	tex_1 = "./src/assests/textures/test/ceiling.bmp";
 }
 
+# Walls for large paintings
 component {
 	x = "1";
 	y = "0";
-	w = "22";
+	w = "2";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "3";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/north_wing/art3a.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "4";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/north_wing/art3b.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "5";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "6";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/north_wing/art7a.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "7";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/north_wing/art7b.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "8";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "9";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/north_wing/art9a.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "10";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/north_wing/art9b.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "11";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "12";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/north_wing/art16a.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "13";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/north_wing/art16b.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "14";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "15";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/north_wing/art20a.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "16";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/north_wing/art20b.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "17";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "18";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/north_wing/art44.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "19";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/north_wing/art45.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "20";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "21";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/north_wing/art47a.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "22";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/north_wing/art47b.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "23";
+	y = "0";
+	w = "1";
 	h = "1";
 
 	is_floor_ciel = "0";
@@ -34,7 +266,7 @@ component {
 component {
 	x = "1";
 	y = "22";
-	w = "22";
+	w = "23";
 	h = "1";
 
 	is_floor_ciel = "0";
@@ -54,7 +286,7 @@ component {
 }
 
 component {
-	x = "23";
+	x = "24";
 	y = "1";
 	w = "1";
 	h = "6";
