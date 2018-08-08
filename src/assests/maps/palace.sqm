@@ -5,14 +5,15 @@ properties {
 	# String
 	name = "demo world";
 	# String - 0 will denote "NULL"
-	sky_tex = "./src/assests/textures/skybox/demo_sky.bmp";
+	sky_tex = "./src/assests/textures/test/skybox.bmp";
 }
 
+# NORTH WING
 component {
-	x = "1";
+	x = "2";
 	y = "1";
-	w = "8";
-	h = "15";
+	w = "21";
+	h = "6";
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/test/floor.bmp";
@@ -20,9 +21,20 @@ component {
 }
 
 component {
-	x = "0";
+	x = "1";
 	y = "0";
-	w = "9";
+	w = "22";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "1";
+	y = "22";
+	w = "22";
 	h = "1";
 
 	is_floor_ciel = "0";
@@ -32,20 +44,9 @@ component {
 
 component {
 	x = "0";
-	y = "16";
-	w = "9";
-	h = "1";
-
-	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall2.bmp";
-	tex_1 = "0";
-}
-
-component {
-	x = "0";
 	y = "1";
 	w = "1";
-	h = "15";
+	h = "6";
 
 	is_floor_ciel = "0";
 	tex_0 = "./src/assests/textures/test/wall1.bmp";
@@ -53,21 +54,21 @@ component {
 }
 
 component {
-	x = "16";
+	x = "23";
 	y = "1";
 	w = "1";
-	h = "15";
+	h = "6";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall2.bmp";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
 	tex_1 = "0";
 }
 
 thing {
 	type = "0";
-	x = "200";
-	y = "200";
-	rot = "90";
+	x = "128";
+	y = "128";
+	rot = "0";
 
 	anim_class = "0";
 	sprite_sheet = "0";
