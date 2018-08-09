@@ -16,8 +16,8 @@ component {
 	h = "6";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/test/floor.bmp";
-	tex_1 = "./src/assests/textures/test/ceiling.bmp";
+	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
 }
 
 # Walls for large paintings
@@ -28,7 +28,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
 	tex_1 = "0";
 }
 
@@ -61,7 +61,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
 	tex_1 = "0";
 }
 
@@ -94,7 +94,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
 	tex_1 = "0";
 }
 
@@ -127,7 +127,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
 	tex_1 = "0";
 }
 
@@ -160,7 +160,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
 	tex_1 = "0";
 }
 
@@ -193,7 +193,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
 	tex_1 = "0";
 }
 
@@ -226,7 +226,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
 	tex_1 = "0";
 }
 
@@ -259,7 +259,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
 	tex_1 = "0";
 }
 
@@ -270,7 +270,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
 	tex_1 = "0";
 }
 
@@ -281,7 +281,7 @@ component {
 	h = "6";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
 	tex_1 = "0";
 }
 
@@ -292,7 +292,7 @@ component {
 	h = "6";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
 	tex_1 = "0";
 }
 
