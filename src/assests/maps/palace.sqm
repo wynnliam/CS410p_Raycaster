@@ -10,6 +10,17 @@ properties {
 
 # NORTH WING
 component {
+	x = "4";
+	y = "3";
+	w = "18";
+	h = "2";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/baroque/carpet1.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
+}
+
+component {
 	x = "2";
 	y = "1";
 	w = "22";
