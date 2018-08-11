@@ -309,9 +309,9 @@ component {
 
 thing {
 	type = "0";
-	x = "128";
-	y = "128";
-	rot = "0";
+	x = "1049";
+	y = "97";
+	rot = "180";
 
 	anim_class = "0";
 	sprite_sheet = "0";

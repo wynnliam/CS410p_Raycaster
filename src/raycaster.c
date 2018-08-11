@@ -716,24 +716,26 @@ int partition(struct mapdef* map, int s, int e) {
 	int i = s - 1;
 	int j = e + 1;
 
-	int p_dist = map->things[s].dist;
+	int p_dist = things_sorted[s]->dist;
 
 	struct thingdef* temp;
 
 	while(1) {
 		do {
 			i += 1;
-		} while(map->things[i].dist > p_dist);
+		} while(things_sorted[i]->dist > p_dist);
 
 		do {
 			j -= 1;
-		} while(map->things[j].dist < p_dist);
+		} while(things_sorted[j]->dist < p_dist);
 
 		if(i >= j)
 			return j;
 
-		temp = things_sorted[i];
-		things_sorted[i] = things_sorted[j];
-		things_sorted[j] = temp;
+		if(things_sorted[i]->dist < things_sorted[j]->dist) {
+			temp = things_sorted[i];
+			things_sorted[i] = things_sorted[j];
+			things_sorted[j] = temp;
+		}
 	}
 }
