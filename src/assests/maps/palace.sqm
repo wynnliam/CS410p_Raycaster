@@ -316,3 +316,113 @@ thing {
 	anim_class = "0";
 	sprite_sheet = "0";
 }
+
+thing {
+	type = "1";
+
+	x = "352";
+	y = "96";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "544";
+	y = "96";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "736";
+	y = "96";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "928";
+	y = "96";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1120";
+	y = "96";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1312";
+	y = "96";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1504";
+	y = "160";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/column1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1504";
+	y = "352";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/column1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "160";
+	y = "160";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/column1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "160";
+	y = "352";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/column1.bmp";
+}
