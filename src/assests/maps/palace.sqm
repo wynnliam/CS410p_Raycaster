@@ -8,6 +8,17 @@ properties {
 	sky_tex = "./src/assests/textures/test/skybox.bmp";
 }
 
+# Player spawn.
+thing {
+	type = "0";
+	x = "1049";
+	y = "97";
+	rot = "180";
+
+	anim_class = "0";
+	sprite_sheet = "0";
+}
+
 # NORTH WING
 # The detail components for the room.
 
@@ -240,4 +251,115 @@ component {
 	is_floor_ciel = "0";
 	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
 	tex_1 = "0";
+}
+
+# Props for the North Wing.
+thing {
+	type = "1";
+
+	x = "288";
+	y = "96";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "480";
+	y = "96";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "672";
+	y = "96";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "864";
+	y = "96";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1056";
+	y = "96";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1248";
+	y = "96";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1440";
+	y = "160";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/column1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1440";
+	y = "352";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/column1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "96";
+	y = "160";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/column1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "96";
+	y = "352";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/column1.bmp";
 }
