@@ -9,8 +9,14 @@ properties {
 }
 
 # NORTH WING
+# The detail components for the room.
+
+# Note that the way we read in components forces us
+# to define the details first.
+
+# The carpeting for the main floor.
 component {
-	x = "4";
+	x = "3";
 	y = "3";
 	w = "18";
 	h = "2";
@@ -20,31 +26,9 @@ component {
 	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
 }
 
+# The paintings for the North Wing
 component {
 	x = "2";
-	y = "1";
-	w = "22";
-	h = "6";
-
-	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
-	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
-}
-
-# Walls for large paintings
-component {
-	x = "1";
-	y = "0";
-	w = "2";
-	h = "1";
-
-	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
-	tex_1 = "0";
-}
-
-component {
-	x = "3";
 	y = "0";
 	w = "1";
 	h = "1";
@@ -55,7 +39,7 @@ component {
 }
 
 component {
-	x = "4";
+	x = "3";
 	y = "0";
 	w = "1";
 	h = "1";
@@ -72,7 +56,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
+	tex_0 = "./src/assests/textures/art/north_wing/art7a.bmp";
 	tex_1 = "0";
 }
 
@@ -83,34 +67,12 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/art/north_wing/art7a.bmp";
-	tex_1 = "0";
-}
-
-component {
-	x = "7";
-	y = "0";
-	w = "1";
-	h = "1";
-
-	is_floor_ciel = "0";
 	tex_0 = "./src/assests/textures/art/north_wing/art7b.bmp";
 	tex_1 = "0";
-}
+} 
 
 component {
 	x = "8";
-	y = "0";
-	w = "1";
-	h = "1";
-
-	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
-	tex_1 = "0";
-}
-
-component {
-	x = "9";
 	y = "0";
 	w = "1";
 	h = "1";
@@ -121,7 +83,7 @@ component {
 }
 
 component {
-	x = "10";
+	x = "9";
 	y = "0";
 	w = "1";
 	h = "1";
@@ -138,23 +100,12 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
-	tex_1 = "0";
-}
-
-component {
-	x = "12";
-	y = "0";
-	w = "1";
-	h = "1";
-
-	is_floor_ciel = "0";
 	tex_0 = "./src/assests/textures/art/north_wing/art16a.bmp";
 	tex_1 = "0";
 }
 
 component {
-	x = "13";
+	x = "12";
 	y = "0";
 	w = "1";
 	h = "1";
@@ -171,23 +122,12 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
-	tex_1 = "0";
-}
-
-component {
-	x = "15";
-	y = "0";
-	w = "1";
-	h = "1";
-
-	is_floor_ciel = "0";
 	tex_0 = "./src/assests/textures/art/north_wing/art20a.bmp";
 	tex_1 = "0";
 }
 
 component {
-	x = "16";
+	x = "15";
 	y = "0";
 	w = "1";
 	h = "1";
@@ -204,23 +144,12 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
-	tex_1 = "0";
-}
-
-component {
-	x = "18";
-	y = "0";
-	w = "1";
-	h = "1";
-
-	is_floor_ciel = "0";
 	tex_0 = "./src/assests/textures/art/north_wing/art44.bmp";
 	tex_1 = "0";
 }
 
 component {
-	x = "19";
+	x = "18";
 	y = "0";
 	w = "1";
 	h = "1";
@@ -237,7 +166,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
+	tex_0 = "./src/assests/textures/art/north_wing/art47a.bmp";
 	tex_1 = "0";
 }
 
@@ -248,36 +177,28 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/art/north_wing/art47a.bmp";
-	tex_1 = "0";
-}
-
-component {
-	x = "22";
-	y = "0";
-	w = "1";
-	h = "1";
-
-	is_floor_ciel = "0";
 	tex_0 = "./src/assests/textures/art/north_wing/art47b.bmp";
 	tex_1 = "0";
 }
 
-component {
-	x = "23";
-	y = "0";
-	w = "1";
-	h = "1";
-
-	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
-	tex_1 = "0";
-}
-
+# CORE ROOM
+# The floor of the North Wing Room.
 component {
 	x = "1";
-	y = "22";
-	w = "23";
+	y = "1";
+	w = "22";
+	h = "6";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
+}
+
+# The north wall of the North Wing Room.
+component {
+	x = "0";
+	y = "0";
+	w = "24";
 	h = "1";
 
 	is_floor_ciel = "0";
@@ -285,6 +206,19 @@ component {
 	tex_1 = "0";
 }
 
+# The sourthern wall of the North Wing Room
+component {
+	x = "0";
+	y = "7";
+	w = "24";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
+	tex_1 = "0";
+}
+
+# The west wall of the North Wing Room.
 component {
 	x = "0";
 	y = "1";
@@ -296,8 +230,9 @@ component {
 	tex_1 = "0";
 }
 
+# The east wall of the North Wing Room.
 component {
-	x = "24";
+	x = "23";
 	y = "1";
 	w = "1";
 	h = "6";
@@ -305,124 +240,4 @@ component {
 	is_floor_ciel = "0";
 	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
 	tex_1 = "0";
-}
-
-thing {
-	type = "0";
-	x = "1049";
-	y = "97";
-	rot = "180";
-
-	anim_class = "0";
-	sprite_sheet = "0";
-}
-
-thing {
-	type = "1";
-
-	x = "352";
-	y = "96";
-	rot = "72";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "544";
-	y = "96";
-	rot = "72";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "736";
-	y = "96";
-	rot = "72";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "928";
-	y = "96";
-	rot = "72";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "1120";
-	y = "96";
-	rot = "72";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "1312";
-	y = "96";
-	rot = "72";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "1504";
-	y = "160";
-	rot = "72";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/columns/column1.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "1504";
-	y = "352";
-	rot = "72";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/columns/column1.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "160";
-	y = "160";
-	rot = "72";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/columns/column1.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "160";
-	y = "352";
-	rot = "72";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/columns/column1.bmp";
 }
