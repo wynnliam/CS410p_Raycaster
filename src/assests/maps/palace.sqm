@@ -392,7 +392,251 @@ component {
 # LOWER WING
 # A large area with several paintings
 
-# The core flooring
+# Details
+# Paintings
+component {
+	x = "0";
+	y = "9";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art10.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "11";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art11.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "13";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art13.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "15";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art14.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "17";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art15.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "19";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art17.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "21";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art18.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "23";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art19.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "25";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "27";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art21.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "29";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art22.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "31";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art23.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "33";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art24.bmp";
+	tex_1 = "0";
+}
+
+#---------
+component {
+	x = "0";
+	y = "35";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art25.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "37";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art26.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "39";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art28.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "41";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art29.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "43";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art2.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "45";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art30.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "47";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art31.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "49";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art32.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "51";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art33.bmp";
+	tex_1 = "0";
+}
+# CORE ROOM
 component {
 	x = "1";
 	y = "8";
