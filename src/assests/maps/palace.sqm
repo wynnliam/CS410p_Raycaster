@@ -11,9 +11,9 @@ properties {
 # Player spawn.
 thing {
 	type = "0";
-	x = "1049";
-	y = "97";
-	rot = "180";
+	x = "448";
+	y = "1024";
+	rot = "90";
 
 	anim_class = "0";
 	sprite_sheet = "0";
@@ -218,10 +218,22 @@ component {
 }
 
 # The sourthern wall of the North Wing Room
+
 component {
 	x = "0";
 	y = "7";
-	w = "24";
+	w = "4";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "6";
+	y = "7";
+	w = "18";
 	h = "1";
 
 	is_floor_ciel = "0";
@@ -362,4 +374,68 @@ thing {
 
 	anim_class = "0";
 	sprite_sheet = "./src/assests/sprites/columns/column1.bmp";
+}
+
+# Connects the North Wing to the Lower Wing
+component {
+	x = "4";
+	y = "7";
+	w = "2";
+	h = "1";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
+}
+
+
+# LOWER WING
+# A large area with several paintings
+
+# The core flooring
+component {
+	x = "1";
+	y = "8";
+	w = "8";
+	h = "45";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
+}
+
+# The south wall.
+component {
+	x = "1";
+	y = "53";
+	w = "8";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
+	tex_1 = "0";
+}
+
+# The west wall.
+component {
+	x = "0";
+	y = "8";
+	w = "1";
+	h = "45";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
+	tex_1 = "0";
+}
+
+# The east wall.
+component {
+	x = "9";
+	y = "8";
+	w = "1";
+	h = "45";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
+	tex_1 = "0";
 }
