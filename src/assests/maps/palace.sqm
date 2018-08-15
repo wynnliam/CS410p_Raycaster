@@ -636,6 +636,7 @@ component {
 	tex_0 = "./src/assests/textures/art/art33.bmp";
 	tex_1 = "0";
 }
+
 # CORE ROOM
 component {
 	x = "1";
@@ -652,7 +653,7 @@ component {
 component {
 	x = "1";
 	y = "53";
-	w = "8";
+	w = "59";
 	h = "1";
 
 	is_floor_ciel = "0";
@@ -677,7 +678,45 @@ component {
 	x = "9";
 	y = "8";
 	w = "1";
-	h = "45";
+	h = "37";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
+	tex_1 = "0";
+}
+
+# EXTENSION OF LOWER WING
+
+# Flooring
+component {
+	x = "9";
+	y = "45";
+	w = "51";
+	h = "8";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
+}
+
+# Topmost wall of the extension
+component {
+	x = "10";
+	y = "44";
+	w = "50";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
+	tex_1 = "0";
+}
+
+# Eastmost wall of the extension
+component {
+	x = "60";
+	y = "44";
+	w = "1";
+	h = "9";
 
 	is_floor_ciel = "0";
 	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
