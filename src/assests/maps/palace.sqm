@@ -956,6 +956,29 @@ component {
 	tex_1 = "0";
 }
 
+# Carpeting
+component {
+	x = "3";
+	y = "10";
+	w = "4";
+	h = "41";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/baroque/carpet1.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
+}
+
+component {
+	x = "7";
+	y = "47";
+	w = "51";
+	h = "4";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/baroque/carpet1.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
+}
+
 # CORE ROOM
 component {
 	x = "1";
