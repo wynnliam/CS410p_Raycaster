@@ -791,6 +791,171 @@ component {
 	tex_1 = "0";
 }
 
+component {
+	x = "30";
+	y = "53";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art51.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "32";
+	y = "53";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art52.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "34";
+	y = "53";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art53.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "36";
+	y = "53";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art54.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "38";
+	y = "53";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art55.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "40";
+	y = "53";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art56.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "42";
+	y = "53";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art57.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "44";
+	y = "53";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art58.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "46";
+	y = "53";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art59.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "48";
+	y = "53";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art5.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "50";
+	y = "53";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art60.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "52";
+	y = "53";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art61.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "54";
+	y = "53";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art6.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "56";
+	y = "53";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/art8.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "58";
+	y = "53";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/ctm1.bmp";
+	tex_1 = "0";
+}
+
 # CORE ROOM
 component {
 	x = "1";
