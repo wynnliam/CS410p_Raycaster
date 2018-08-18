@@ -1,6 +1,6 @@
 // Liam Wynn, 5/11/2018, CS410p: Full Stack Web Development
 
-//#include <emscripten.h>
+#include <emscripten.h>
 #include <stdio.h>
 
 #include "loop_handling.h"
@@ -43,29 +43,18 @@ int main() {
 
 	ctx.renderer = renderer;
 
-	/*SDL_Surface* wall1 = SDL_LoadBMP("./src/assests/wall1.bmp");
-	if(wall1) {
-		printf("Ye wall!\n");
-		SDL_FreeSurface(wall1);
-	}
-
-	else {
-		printf("No wall!\n");
-		printf("ERROR: %s\n", SDL_GetError());
-	}*/
-
 	// Initialize any non-SDL logic
 	initialize(renderer);
 
-	while(1) {
+	/*while(1) {
 		// Things like keyboard input and user movement.
 		update();
 		// Do a ray-casting rendering step.
 		render(renderer);
-	}
+	}*/
 
 	// Actually sets the rendering loop.
-	//emscripten_set_main_loop_arg(loop, &ctx, fps_count, run_infinite);
+	emscripten_set_main_loop_arg(loop, &ctx, fps_count, run_infinite);
 
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
