@@ -537,7 +537,6 @@ component {
 	tex_1 = "0";
 }
 
-#---------
 component {
 	x = "0";
 	y = "35";
@@ -1063,4 +1062,526 @@ component {
 	is_floor_ciel = "0";
 	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
 	tex_1 = "0";
+}
+
+# Things for the lower wing
+thing {
+	type = "1";
+
+	x = "96";
+	y = "672";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "800";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "928";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "1056";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "1184";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "1312";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "1440";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "1568";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "1696";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "1696";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "1824";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "1952";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "2080";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "2208";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "2336";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "2464";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "2592";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "2720";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "2848";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "2976";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "3104";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "3232";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "96";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/column1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "224";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "352";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "480";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "608";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "736";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "864";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "992";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "1120";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "1248";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "1376";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "1504";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "1632";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "1760";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "1888";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "2016";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "2144";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "2272";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "2400";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "2528";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "2656";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "2784";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "2912";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "3040";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "3168";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "3296";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "3424";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "3552";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "3680";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+thing {
+	type = "1";
+
+	x = "3808";
+	y = "3360";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/column1.bmp";
 }
