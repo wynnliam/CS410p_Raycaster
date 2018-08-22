@@ -6,103 +6,117 @@
 #include <stdio.h>
 #include <math.h>
 
-int is_tan_undefined_for_deg(int deg) {
+int is_tan_undefined_for_angle(int deg) {
 	return deg == 0 || deg == 90 || deg == 180 || deg == 270 || deg == 360;
 }
 
-void set_tan_and_delta_vals_for_bad_deg(int deg) {
-	tan1table[deg] = -1;
-	delta_h_x[deg] = 0;
-	delta_h_y[deg] = 0;
-	delta_v_x[deg] = 0;
-	delta_v_y[deg] = 0;
+int is_angle_in_quadrant_1(int deg) {
+	return 1 <= deg && deg <= 89;
 }
 
-/*
-	We multiply each value by 128 because 1) dividing the values by
-	128 is easy (val >> 7), and 2) Because we can encode more precision
-	in them. Consider the following:
+int is_angle_in_quadrant_2(int deg) {
+	return 91 <= deg && deg <= 179;
+}
 
-	sin(30) = 0.5. Now, say we need 234 * sin(30). This gives us 234 * 0.5,
-	which is 117. Now say we store ONLY sin(30) as a char. This would be 0.
-	So 234 * 0 = 0. That's WAAAY off.
+int is_angle_in_quadrant_3(int deg) {
+	return 181 <= deg && deg <= 269;
+}
 
-	Now consider, we do sin(30) * 128. This gives us 64. Now say we do 234 *
-	(sin(30) * 128). This gives us 234 * 64 = 14976. Now divide that by 128,
-	and we get 117.
+int is_angle_in_quadrant_4(int deg) {
+	return 271 <= deg && deg <= 359;
+}
 
-	As I said, we can encode to some extent precision in our numbers.
-*/
+void compute_tan_lookup_val_for_angle(int deg) {
+	if(is_tan_undefined_for_angle(deg))
+		tan128table[deg] = -1;
+	else
+		tan128table[deg] = (int)round(tan(deg * M_PI / 180.0f) * 128);
+}
+
+void compute_inverse_tan_lookup_val_for_angle(int deg) {
+	if(is_tan_undefined_for_angle(deg))
+		tan1table[deg] = -1;
+	else
+		tan1table[deg] = (int)round(128.0 / tan(deg * M_PI / 180.0f));
+}
+
+void compute_delta_lookup_vals_quadrant_1(int deg) {
+	// 64 / tan(ray_angle). We must account for the 128.
+	delta_h_x[deg] = (1 << 13) / tan128table[deg];
+	delta_h_y[deg]= -UNIT_SIZE;
+
+	delta_v_x[deg] = UNIT_SIZE;
+	// Compute -tan(angle) * 64
+	delta_v_y[deg] = -((tan128table[deg] << UNIT_POWER) >> 7);
+}
+
+void compute_delta_lookup_vals_quadrant_2(int deg) {
+	// -64, since we are travelling in the negative y direction.
+	delta_h_y[deg] = -UNIT_SIZE;
+	// Computes -64 / tan(deg). Negative since we're
+	// travelling in the negative y direction.
+	delta_h_x[deg] = (tan128table[deg - 90] * -UNIT_SIZE) >> 7;
+
+	delta_v_x[deg] = -UNIT_SIZE;
+	delta_v_y[deg] = -((1 << 13) / tan128table[deg - 90]);
+}
+
+void compute_delta_lookup_vals_quadrant_3(int deg) {
+	delta_h_y[deg] = UNIT_SIZE;
+	delta_h_x[deg]  = -(1 << 13) / tan128table[deg - 180];
+
+	delta_v_x[deg] = -UNIT_SIZE;
+	// Computes 64 * tan(ray_angle).
+	delta_v_y[deg]  = (UNIT_SIZE * tan128table[deg - 180]) >> 7;
+}
+
+void compute_delta_lookup_vals_quadrant_4(int deg) {
+	delta_h_y[deg] = UNIT_SIZE;
+	// Computes 64 * tan(ray_angle)
+	delta_h_x[deg] = (UNIT_SIZE * tan128table[deg - 270]) >> 7;
+
+	delta_v_x[deg] = UNIT_SIZE;
+	// Computes 64 / tan(ray_angle)
+	delta_v_y[deg] = (1 << 13) / tan128table[deg - 270];
+}
+
+void compute_delta_lookup_vals_for_angle(int deg) {
+	if(is_tan_undefined_for_angle(deg)) {
+		delta_h_x[deg] = 0;
+		delta_h_y[deg] = 0;
+		delta_v_x[deg] = 0;
+		delta_v_y[deg] = 0;
+	}
+
+	if(is_angle_in_quadrant_1(deg)) {
+		compute_delta_lookup_vals_quadrant_1(deg);
+	} else if(is_angle_in_quadrant_2(deg)) {
+		compute_delta_lookup_vals_quadrant_2(deg);
+	} else if(is_angle_in_quadrant_3(deg)) {
+		compute_delta_lookup_vals_quadrant_3(deg);
+	} else if(is_angle_in_quadrant_4(deg)) {
+		compute_delta_lookup_vals_quadrant_4(deg);
+	}
+}
+
 void compute_lookup_vals_for_angle(int deg) {
 	// Stores the angle in radians.
 	float curr_angle;
-	// Use these to make this procedure more readable.
-	float curr_sin, curr_cos, curr_tan;
 
-	curr_angle = (float)(deg * M_PI / 180.0f);
-	curr_sin = (float)round(sin(curr_angle) * 128);
-	curr_cos = (float)round(cos(curr_angle) * 128);
+	compute_tan_lookup_val_for_angle(deg);
+	compute_inverse_tan_lookup_val_for_angle(deg);
+	sin128table[deg] = (int)round(sin(deg * M_PI / 180.0f) * 128);
+	cos128table[deg] = (int)round(cos(deg * M_PI / 180.0f) * 128);
+	sin1table[deg] = (int)(round(128.0 / sin(deg * M_PI / 180.0f)));
 
-	if(is_tan_undefined_for_deg(deg)) {
-		curr_tan = -1;
-		set_tan_and_delta_vals_for_bad_deg(deg);
-	} else {
-		curr_tan = (float)round(tan(curr_angle) * 128);
-		tan1table[deg] = (int)round(128.0 / tan(curr_angle));
-	}
-
-	sin128table[deg] = (int)curr_sin;
-	cos128table[deg] = (int)curr_cos;
-	tan128table[deg] = (int)curr_tan;
-	sin1table[deg] = (int)(round(128.0 / sin(curr_angle)));
-
-	if(1 <= deg && deg <= 89) {
-		// 64 / tan(ray_angle). We must account for the 128.
-		delta_h_x[deg] = (1 << 13) / tan128table[deg];
-		delta_h_y[deg]= -UNIT_SIZE;
-
-		delta_v_x[deg] = UNIT_SIZE;
-		// Compute -tan(angle) * 64
-		delta_v_y[deg] = -((tan128table[deg] << UNIT_POWER) >> 7);
-	}
-
-	else if(91 <= deg && deg <= 179) {
-		// -64, since we are travelling in the negative y direction.
-		delta_h_y[deg] = -UNIT_SIZE;
-		// Computes -64 / tan(deg). Negative since we're
-		// travelling in the negative y direction.
-		delta_h_x[deg] = (tan128table[deg - 90] * -UNIT_SIZE) >> 7;
-
-		delta_v_x[deg] = -UNIT_SIZE;
-		delta_v_y[deg] = -((1 << 13) / tan128table[deg - 90]);
-	}
-
-	else if(181 <= deg && deg <= 269) {
-		delta_h_y[deg] = UNIT_SIZE;
-		delta_h_x[deg]  = -(1 << 13) / tan128table[deg - 180];
-
-		delta_v_x[deg] = -UNIT_SIZE;
-		// Computes 64 * tan(ray_angle).
-		delta_v_y[deg]  = (UNIT_SIZE * tan128table[deg - 180]) >> 7;
-	}
-
-	else if(271 <= deg && deg <= 359) {
-		delta_h_y[deg] = UNIT_SIZE;
-		// Computes 64 * tan(ray_angle)
-		delta_h_x[deg] = (UNIT_SIZE * tan128table[deg - 270]) >> 7;
-
-		delta_v_x[deg] = UNIT_SIZE;
-		// Computes 64 / tan(ray_angle)
-		delta_v_y[deg] = (1 << 13) / tan128table[deg - 270];
-	}
+	compute_delta_lookup_vals_for_angle(deg);
 }
 
 void initialize_lookup_tables() {
-
 	int deg;
-	for(deg = 0; deg <= 360; ++deg) {
+
+	for(deg = 0; deg <= 360; ++deg)
 		compute_lookup_vals_for_angle(deg);
-	}
 }
 
 void initialize_render_textures(SDL_Renderer* renderer) {
