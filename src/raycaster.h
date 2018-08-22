@@ -192,9 +192,8 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* map, int player_x, int pla
 
 	ARUGMENTS:
 		map - used to access things.
-		player_x, player_y - the position of the player in "world" space.
 */
-void preprocess_things(struct mapdef* map, int player_x, int player_y);
+void preprocess_things(struct mapdef* map);
 
 /*
 	Computes an angle that is equivalent to the given angle, but adjusted so that
@@ -217,11 +216,10 @@ int get_adjusted_angle(int curr_angle);
 	ARGUMENTS:
 		ray_angle - the angle of the ray as an integer (in degrees). We use an imprecise
 		value so as to do our lookup's quickly.
-		player_x, player_y - where the ray will originate from.
 		hit - stores all of the data about this hit.
 		map - used to access information about tiles, level, etc.
 */
-void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit, struct mapdef* map);
+void get_ray_hit(int ray_angle, struct hitinfo* hit, struct mapdef* map);
 
 /*
 	Renders the sky at a given column of pixels. Given the adjusted angle,
@@ -263,10 +261,9 @@ void draw_floor_and_ceiling(int screen_slice_y, int screen_slice_h, struct draw_
 
 	ARGUMENTS:
 		map - used to access the things.
-		player_x, player_y - the position of the player in "world" space.
 		player_rot - the rotation of the player in degrees.
 */
-void draw_things(struct mapdef* map, int player_x, int player_y, int player_rot);
+void draw_things(struct mapdef* map, int player_rot);
 
 /*
 	Grabs the pixel of a surface at point (x, y). If the point is within the dimensions

@@ -6,41 +6,44 @@
 #include <stdio.h>
 #include <math.h>
 
-int is_tan_undefined_for_angle(int deg) {
+// RAYCASTER STATE VARIABLES
+int player_x, player_y;
+
+int is_tan_undefined_for_angle(const int deg) {
 	return deg == 0 || deg == 90 || deg == 180 || deg == 270 || deg == 360;
 }
 
-int is_angle_in_quadrant_1(int deg) {
+int is_angle_in_quadrant_1(const int deg) {
 	return 1 <= deg && deg <= 89;
 }
 
-int is_angle_in_quadrant_2(int deg) {
+int is_angle_in_quadrant_2(const int deg) {
 	return 91 <= deg && deg <= 179;
 }
 
-int is_angle_in_quadrant_3(int deg) {
+int is_angle_in_quadrant_3(const int deg) {
 	return 181 <= deg && deg <= 269;
 }
 
-int is_angle_in_quadrant_4(int deg) {
+int is_angle_in_quadrant_4(const int deg) {
 	return 271 <= deg && deg <= 359;
 }
 
-void compute_tan_lookup_val_for_angle(int deg) {
+void compute_tan_lookup_val_for_angle(const int deg) {
 	if(is_tan_undefined_for_angle(deg))
 		tan128table[deg] = -1;
 	else
 		tan128table[deg] = (int)round(tan(deg * M_PI / 180.0f) * 128);
 }
 
-void compute_inverse_tan_lookup_val_for_angle(int deg) {
+void compute_inverse_tan_lookup_val_for_angle(const int deg) {
 	if(is_tan_undefined_for_angle(deg))
 		tan1table[deg] = -1;
 	else
 		tan1table[deg] = (int)round(128.0 / tan(deg * M_PI / 180.0f));
 }
 
-void compute_delta_lookup_vals_quadrant_1(int deg) {
+void compute_delta_lookup_vals_quadrant_1(const int deg) {
 	// 64 / tan(ray_angle). We must account for the 128.
 	delta_h_x[deg] = (1 << 13) / tan128table[deg];
 	delta_h_y[deg]= -UNIT_SIZE;
@@ -50,7 +53,7 @@ void compute_delta_lookup_vals_quadrant_1(int deg) {
 	delta_v_y[deg] = -((tan128table[deg] << UNIT_POWER) >> 7);
 }
 
-void compute_delta_lookup_vals_quadrant_2(int deg) {
+void compute_delta_lookup_vals_quadrant_2(const int deg) {
 	// -64, since we are travelling in the negative y direction.
 	delta_h_y[deg] = -UNIT_SIZE;
 	// Computes -64 / tan(deg). Negative since we're
@@ -61,7 +64,7 @@ void compute_delta_lookup_vals_quadrant_2(int deg) {
 	delta_v_y[deg] = -((1 << 13) / tan128table[deg - 90]);
 }
 
-void compute_delta_lookup_vals_quadrant_3(int deg) {
+void compute_delta_lookup_vals_quadrant_3(const int deg) {
 	delta_h_y[deg] = UNIT_SIZE;
 	delta_h_x[deg]  = -(1 << 13) / tan128table[deg - 180];
 
@@ -70,7 +73,7 @@ void compute_delta_lookup_vals_quadrant_3(int deg) {
 	delta_v_y[deg]  = (UNIT_SIZE * tan128table[deg - 180]) >> 7;
 }
 
-void compute_delta_lookup_vals_quadrant_4(int deg) {
+void compute_delta_lookup_vals_quadrant_4(const int deg) {
 	delta_h_y[deg] = UNIT_SIZE;
 	// Computes 64 * tan(ray_angle)
 	delta_h_x[deg] = (UNIT_SIZE * tan128table[deg - 270]) >> 7;
@@ -80,7 +83,7 @@ void compute_delta_lookup_vals_quadrant_4(int deg) {
 	delta_v_y[deg] = (1 << 13) / tan128table[deg - 270];
 }
 
-void compute_delta_lookup_vals_for_angle(int deg) {
+void compute_delta_lookup_vals_for_angle(const int deg) {
 	if(is_tan_undefined_for_angle(deg)) {
 		delta_h_x[deg] = 0;
 		delta_h_y[deg] = 0;
@@ -99,7 +102,7 @@ void compute_delta_lookup_vals_for_angle(int deg) {
 	}
 }
 
-void compute_lookup_vals_for_angle(int deg) {
+void compute_lookup_vals_for_angle(const int deg) {
 	// Stores the angle in radians.
 	float curr_angle;
 
@@ -153,14 +156,81 @@ int get_dist_sqrd(int x1, int y1, int x2, int y2) {
 	return d_x + d_y;
 }
 
-void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit, struct mapdef* map) {
-	// Stores the position of the ray as it moved
-	// from one grid line to the next.
-	int curr_h_x, curr_h_y;
-	int curr_v_x, curr_v_y;
+// TODO: Make struct for vector args
+// TODO: Rename
+// TODO: CONST CORRECTNESS
+int compute_initial_ray_pos(const int ray_angle, int curr_h[2], int curr_v[2]) {
+	if(is_tan_undefined_for_angle(ray_angle))
+		return 0;
+
+	int alpha;
+
+	if(is_angle_in_quadrant_1(ray_angle)) {
+		alpha = ray_angle;
+
+		// Divide player_y by 64, floor that, multiply by 64, and then subtract 1.
+		curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
+		// Multiply player_y and curr_h[1] by 128, then divide by the tan * 128. This will
+		// undo the the 128 multiplication without having a divide by 0 (For example, tan128table[1]).
+		curr_h[0] = (((player_y - curr_h[1]) * tan1table[alpha]) >> 7) + player_x;
+
+		// Divide player_x by 64, floor the result, multiply by 64 and add 64.
+		curr_v[0]= ((player_x >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
+		// Get the tan(curr_v[0] - player_x) and subtract that from player_y.
+		curr_v[1]= player_y - (((curr_v[0]- player_x) * tan128table[alpha]) >> 7);
+
+	} else if(is_angle_in_quadrant_2(ray_angle)) {
+		// Adjusts the angle so its between 1 and 89.
+		alpha = ray_angle - 90;
+
+		// Compute floor(player_y / 64) * 64 - 1.
+		curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
+		// Computes player_x - (player_y * curr_h[1]) * tan(ray_angle).
+		curr_h[0] = player_x - ((tan128table[alpha] * (player_y - curr_h[1])) >> 7);
+
+		// Compute floor(player_x / 64) * 64 - 1.
+		curr_v[0] = ((player_x >> UNIT_POWER) << UNIT_POWER) - 1;
+		// Compute player_y - (player_x - curr_v[0]) / tan(ray_angle).
+		curr_v[1] = player_y - (((player_x - curr_v[0]) * tan1table[alpha]) >> 7);
+	} else if(is_angle_in_quadrant_3(ray_angle)) {
+		// Adjusts the angle so its between 1 and 89.
+		alpha = ray_angle - 180;
+
+		// Computes floor(player_y / 64) * 64 + 64.
+		curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
+		// Computes player_x - (curr_h[1] - player_y / tan(ray_angle).
+		curr_h[0] = player_x - (((curr_h[1]- player_y) * tan1table[alpha]) >> 7);
+
+		// Computes floor(player x / 64) * 64 - 1.
+		curr_v[0] = ((player_x >> UNIT_POWER) << UNIT_POWER) - 1;
+		// Computes tan(ray_angle) * (player_x - curr_v[0]) + player_y.
+		curr_v[1] = ((tan128table[alpha] * (player_x  - curr_v[0])) >> 7) + player_y;
+	} else if(is_angle_in_quadrant_4(ray_angle)) {
+		// Adjusts the angle so its between 1 and 89.
+		alpha = ray_angle - 270;
+
+		// Computes floor(player_y / 64) * 64 + 64
+		curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
+		// Computes (curr_h[1] - player_y) * tan(ray_angle) + player_x
+		curr_h[0] = (((curr_h[1] - player_y) * tan128table[alpha]) >> 7) + player_x;
+
+		// Computes floor(player_x / 64) * 64 + 64
+		curr_v[0] = ((player_x >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
+		// Computes (curr_v[0] - player_x) / tan(ray_angle) + player_y.
+		curr_v[1] = (((curr_v[0] - player_x) * tan1table[alpha]) >> 7) + player_y;
+	}
+
+	return 1;
+}
+
+void get_ray_hit(int ray_angle, struct hitinfo* hit, struct mapdef* map) {
+	// Stores the position of the ray as it moves
+	// from one grid line to the next. x is 0, y is 1
+	int curr_h[2];
+	int curr_v[2];
 	// How much we move from curr_x and curr_y.
-	int delt_h_x, delt_h_y;
-	int delt_v_x, delt_v_y;
+	int delta_h[2];
+	int delta_v[2];
 
 	// Stores the ray angle adjusted for its quadrant. We use this angle to compute
 	// the curr_h and curr_v values.
@@ -174,96 +244,23 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit,
 
 	// Next, we choose our curr and delta vectors according to the quadrant
 	// our angle is in.
-
-	// The ray is in quadrant 1.
-	if(1 <= ray_angle && ray_angle <= 89) {
-		hit->quadrant = 1;
-		alpha = ray_angle;
-
-		// Divide player_y by 64, floor that, multiply by 64, and then subtract 1.
-		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
-		// Multiply player_y and curr_h_y by 128, then divide by the tan * 128. This will
-		// undo the the 128 multiplication without having a divide by 0 (For example, tan128table[1]).
-		curr_h_x = (((player_y - curr_h_y) * tan1table[alpha]) >> 7) + player_x;
-
-		// Divide player_x by 64, floor the result, multiply by 64 and add 64.
-		curr_v_x = ((player_x >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
-		// Get the tan(curr_v_x - player_x) and subtract that from player_y.
-		curr_v_y = player_y - (((curr_v_x - player_x) * tan128table[alpha]) >> 7);
-
-	}
-
-	// The ray is in quadrant 2.
-	else if(91 <= ray_angle && ray_angle <= 179) {
-		hit->quadrant = 2;
-
-		// Adjusts the angle so its between 1 and 89.
-		alpha = ray_angle - 90;
-
-		// Compute floor(player_y / 64) * 64 - 1.
-		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
-		// Computes player_x - (player_y * curr_h_y) * tan(ray_angle).
-		curr_h_x = player_x - ((tan128table[alpha] * (player_y - curr_h_y)) >> 7);
-
-		// Compute floor(player_x / 64) * 64 - 1.
-		curr_v_x = ((player_x >> UNIT_POWER) << UNIT_POWER) - 1;
-		// Compute player_y - (player_x - curr_v_x) / tan(ray_angle).
-		curr_v_y = player_y - (((player_x - curr_v_x) * tan1table[alpha]) >> 7);
-	}
-
-	// The ray is in quadrant 3.
-	else if(181 <= ray_angle && ray_angle <= 269) {
-		hit->quadrant = 3;
-
-		// Adjusts the angle so its between 1 and 89.
-		alpha = ray_angle - 180;
-
-		// Computes floor(player_y / 64) * 64 + 64.
-		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
-		// Computes player_x - (curr_h_y - player_y / tan(ray_angle).
-		curr_h_x = player_x - (((curr_h_y - player_y) * tan1table[alpha]) >> 7);
-
-		// Computes floor(player x / 64) * 64 - 1.
-		curr_v_x = ((player_x >> UNIT_POWER) << UNIT_POWER) - 1;
-		// Computes tan(ray_angle) * (player_x - curr_v_x) + player_y.
-		curr_v_y = ((tan128table[alpha] * (player_x  - curr_v_x)) >> 7) + player_y;
-	}
-
-	// The ray is in quadrant 4 (271 <= ray_angle && ray_angle <= 359)
-	else if(271 <= ray_angle && ray_angle <= 359) {
-		hit->quadrant = 4;
-
-		// Adjusts the angle so its between 1 and 89.
-		alpha = ray_angle - 270;
-
-		// Computes floor(player_y / 64) * 64 + 64
-		curr_h_y = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
-		// Computes (curr_h_y - player_y) * tan(ray_angle) + player_x
-		curr_h_x = (((curr_h_y - player_y) * tan128table[alpha]) >> 7) + player_x;
-
-		// Computes floor(player_x / 64) * 64 + 64
-		curr_v_x = ((player_x >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
-		// Computes (curr_v_x - player_x) / tan(ray_angle) + player_y.
-		curr_v_y = (((curr_v_x - player_x) * tan1table[alpha]) >> 7) + player_y;
-	}
-
-	else {
-		hit->hit_pos[0] = -1;
-		hit->hit_pos[1] = -1;
+	if(compute_initial_ray_pos(ray_angle, curr_h, curr_v) == 0) {
+		hit->hit_pos[0] = - 1;
+		hit->hit_pos[1] = - 1;
 		return;
 	}
 
-	delt_h_x = delta_h_x[ray_angle];
-	delt_h_y = delta_h_y[ray_angle];
-	delt_v_x = delta_v_x[ray_angle];
-	delt_v_y = delta_v_y[ray_angle];
+	delta_h[0] = delta_h_x[ray_angle];
+	delta_h[1] = delta_h_y[ray_angle];
+	delta_v[0] = delta_v_x[ray_angle];
+	delta_v[1] = delta_v_y[ray_angle];
 
 	// Now find the point that is a wall by travelling along horizontal gridlines.
-	tile = get_tile(curr_h_x, curr_h_y, map);
+	tile = get_tile(curr_h[0], curr_h[1], map);
 	while(-1 < tile && tile < map->num_floor_ceils) {
-		curr_h_x += delt_h_x;
-		curr_h_y += delt_h_y;
-		tile = get_tile(curr_h_x, curr_h_y, map);
+		curr_h[0] += delta_h[0];
+		curr_h[1] += delta_h[1];
+		tile = get_tile(curr_h[0], curr_h[1], map);
 	}
 
 	// We went outside the bounds of the map.
@@ -273,16 +270,16 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit,
 	}
 
 	else {
-		hit_h[0] = curr_h_x;
-		hit_h[1] = curr_h_y;
+		hit_h[0] = curr_h[0];
+		hit_h[1] = curr_h[1];
 	}
 
 	// Now find the point that is a wall by travelling along vertical gridlines.
-	tile = get_tile(curr_v_x, curr_v_y, map);
+	tile = get_tile(curr_v[0], curr_v[1], map);
 	while(-1 < tile && tile < map->num_floor_ceils) {
-		curr_v_x += delt_v_x;
-		curr_v_y += delt_v_y;
-		tile = get_tile(curr_v_x, curr_v_y, map);
+		curr_v[0] += delta_v[0];
+		curr_v[1] += delta_v[1];
+		tile = get_tile(curr_v[0], curr_v[1], map);
 	}
 
 	// We went outside the bounds of the map.
@@ -292,8 +289,8 @@ void get_ray_hit(int ray_angle, int player_x, int player_y, struct hitinfo* hit,
 	}
 
 	else {
-		hit_v[0] = curr_v_x;
-		hit_v[1] = curr_v_y;
+		hit_v[0] = curr_v[0];
+		hit_v[1] = curr_v[1];
 	}
 
 	// Now choose either the horizontal or vertical intersection
@@ -490,7 +487,7 @@ void draw_floor_and_ceiling(int screen_slice_y, int screen_slice_h, struct draw_
 	}
 }
 
-void draw_things(struct mapdef* map, int player_x, int player_y, int player_rot) {
+void draw_things(struct mapdef* map, int player_rot) {
 	// The texture point.
 	int t_x, t_y;
 	// RGB value of the sprite texture.
@@ -546,32 +543,6 @@ void draw_things(struct mapdef* map, int player_x, int player_y, int player_rot)
 		// The column for the scaled texture.
 		m = 0;
 
-		// Compute orientation data.
-		// Get relative angle of thing assuming player was facing 90 degrees.
-		/*transformed_rotation = (things_sorted[i]->rotation - player_rot) + 90;
-		// Correct transformed_rotation
-		if(transformed_rotation < 0)
-			transformed_rotation += 360;
-		if(transformed_rotation >= 360)
-			transformed_rotation -= 360;
-
-		if(0 <= transformed_rotation && transformed_rotation <= 22)
-			orientation = 6;
-		else if(23 <= transformed_rotation && transformed_rotation <= 68)
-			orientation = 5;
-		else if(69 <= transformed_rotation && transformed_rotation <= 113)
-			orientation = 4;
-		else if(114 <= transformed_rotation && transformed_rotation <= 158)
-			orientation = 3;
-		else if(159 <= transformed_rotation && transformed_rotation <= 203)
-			orientation = 2;
-		else if(204 <= transformed_rotation && transformed_rotation <= 249)
-			orientation = 1;
-		else if(250 <= transformed_rotation && transformed_rotation <= 295)
-			orientation = 0;
-		else
-			orientation = 6;*/
-
 		curr_anim = things_sorted[i]->curr_anim;
 		// Take starting position and multiply by 64 to go from unit coordinates to pixel coordinates.
 		// This puts us in the correct position for the animation as a whole.
@@ -613,7 +584,7 @@ void draw_things(struct mapdef* map, int player_x, int player_y, int player_rot)
 	}
 }
 
-void preprocess_things(struct mapdef* map, int player_x, int player_y) {
+void preprocess_things(struct mapdef* map) {
 	unsigned int i;
 
 	// Compute the distance between each thing and the player.
@@ -651,7 +622,8 @@ int get_adjusted_angle(int curr_angle) {
 	return adj_angle;
 }
 
-void cast_rays(SDL_Renderer* renderer, struct mapdef* map, int player_x, int player_y, int player_rot) {
+// TODO: Have struct for player data.
+void cast_rays(SDL_Renderer* renderer, struct mapdef* map, int curr_player_x, int curr_player_y, int player_rot) {
 	// Stores the precise angle of our current ray.
 	float curr_angle = (float)(player_rot + FOV_HALF);
 	// The curr_angle adjusted to be within 0 and 360.
@@ -667,6 +639,10 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* map, int player_x, int pla
 
 	int i;
 
+	// Update all state variables.
+	player_x = curr_player_x;
+	player_y = curr_player_y;
+
 	// Begin by clearning the pixel arrays that we copy to.
 	for(i = 0; i < 64000; ++i) {
 		floor_ceiling_pixels[i] = 0;
@@ -674,7 +650,7 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* map, int player_x, int pla
 		thing_pixels[i] = 0;
 	}
 
-	preprocess_things(map, player_x, player_y);
+	preprocess_things(map);
 
 	// Now loop through each column of pixels on the screen and do ray casting.
 	for(i = 0; i < PROJ_W; ++i) {
@@ -684,7 +660,7 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* map, int player_x, int pla
 		correct_angle = abs(adj_angle - player_rot);
 
 		z_buffer[i] = 0;
-		get_ray_hit(adj_angle, player_x, player_y, &hit, map);
+		get_ray_hit(adj_angle, &hit, map);
 		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
 			// SKY CASTING
 			draw_sky(map, i, adj_angle);
@@ -707,7 +683,7 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* map, int player_x, int pla
 	}
 
 	// THING CASTING
-	draw_things(map, player_x, player_y, player_rot);
+	draw_things(map, player_rot);
 
 	// Draw pixel arrays to screen.
 	SDL_UpdateTexture(raycast_texture, NULL, raycast_pixels, PROJ_W << 2);
