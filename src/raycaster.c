@@ -460,14 +460,10 @@ void draw_floor_and_ceiling(int screen_slice_y, int screen_slice_h, struct draw_
 		dist_to_point = (straight_dist << 7) / (cos128table[dws->correct_angle]);
 
 		// Use adjusted so it gives us the direction of the "true" ray angle.
-		p_x = dws->player_x + ((dist_to_point * cos128table[dws->adj_angle]) >> 7);
-		p_y = dws->player_y - ((dist_to_point * sin128table[dws->adj_angle]) >> 7);
+		p_x = player_x + ((dist_to_point * cos128table[dws->adj_angle]) >> 7);
+		p_y = player_y - ((dist_to_point * sin128table[dws->adj_angle]) >> 7);
 
 		floor_ceil_type = get_tile(p_x, p_y, dws->map);
-
-		// Gives us the texture location.
-		//t_x = p_x % UNIT_SIZE;
-		//t_y = p_y % UNIT_SIZE;
 
 		if(floor_ceil_type >= dws->map->num_floor_ceils)
 			continue;
@@ -673,8 +669,6 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* map, int curr_player_x, in
 			dws.correct_angle = correct_angle;
 			dws.adj_angle = adj_angle;
 			dws.screen_col = i;
-			dws.player_x = player_x;
-			dws.player_y = player_y;
 			draw_wall_slice(&dws);
 
 		}

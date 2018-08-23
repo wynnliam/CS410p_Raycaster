@@ -71,8 +71,6 @@ struct draw_wall_slice_args {
 	int adj_angle;
 	// Where we render the wall slice on the screen.
 	int screen_col;
-	// Coordinates of the player in "world" space.
-	int player_x, player_y;
 };
 
 // Stores the sin value of every degree from 0 to 360 multiplied by 128.
