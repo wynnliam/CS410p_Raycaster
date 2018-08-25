@@ -160,6 +160,20 @@ int get_dist_sqrd(int x1, int y1, int x2, int y2) {
 	return d_x + d_y;
 }
 
+void compute_initial_ray_pos_angle_in_quad_1(const int alpha, int curr_h[2], int curr_v[2]) {
+
+	// Divide player_y by 64, floor that, multiply by 64, and then subtract 1.
+	curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
+	// Multiply player_y and curr_h[1] by 128, then divide by the tan * 128. This will
+	// undo the the 128 multiplication without having a divide by 0 (For example, tan128table[1]).
+	curr_h[0] = (((player_y - curr_h[1]) * tan1table[alpha]) >> 7) + player_x;
+
+	// Divide player_x by 64, floor the result, multiply by 64 and add 64.
+	curr_v[0]= ((player_x >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
+	// Get the tan(curr_v[0] - player_x) and subtract that from player_y.
+	curr_v[1]= player_y - (((curr_v[0]- player_x) * tan128table[alpha]) >> 7);
+}
+
 // TODO: Make struct for vector args
 // TODO: Rename
 // TODO: CONST CORRECTNESS
@@ -171,18 +185,7 @@ int compute_initial_ray_pos(const int ray_angle, int curr_h[2], int curr_v[2]) {
 
 	if(is_angle_in_quadrant_1(ray_angle)) {
 		alpha = ray_angle;
-
-		// Divide player_y by 64, floor that, multiply by 64, and then subtract 1.
-		curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
-		// Multiply player_y and curr_h[1] by 128, then divide by the tan * 128. This will
-		// undo the the 128 multiplication without having a divide by 0 (For example, tan128table[1]).
-		curr_h[0] = (((player_y - curr_h[1]) * tan1table[alpha]) >> 7) + player_x;
-
-		// Divide player_x by 64, floor the result, multiply by 64 and add 64.
-		curr_v[0]= ((player_x >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
-		// Get the tan(curr_v[0] - player_x) and subtract that from player_y.
-		curr_v[1]= player_y - (((curr_v[0]- player_x) * tan128table[alpha]) >> 7);
-
+		compute_initial_ray_pos_angle_in_quad_1(alpha, curr_h, curr_v);
 	} else if(is_angle_in_quadrant_2(ray_angle)) {
 		// Adjusts the angle so its between 1 and 89.
 		alpha = ray_angle - 90;
