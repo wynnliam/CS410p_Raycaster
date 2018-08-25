@@ -255,10 +255,9 @@ void draw_floor_and_ceiling(int screen_slice_y, int screen_slice_h, struct draw_
 	wall slice of a given column is further away).
 
 	ARGUMENTS:
-		map - used to access the things.
 		player_rot - the rotation of the player in degrees.
 */
-void draw_things(struct mapdef* map, int player_rot);
+void draw_things(int player_rot);
 
 /*
 	Grabs the pixel of a surface at point (x, y). If the point is within the dimensions
@@ -290,8 +289,7 @@ unsigned int get_pixel(SDL_Surface* surface, int x, int y);
 	farthest to closest so we render the closest ones last. The algorithm used here is quicksort.
 
 	ARGUMENTS:
-		map - used to access things to sort.
-		s, e - the starting and ending indecies
+		s, e - the starting and ending indecies for the thing list
 
 	PRECONDITIONS:
 		initialize_map was called
@@ -299,6 +297,6 @@ unsigned int get_pixel(SDL_Surface* surface, int x, int y);
 	POSTCONDITIONS:
 		Order of things array will be modifief.
 */
-void sort_things(struct mapdef* map, int s, int e);
-int partition(struct mapdef* map, int s, int e);
+void sort_things(int s, int e);
+int partition(int s, int e);
 #endif

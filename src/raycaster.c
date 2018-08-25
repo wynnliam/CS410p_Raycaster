@@ -485,7 +485,7 @@ void draw_floor_and_ceiling(int screen_slice_y, int screen_slice_h, struct draw_
 	}
 }
 
-void draw_things(struct mapdef* map, int player_rot) {
+void draw_things(int player_rot) {
 	// The texture point.
 	int t_x, t_y;
 	// RGB value of the sprite texture.
@@ -598,7 +598,7 @@ void preprocess_things() {
 	}
 
 	// Now, sort the things according to distance.
-	sort_things(map, 0, map->num_things - 1);
+	sort_things(0, map->num_things - 1);
 }
 
 int get_adjusted_angle(int curr_angle) {
@@ -679,7 +679,7 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_
 	}
 
 	// THING CASTING
-	draw_things(map, player_rot);
+	draw_things(player_rot);
 
 	// Draw pixel arrays to screen.
 	SDL_UpdateTexture(raycast_texture, NULL, raycast_pixels, PROJ_W << 2);
@@ -692,17 +692,17 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_
 	SDL_RenderCopy(renderer, thing_texture, NULL, NULL);
 }
 
-void sort_things(struct mapdef* map, int s, int e) {
+void sort_things(int s, int e) {
 	if(e <= s)
 		return;
 
-	int m = partition(map, s, e);
+	int m = partition(s, e);
 
-	sort_things(map, s, m);
-	sort_things(map, m + 1, e);
+	sort_things(s, m);
+	sort_things(m + 1, e);
 }
 
-int partition(struct mapdef* map, int s, int e) {
+int partition(int s, int e) {
 	int i = s - 1;
 	int j = e + 1;
 
