@@ -185,9 +185,6 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* map, int player_x, int pla
 /*
 	Sorts every thing according to distance from the player. This requires updating
 	the distance for each thing and then doing quicksort according to distance.
-
-	ARUGMENTS:
-		map - used to access things.
 */
 void preprocess_things();
 
