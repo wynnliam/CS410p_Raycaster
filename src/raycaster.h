@@ -222,11 +222,10 @@ void get_ray_hit(int ray_angle, struct hitinfo* hit);
 	onto the screen.
 
 	ARGUMENTS:
-		map - used to access sky surface.
 		screen_col - the column on the screen we want to draw sky pixels to.
 		adj_angle - used to figure out what column of sky pixels to render.
 */
-void draw_sky(struct mapdef* map, int screen_col, int adj_angle);
+void draw_sky(int screen_col, int adj_angle);
 
 /*
 	Renders a single wall slice for a given ray. When this procedure is called,

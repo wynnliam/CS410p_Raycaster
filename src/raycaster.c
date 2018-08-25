@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <math.h>
 
+// TODO: Remove constants.
+
 // RAYCASTER STATE VARIABLES
 static int player_x, player_y;
 static struct mapdef* map;
@@ -383,7 +385,7 @@ unsigned int get_pixel(SDL_Surface* surface, int x, int y) {
 	return result;
 }
 
-void draw_sky(struct mapdef* map, int screen_col, int adj_angle) {
+void draw_sky(int screen_col, int adj_angle) {
 	if(!map || !map->sky_surf)
 		return;
 
@@ -662,7 +664,7 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_
 		get_ray_hit(adj_angle, &hit);
 		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
 			// SKY CASTING
-			draw_sky(map, i, adj_angle);
+			draw_sky(i, adj_angle);
 
 			z_buffer[i] = hit.dist;
 
