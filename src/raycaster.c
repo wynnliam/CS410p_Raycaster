@@ -160,7 +160,7 @@ int get_dist_sqrd(int x1, int y1, int x2, int y2) {
 	return d_x + d_y;
 }
 
-void compute_initial_ray_pos_when_angle_in_quad_1(const int ray_angle, int curr_h[2], int curr_v[2]) {
+static void compute_initial_ray_pos_when_angle_in_quad_1(const int ray_angle, int curr_h[2], int curr_v[2]) {
 	int alpha = ray_angle;
 
 	// Divide player_y by 64, floor that, multiply by 64, and then subtract 1.
@@ -175,7 +175,7 @@ void compute_initial_ray_pos_when_angle_in_quad_1(const int ray_angle, int curr_
 	curr_v[1]= player_y - (((curr_v[0]- player_x) * tan128table[alpha]) >> 7);
 }
 
-void compute_initial_ray_pos_when_angle_in_quad_2(const int ray_angle, int curr_h[2], int curr_v[2]) {
+static void compute_initial_ray_pos_when_angle_in_quad_2(const int ray_angle, int curr_h[2], int curr_v[2]) {
 	// Adjusts the angle so its between 1 and 89.
 	int alpha = ray_angle - 90;
 	// Compute floor(player_y / 64) * 64 - 1.
@@ -189,7 +189,7 @@ void compute_initial_ray_pos_when_angle_in_quad_2(const int ray_angle, int curr_
 	curr_v[1] = player_y - (((player_x - curr_v[0]) * tan1table[alpha]) >> 7);
 }
 
-void compute_initial_ray_pos_when_angle_in_quad_3(const int ray_angle, int curr_h[2], int curr_v[2]) {
+static void compute_initial_ray_pos_when_angle_in_quad_3(const int ray_angle, int curr_h[2], int curr_v[2]) {
 	// Adjusts the angle so its between 1 and 89.
 	int alpha = ray_angle - 180;
 
@@ -204,7 +204,7 @@ void compute_initial_ray_pos_when_angle_in_quad_3(const int ray_angle, int curr_
 	curr_v[1] = ((tan128table[alpha] * (player_x  - curr_v[0])) >> 7) + player_y;
 }
 
-void compute_initial_ray_pos_when_angle_in_quad_4(const int ray_angle, int curr_h[2], int curr_v[2]) {
+static void compute_initial_ray_pos_when_angle_in_quad_4(const int ray_angle, int curr_h[2], int curr_v[2]) {
 	// Adjusts the angle so its between 1 and 89.
 	int alpha = ray_angle - 270;
 
@@ -219,10 +219,7 @@ void compute_initial_ray_pos_when_angle_in_quad_4(const int ray_angle, int curr_
 	curr_v[1] = (((curr_v[0] - player_x) * tan1table[alpha]) >> 7) + player_y;
 }
 
-// TODO: Make struct for vector args
-// TODO: Rename
-// TODO: CONST CORRECTNESS
-int compute_initial_ray_pos(const int ray_angle, int curr_h[2], int curr_v[2]) {
+static int compute_initial_ray_pos(const int ray_angle, int curr_h[2], int curr_v[2]) {
 	if(is_tan_undefined_for_angle(ray_angle))
 		return 0;
 
@@ -241,23 +238,23 @@ int compute_initial_ray_pos(const int ray_angle, int curr_h[2], int curr_v[2]) {
 	return 1;
 }
 
-void compute_ray_delta_vectors(const int ray_angle, int delta_h[2], int delta_v[2]) {
+static void compute_ray_delta_vectors(const int ray_angle, int delta_h[2], int delta_v[2]) {
 	delta_h[0] = delta_h_x[ray_angle];
 	delta_h[1] = delta_h_y[ray_angle];
 	delta_v[0] = delta_v_x[ray_angle];
 	delta_v[1] = delta_v_y[ray_angle];
 }
 
-int tile_is_floor_ceil(const int tile) {
+static int tile_is_floor_ceil(const int tile) {
 	return -1 < tile && tile < map->num_floor_ceils;
 }
 
-void move_ray_pos(int ray_pos[2], int ray_delta[2]) {
+static void move_ray_pos(int ray_pos[2], int ray_delta[2]) {
 	ray_pos[0] += ray_delta[0];
 	ray_pos[1] += ray_delta[1];
 }
 
-void compute_ray_hit_position(int curr_pos[2], int delta[2], int hit[2]) {
+static void compute_ray_hit_position(int curr_pos[2], int delta[2], int hit[2]) {
 	int tile;
 
 	tile = get_tile(curr_pos[0], curr_pos[1], map);
@@ -276,27 +273,27 @@ void compute_ray_hit_position(int curr_pos[2], int delta[2], int hit[2]) {
 	}
 }
 
-int both_ray_horizontal_and_vertical_hit_pos_invalid(int hit_h[2], int hit_v[2]) {
+static int both_ray_horizontal_and_vertical_hit_pos_invalid(int hit_h[2], int hit_v[2]) {
 	return hit_h[0] == -1 && hit_h[1] == -1 && hit_v[0] == -1 && hit_v[1] == -1;
 }
 
-int ray_hit_pos_is_invalid(int hit_pos[2]) {
+static int ray_hit_pos_is_invalid(int hit_pos[2]) {
 	return hit_pos[0] == -1 && hit_pos[1] == -1;
 }
 
-void set_hit(struct hitinfo* to_set, int hit_pos[2], const int is_horiz) {
+static void set_hit(struct hitinfo* to_set, int hit_pos[2], const int is_horiz) {
 	to_set->hit_pos[0] = hit_pos[0];
 	to_set->hit_pos[1] = hit_pos[1];
 	to_set->is_horiz = is_horiz;
-	to_set->dist = sqrt((player_x - hit_pos[0]) * (player_x - hit_pos[0]) + (player_y - hit_pos[1]) * (player_y - hit_pos[1]));
+	to_set->dist = sqrt(get_dist_sqrd(player_x, player_y, hit_pos[0], hit_pos[1]));
 }
 
-void choose_ray_pos_according_to_shortest_dist(struct hitinfo* hit, int hit_h[2], int hit_v[2]) {
+static void choose_ray_pos_according_to_shortest_dist(struct hitinfo* hit, int hit_h[2], int hit_v[2]) {
 	int h_dist;
 	int v_dist;
-
-	h_dist = sqrt((player_x - hit_h[0]) * (player_x - hit_h[0]) + (player_y - hit_h[1]) * (player_y - hit_h[1]));
-	v_dist = sqrt((player_x - hit_v[0]) * (player_x - hit_v[0]) + (player_y - hit_v[1]) * (player_y - hit_v[1]));
+	
+	h_dist = get_dist_sqrd(player_x, player_y, hit_h[0], hit_h[1]);
+	v_dist = get_dist_sqrd(player_x, player_y, hit_v[0], hit_v[1]);
 
 	if(h_dist < v_dist) {
 		set_hit(hit, hit_h, 1);
@@ -305,7 +302,7 @@ void choose_ray_pos_according_to_shortest_dist(struct hitinfo* hit, int hit_h[2]
 	}
 }
 
-void choose_ray_horizontal_or_vertical_hit_pos(int hit_h[2], int hit_v[2], struct hitinfo* hit) {
+static void choose_ray_horizontal_or_vertical_hit_pos(int hit_h[2], int hit_v[2], struct hitinfo* hit) {
 	if(both_ray_horizontal_and_vertical_hit_pos_invalid(hit_h, hit_v)) {
 		hit->hit_pos[0] = -1;
 		hit->hit_pos[1] = -1;
