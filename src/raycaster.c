@@ -7,9 +7,10 @@
 #include <math.h>
 
 // RAYCASTER STATE VARIABLES
-int player_x, player_y;
+static int player_x, player_y;
+static struct mapdef* map;
 
-int is_tan_undefined_for_angle(const int deg) {
+static int is_tan_undefined_for_angle(const int deg) {
 	return deg == 0 || deg == 90 || deg == 180 || deg == 270 || deg == 360;
 }
 
@@ -619,7 +620,7 @@ int get_adjusted_angle(int curr_angle) {
 }
 
 // TODO: Have struct for player data.
-void cast_rays(SDL_Renderer* renderer, struct mapdef* map, int curr_player_x, int curr_player_y, int player_rot) {
+void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_x, int curr_player_y, int player_rot) {
 	// Stores the precise angle of our current ray.
 	float curr_angle = (float)(player_rot + FOV_HALF);
 	// The curr_angle adjusted to be within 0 and 360.
@@ -638,6 +639,7 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* map, int curr_player_x, in
 	// Update all state variables.
 	player_x = curr_player_x;
 	player_y = curr_player_y;
+	map = curr_map;
 
 	// Begin by clearning the pixel arrays that we copy to.
 	for(i = 0; i < 64000; ++i) {
