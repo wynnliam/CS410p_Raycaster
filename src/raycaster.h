@@ -189,7 +189,7 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* map, int player_x, int pla
 	ARUGMENTS:
 		map - used to access things.
 */
-void preprocess_things(struct mapdef* map);
+void preprocess_things();
 
 /*
 	Computes an angle that is equivalent to the given angle, but adjusted so that

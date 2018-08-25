@@ -582,7 +582,7 @@ void draw_things(struct mapdef* map, int player_rot) {
 	}
 }
 
-void preprocess_things(struct mapdef* map) {
+void preprocess_things() {
 	unsigned int i;
 
 	// Compute the distance between each thing and the player.
@@ -649,7 +649,7 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_
 		thing_pixels[i] = 0;
 	}
 
-	preprocess_things(map);
+	preprocess_things();
 
 	// Now loop through each column of pixels on the screen and do ray casting.
 	for(i = 0; i < PROJ_W; ++i) {
