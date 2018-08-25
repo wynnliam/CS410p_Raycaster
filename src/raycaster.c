@@ -276,49 +276,45 @@ void compute_ray_hit_position(int curr_pos[2], int delta[2], int hit[2]) {
 	}
 }
 
-void choose_ray_horizontal_or_vertical_hit_pos(int hit_h[2], int hit_v[2], struct hitinfo* hit) {
+int both_ray_horizontal_and_vertical_hit_pos_invalid(int hit_h[2], int hit_v[2]) {
+	return hit_h[0] == -1 && hit_h[1] == -1 && hit_v[0] == -1 && hit_v[1] == -1;
+}
+
+int ray_hit_pos_is_invalid(int hit_pos[2]) {
+	return hit_pos[0] == -1 && hit_pos[1] == -1;
+}
+
+void set_hit(struct hitinfo* to_set, int hit_pos[2], const int is_horiz) {
+	to_set->hit_pos[0] = hit_pos[0];
+	to_set->hit_pos[1] = hit_pos[1];
+	to_set->is_horiz = is_horiz;
+	to_set->dist = sqrt((player_x - hit_pos[0]) * (player_x - hit_pos[0]) + (player_y - hit_pos[1]) * (player_y - hit_pos[1]));
+}
+
+void choose_ray_pos_according_to_shortest_dist(struct hitinfo* hit, int hit_h[2], int hit_v[2]) {
 	int h_dist;
 	int v_dist;
 
-	if(hit_h[0] == -1 && hit_h[1] == -1 && hit_v[0] == -1 && hit_v[1] == -1) {
+	h_dist = sqrt((player_x - hit_h[0]) * (player_x - hit_h[0]) + (player_y - hit_h[1]) * (player_y - hit_h[1]));
+	v_dist = sqrt((player_x - hit_v[0]) * (player_x - hit_v[0]) + (player_y - hit_v[1]) * (player_y - hit_v[1]));
+
+	if(h_dist < v_dist) {
+		set_hit(hit, hit_h, 1);
+	} else {
+		set_hit(hit, hit_v, 0);
+	}
+}
+
+void choose_ray_horizontal_or_vertical_hit_pos(int hit_h[2], int hit_v[2], struct hitinfo* hit) {
+	if(both_ray_horizontal_and_vertical_hit_pos_invalid(hit_h, hit_v)) {
 		hit->hit_pos[0] = -1;
 		hit->hit_pos[1] = -1;
-	}
-
-	else if(hit_h[0] == -1 && hit_h[1] == -1) {
-		hit->hit_pos[0] = hit_v[0];
-		hit->hit_pos[1] = hit_v[1];
-		hit->is_horiz = 0;
-
-		hit->dist = sqrt((player_x - hit_v[0]) * (player_x - hit_v[0]) + (player_y - hit_v[1]) * (player_y - hit_v[1]));
-	}
-
-	else if(hit_v[0] == -1 && hit_v[1] == -1) {
-		hit->hit_pos[0] = hit_h[0];
-		hit->hit_pos[1] = hit_h[1];
-		hit->is_horiz = 1;
-
-		hit->dist = sqrt((player_x - hit_h[0]) * (player_x - hit_h[0]) + (player_y - hit_h[1]) * (player_y - hit_h[1]));
-	}
-
-	else {
-
-		h_dist = sqrt((player_x - hit_h[0]) * (player_x - hit_h[0]) + (player_y - hit_h[1]) * (player_y - hit_h[1]));
-		v_dist = sqrt((player_x - hit_v[0]) * (player_x - hit_v[0]) + (player_y - hit_v[1]) * (player_y - hit_v[1]));
-
-		if(h_dist < v_dist) {
-			hit->hit_pos[0] = hit_h[0];
-			hit->hit_pos[1] = hit_h[1];
-			hit->dist = h_dist;
-			hit->is_horiz = 1;
-		}
-
-		else {
-			hit->hit_pos[0] = hit_v[0];
-			hit->hit_pos[1] = hit_v[1];
-			hit->dist = v_dist;
-			hit->is_horiz = 0;
-		}
+	} else if(ray_hit_pos_is_invalid(hit_h)) {
+		set_hit(hit, hit_v, 0);
+	} else if(ray_hit_pos_is_invalid(hit_v)) {
+		set_hit(hit, hit_h, 1);
+	} else {
+		choose_ray_pos_according_to_shortest_dist(hit, hit_h, hit_v);
 	}
 }
 
