@@ -248,6 +248,10 @@ void compute_ray_delta_vectors(const int ray_angle, int delta_h[2], int delta_v[
 	delta_v[1] = delta_v_y[ray_angle];
 }
 
+int tile_is_floor_ceil(const int tile) {
+	return -1 < tile && tile < map->num_floor_ceils;
+}
+
 void get_ray_hit(int ray_angle, struct hitinfo* hit) {
 	// Stores the position of the ray as it moves
 	// from one grid line to the next. x is 0, y is 1
@@ -263,8 +267,6 @@ void get_ray_hit(int ray_angle, struct hitinfo* hit) {
 	int v_dist;
 	int tile;
 
-	// Next, we choose our curr and delta vectors according to the quadrant
-	// our angle is in.
 	if(compute_initial_ray_pos(ray_angle, curr_h, curr_v) == 0) {
 		hit->hit_pos[0] = -1;
 		hit->hit_pos[1] = -1;
@@ -275,7 +277,7 @@ void get_ray_hit(int ray_angle, struct hitinfo* hit) {
 
 	// Now find the point that is a wall by travelling along horizontal gridlines.
 	tile = get_tile(curr_h[0], curr_h[1], map);
-	while(-1 < tile && tile < map->num_floor_ceils) {
+	while(tile_is_floor_ceil(tile)) {
 		curr_h[0] += delta_h[0];
 		curr_h[1] += delta_h[1];
 		tile = get_tile(curr_h[0], curr_h[1], map);
@@ -294,7 +296,7 @@ void get_ray_hit(int ray_angle, struct hitinfo* hit) {
 
 	// Now find the point that is a wall by travelling along vertical gridlines.
 	tile = get_tile(curr_v[0], curr_v[1], map);
-	while(-1 < tile && tile < map->num_floor_ceils) {
+	while(tile_is_floor_ceil(tile)) {
 		curr_v[0] += delta_v[0];
 		curr_v[1] += delta_v[1];
 		tile = get_tile(curr_v[0], curr_v[1], map);
