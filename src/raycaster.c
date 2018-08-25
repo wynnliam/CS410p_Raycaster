@@ -276,36 +276,10 @@ void compute_ray_hit_position(int curr_pos[2], int delta[2], int hit[2]) {
 	}
 }
 
-void get_ray_hit(int ray_angle, struct hitinfo* hit) {
-	// Stores the position of the ray as it moves
-	// from one grid line to the next. x is 0, y is 1
-	int curr_h[2];
-	int curr_v[2];
-	// How much we move from curr_x and curr_y.
-	int delta_h[2];
-	int delta_v[2];
-
-	int hit_h[2];
-	int hit_v[2];
+void choose_ray_horizontal_or_vertical_hit_pos(int hit_h[2], int hit_v[2], struct hitinfo* hit) {
 	int h_dist;
 	int v_dist;
-	int tile;
 
-	if(compute_initial_ray_pos(ray_angle, curr_h, curr_v) == 0) {
-		hit->hit_pos[0] = -1;
-		hit->hit_pos[1] = -1;
-		return;
-	}
-
-	compute_ray_delta_vectors(ray_angle, delta_h, delta_v);
-
-	// Now find the point that is a wall by travelling along horizontal gridlines.
-	compute_ray_hit_position(curr_h, delta_h, hit_h);
-	// Now find the point that is a wall by travelling along vertical gridlines.
-	compute_ray_hit_position(curr_v, delta_v, hit_v);
-
-	// Now choose either the horizontal or vertical intersection
-	// point. Or choose -1, -1 to denote an error.
 	if(hit_h[0] == -1 && hit_h[1] == -1 && hit_v[0] == -1 && hit_v[1] == -1) {
 		hit->hit_pos[0] = -1;
 		hit->hit_pos[1] = -1;
@@ -346,6 +320,39 @@ void get_ray_hit(int ray_angle, struct hitinfo* hit) {
 			hit->is_horiz = 0;
 		}
 	}
+}
+
+void get_ray_hit(int ray_angle, struct hitinfo* hit) {
+	// Stores the position of the ray as it moves
+	// from one grid line to the next. x is 0, y is 1
+	int curr_h[2];
+	int curr_v[2];
+	// How much we move from curr_x and curr_y.
+	int delta_h[2];
+	int delta_v[2];
+
+	int hit_h[2];
+	int hit_v[2];
+	int h_dist;
+	int v_dist;
+	int tile;
+
+	if(compute_initial_ray_pos(ray_angle, curr_h, curr_v) == 0) {
+		hit->hit_pos[0] = -1;
+		hit->hit_pos[1] = -1;
+		return;
+	}
+
+	compute_ray_delta_vectors(ray_angle, delta_h, delta_v);
+
+	// Now find the point that is a wall by travelling along horizontal gridlines.
+	compute_ray_hit_position(curr_h, delta_h, hit_h);
+	// Now find the point that is a wall by travelling along vertical gridlines.
+	compute_ray_hit_position(curr_v, delta_v, hit_v);
+
+	// Now choose either the horizontal or vertical intersection
+	// point. Or choose -1, -1 to denote an error.
+	choose_ray_horizontal_or_vertical_hit_pos(hit_h, hit_v, hit);
 
 	hit->wall_type = get_tile(hit->hit_pos[0], hit->hit_pos[1], map);
 }
