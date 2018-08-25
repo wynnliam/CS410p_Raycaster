@@ -257,6 +257,25 @@ void move_ray_pos(int ray_pos[2], int ray_delta[2]) {
 	ray_pos[1] += ray_delta[1];
 }
 
+void compute_ray_hit_position(int curr_pos[2], int delta[2], int hit[2]) {
+	int tile;
+
+	tile = get_tile(curr_pos[0], curr_pos[1], map);
+	while(tile_is_floor_ceil(tile)) {
+		move_ray_pos(curr_pos, delta);
+		tile = get_tile(curr_pos[0], curr_pos[1], map);
+	}
+
+	// We went outside the bounds of the map.
+	if(tile == -1) {
+		hit[0] = -1;
+		hit[1] = -1;
+	} else {
+		hit[0] = curr_pos[0];
+		hit[1] = curr_pos[1];
+	}
+}
+
 void get_ray_hit(int ray_angle, struct hitinfo* hit) {
 	// Stores the position of the ray as it moves
 	// from one grid line to the next. x is 0, y is 1
@@ -281,36 +300,9 @@ void get_ray_hit(int ray_angle, struct hitinfo* hit) {
 	compute_ray_delta_vectors(ray_angle, delta_h, delta_v);
 
 	// Now find the point that is a wall by travelling along horizontal gridlines.
-	tile = get_tile(curr_h[0], curr_h[1], map);
-	while(tile_is_floor_ceil(tile)) {
-		move_ray_pos(curr_h, delta_h);
-		tile = get_tile(curr_h[0], curr_h[1], map);
-	}
-
-	// We went outside the bounds of the map.
-	if(tile == -1) {
-		hit_h[0] = -1;
-		hit_h[1] = -1;
-	} else {
-		hit_h[0] = curr_h[0];
-		hit_h[1] = curr_h[1];
-	}
-
+	compute_ray_hit_position(curr_h, delta_h, hit_h);
 	// Now find the point that is a wall by travelling along vertical gridlines.
-	tile = get_tile(curr_v[0], curr_v[1], map);
-	while(tile_is_floor_ceil(tile)) {
-		move_ray_pos(curr_v, delta_v);
-		tile = get_tile(curr_v[0], curr_v[1], map);
-	}
-
-	// We went outside the bounds of the map.
-	if(tile == -1) {
-		hit_v[0] = -1;
-		hit_v[1] = -1;
-	} else {
-		hit_v[0] = curr_v[0];
-		hit_v[1] = curr_v[1];
-	}
+	compute_ray_hit_position(curr_v, delta_v, hit_v);
 
 	// Now choose either the horizontal or vertical intersection
 	// point. Or choose -1, -1 to denote an error.
