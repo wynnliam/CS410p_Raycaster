@@ -133,6 +133,7 @@ void initialize_render_textures(SDL_Renderer* renderer) {
 	SDL_SetTextureBlendMode(thing_texture, SDL_BLENDMODE_BLEND);
 }
 
+// TODO: Add to some kind of utils file.
 int get_tile(int x, int y, struct mapdef* map) {
 	int grid_x = x >> UNIT_POWER;
 	int grid_y = y >> UNIT_POWER;
@@ -224,7 +225,7 @@ int compute_initial_ray_pos(const int ray_angle, int curr_h[2], int curr_v[2]) {
 	return 1;
 }
 
-void get_ray_hit(int ray_angle, struct hitinfo* hit, struct mapdef* map) {
+void get_ray_hit(int ray_angle, struct hitinfo* hit) {
 	// Stores the position of the ray as it moves
 	// from one grid line to the next. x is 0, y is 1
 	int curr_h[2];
@@ -658,7 +659,7 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_
 		correct_angle = abs(adj_angle - player_rot);
 
 		z_buffer[i] = 0;
-		get_ray_hit(adj_angle, &hit, map);
+		get_ray_hit(adj_angle, &hit);
 		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
 			// SKY CASTING
 			draw_sky(map, i, adj_angle);

@@ -215,9 +215,8 @@ int get_adjusted_angle(int curr_angle);
 		ray_angle - the angle of the ray as an integer (in degrees). We use an imprecise
 		value so as to do our lookup's quickly.
 		hit - stores all of the data about this hit.
-		map - used to access information about tiles, level, etc.
 */
-void get_ray_hit(int ray_angle, struct hitinfo* hit, struct mapdef* map);
+void get_ray_hit(int ray_angle, struct hitinfo* hit);
 
 /*
 	Renders the sky at a given column of pixels. Given the adjusted angle,
