@@ -330,12 +330,10 @@ void get_ray_hit(int ray_angle, struct hitinfo* hit) {
 	// How much we move from curr_x and curr_y.
 	int delta_h[2];
 	int delta_v[2];
-
+	// Where the final ray position is traveling along
+	// horizontal and vertical grid lines.
 	int hit_h[2];
 	int hit_v[2];
-	int h_dist;
-	int v_dist;
-	int tile;
 
 	if(compute_initial_ray_pos(ray_angle, curr_h, curr_v) == 0) {
 		hit->hit_pos[0] = -1;
