@@ -160,7 +160,8 @@ int get_dist_sqrd(int x1, int y1, int x2, int y2) {
 	return d_x + d_y;
 }
 
-void compute_initial_ray_pos_angle_in_quad_1(const int alpha, int curr_h[2], int curr_v[2]) {
+void compute_initial_ray_pos_when_angle_in_quad_1(const int ray_angle, int curr_h[2], int curr_v[2]) {
+	int alpha = ray_angle;
 
 	// Divide player_y by 64, floor that, multiply by 64, and then subtract 1.
 	curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
@@ -174,6 +175,50 @@ void compute_initial_ray_pos_angle_in_quad_1(const int alpha, int curr_h[2], int
 	curr_v[1]= player_y - (((curr_v[0]- player_x) * tan128table[alpha]) >> 7);
 }
 
+void compute_initial_ray_pos_when_angle_in_quad_2(const int ray_angle, int curr_h[2], int curr_v[2]) {
+	// Adjusts the angle so its between 1 and 89.
+	int alpha = ray_angle - 90;
+	// Compute floor(player_y / 64) * 64 - 1.
+	curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
+	// Computes player_x - (player_y * curr_h[1]) * tan(ray_angle).
+	curr_h[0] = player_x - ((tan128table[alpha] * (player_y - curr_h[1])) >> 7);
+
+	// Compute floor(player_x / 64) * 64 - 1.
+	curr_v[0] = ((player_x >> UNIT_POWER) << UNIT_POWER) - 1;
+	// Compute player_y - (player_x - curr_v[0]) / tan(ray_angle).
+	curr_v[1] = player_y - (((player_x - curr_v[0]) * tan1table[alpha]) >> 7);
+}
+
+void compute_initial_ray_pos_when_angle_in_quad_3(const int ray_angle, int curr_h[2], int curr_v[2]) {
+	// Adjusts the angle so its between 1 and 89.
+	int alpha = ray_angle - 180;
+
+	// Computes floor(player_y / 64) * 64 + 64.
+	curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
+	// Computes player_x - (curr_h[1] - player_y / tan(ray_angle).
+	curr_h[0] = player_x - (((curr_h[1]- player_y) * tan1table[alpha]) >> 7);
+
+	// Computes floor(player x / 64) * 64 - 1.
+	curr_v[0] = ((player_x >> UNIT_POWER) << UNIT_POWER) - 1;
+	// Computes tan(ray_angle) * (player_x - curr_v[0]) + player_y.
+	curr_v[1] = ((tan128table[alpha] * (player_x  - curr_v[0])) >> 7) + player_y;
+}
+
+void compute_initial_ray_pos_when_angle_in_quad_4(const int ray_angle, int curr_h[2], int curr_v[2]) {
+	// Adjusts the angle so its between 1 and 89.
+	int alpha = ray_angle - 270;
+
+	// Computes floor(player_y / 64) * 64 + 64
+	curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
+	// Computes (curr_h[1] - player_y) * tan(ray_angle) + player_x
+	curr_h[0] = (((curr_h[1] - player_y) * tan128table[alpha]) >> 7) + player_x;
+
+	// Computes floor(player_x / 64) * 64 + 64
+	curr_v[0] = ((player_x >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
+	// Computes (curr_v[0] - player_x) / tan(ray_angle) + player_y.
+	curr_v[1] = (((curr_v[0] - player_x) * tan1table[alpha]) >> 7) + player_y;
+}
+
 // TODO: Make struct for vector args
 // TODO: Rename
 // TODO: CONST CORRECTNESS
@@ -184,47 +229,13 @@ int compute_initial_ray_pos(const int ray_angle, int curr_h[2], int curr_v[2]) {
 	int alpha;
 
 	if(is_angle_in_quadrant_1(ray_angle)) {
-		alpha = ray_angle;
-		compute_initial_ray_pos_angle_in_quad_1(alpha, curr_h, curr_v);
+		compute_initial_ray_pos_when_angle_in_quad_1(ray_angle, curr_h, curr_v);
 	} else if(is_angle_in_quadrant_2(ray_angle)) {
-		// Adjusts the angle so its between 1 and 89.
-		alpha = ray_angle - 90;
-
-		// Compute floor(player_y / 64) * 64 - 1.
-		curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
-		// Computes player_x - (player_y * curr_h[1]) * tan(ray_angle).
-		curr_h[0] = player_x - ((tan128table[alpha] * (player_y - curr_h[1])) >> 7);
-
-		// Compute floor(player_x / 64) * 64 - 1.
-		curr_v[0] = ((player_x >> UNIT_POWER) << UNIT_POWER) - 1;
-		// Compute player_y - (player_x - curr_v[0]) / tan(ray_angle).
-		curr_v[1] = player_y - (((player_x - curr_v[0]) * tan1table[alpha]) >> 7);
+		compute_initial_ray_pos_when_angle_in_quad_2(ray_angle, curr_h, curr_v);
 	} else if(is_angle_in_quadrant_3(ray_angle)) {
-		// Adjusts the angle so its between 1 and 89.
-		alpha = ray_angle - 180;
-
-		// Computes floor(player_y / 64) * 64 + 64.
-		curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
-		// Computes player_x - (curr_h[1] - player_y / tan(ray_angle).
-		curr_h[0] = player_x - (((curr_h[1]- player_y) * tan1table[alpha]) >> 7);
-
-		// Computes floor(player x / 64) * 64 - 1.
-		curr_v[0] = ((player_x >> UNIT_POWER) << UNIT_POWER) - 1;
-		// Computes tan(ray_angle) * (player_x - curr_v[0]) + player_y.
-		curr_v[1] = ((tan128table[alpha] * (player_x  - curr_v[0])) >> 7) + player_y;
+		compute_initial_ray_pos_when_angle_in_quad_3(ray_angle, curr_h, curr_v);
 	} else if(is_angle_in_quadrant_4(ray_angle)) {
-		// Adjusts the angle so its between 1 and 89.
-		alpha = ray_angle - 270;
-
-		// Computes floor(player_y / 64) * 64 + 64
-		curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
-		// Computes (curr_h[1] - player_y) * tan(ray_angle) + player_x
-		curr_h[0] = (((curr_h[1] - player_y) * tan128table[alpha]) >> 7) + player_x;
-
-		// Computes floor(player_x / 64) * 64 + 64
-		curr_v[0] = ((player_x >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
-		// Computes (curr_v[0] - player_x) / tan(ray_angle) + player_y.
-		curr_v[1] = (((curr_v[0] - player_x) * tan1table[alpha]) >> 7) + player_y;
+		compute_initial_ray_pos_when_angle_in_quad_4(ray_angle, curr_h, curr_v);
 	}
 
 	return 1;
