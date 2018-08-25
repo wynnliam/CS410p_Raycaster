@@ -43,6 +43,10 @@
 // Multiply a radian value to get its approximated degree.
 #define RAD_TO_DEG 			57.296
 
+// Experimentation with this value showed twice the screen size
+// worked very well.
+#define SKYBOX_TEX_WIDTH		640
+
 struct hitinfo {
 	// Where we hit.
 	int hit_pos[2];

@@ -348,6 +348,7 @@ void get_ray_hit(int ray_angle, struct hitinfo* hit) {
 	hit->wall_type = get_tile(hit->hit_pos[0], hit->hit_pos[1], map);
 }
 
+// TODO: Move this elsewhere.
 unsigned int get_pixel(SDL_Surface* surface, int x, int y) {
 	if(!surface)
 		return 0;
@@ -390,13 +391,20 @@ unsigned int get_pixel(SDL_Surface* surface, int x, int y) {
 	return result;
 }
 
-void draw_sky(int screen_col, int adj_angle) {
+void draw_sky_slice(const int screen_col, const int adj_angle) {
 	if(!map || !map->sky_surf)
 		return;
 
+	// A skybox has 640 columns of pixels.
+	// There are 360 degrees in a circle.
+	// So to convert an angle to the corresponding column,
+	// we do 640 / 360, which is roughly 1.77. We can just round this
+	// to two.
+	int adj_angle_to_pixel_col = (adj_angle << 1) % SKYBOX_TEX_WIDTH;
+
 	int j;
-	for(j = 0; j < 200; ++j)
-		raycast_pixels[j * PROJ_W + screen_col] = get_pixel(map->sky_surf, (int)(adj_angle * 1.77) % 640, j);
+	for(j = 0; j < PROJ_H; ++j)
+		raycast_pixels[j * PROJ_W + screen_col] = get_pixel(map->sky_surf, adj_angle_to_pixel_col, j);
 }
 
 void draw_wall_slice(struct draw_wall_slice_args* args) {
@@ -669,7 +677,7 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_
 		get_ray_hit(adj_angle, &hit);
 		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
 			// SKY CASTING
-			draw_sky(i, adj_angle);
+			draw_sky_slice(i, adj_angle);
 
 			z_buffer[i] = hit.dist;
 
