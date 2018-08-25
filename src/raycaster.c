@@ -410,7 +410,7 @@ void draw_wall_slice(struct draw_wall_slice_args* args) {
 	// The height of the slice on the screen
 	int screen_slice_h;
 
-	wall = args->hit->wall_type - args->map->num_floor_ceils;
+	wall = args->hit->wall_type - map->num_floor_ceils;
 	slice_dist = (args->hit->dist * cos128table[args->correct_angle]) >> 7;
 
 	// Make sure we don't get any issues computing the slice height.
@@ -437,7 +437,7 @@ void draw_wall_slice(struct draw_wall_slice_args* args) {
 			continue;
 
 		raycast_pixels[(j + screen_slice_y) * PROJ_W + args->screen_col] =
-			get_pixel(args->map->walls[wall].surf, tex_col, (j << 6) / screen_slice_h);
+			get_pixel(map->walls[wall].surf, tex_col, (j << 6) / screen_slice_h);
 	}
 
 	// FLOOR/CEILING CASTING.
@@ -465,21 +465,21 @@ void draw_floor_and_ceiling(int screen_slice_y, int screen_slice_h, struct draw_
 		p_x = player_x + ((dist_to_point * cos128table[dws->adj_angle]) >> 7);
 		p_y = player_y - ((dist_to_point * sin128table[dws->adj_angle]) >> 7);
 
-		floor_ceil_type = get_tile(p_x, p_y, dws->map);
+		floor_ceil_type = get_tile(p_x, p_y, map);
 
-		if(floor_ceil_type >= dws->map->num_floor_ceils)
+		if(floor_ceil_type >= map->num_floor_ceils)
 			continue;
 
 		// Put floor pixel.
 		//printf("%d\n", floor_ceil);
-		if(dws->map->floor_ceils[floor_ceil_type].floor_surf) {
-			floor_ceiling_pixels[j * PROJ_W + dws->screen_col] = get_pixel(dws->map->floor_ceils[floor_ceil_type].floor_surf,
+		if(map->floor_ceils[floor_ceil_type].floor_surf) {
+			floor_ceiling_pixels[j * PROJ_W + dws->screen_col] = get_pixel(map->floor_ceils[floor_ceil_type].floor_surf,
 															 		  p_x % UNIT_SIZE, p_y % UNIT_SIZE);
 		}
 
 		// Put ceiling pixel.
-		if(dws->map->floor_ceils[floor_ceil_type].ceil_surf) {
-			floor_ceiling_pixels[(-j + PROJ_H) * PROJ_W + dws->screen_col] = get_pixel(dws->map->floor_ceils[floor_ceil_type].ceil_surf,
+		if(map->floor_ceils[floor_ceil_type].ceil_surf) {
+			floor_ceiling_pixels[(-j + PROJ_H) * PROJ_W + dws->screen_col] = get_pixel(map->floor_ceils[floor_ceil_type].ceil_surf,
 																				  p_x % UNIT_SIZE, p_y % UNIT_SIZE);
 		}
 	}
@@ -667,7 +667,6 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_
 			z_buffer[i] = hit.dist;
 
 			// WALL, FLOOR, CEILING CASTING
-			dws.map = map;
 			dws.hit = &hit;
 			dws.correct_angle = correct_angle;
 			dws.adj_angle = adj_angle;

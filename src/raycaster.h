@@ -59,8 +59,6 @@ struct hitinfo {
 
 // Used in the function draw_wall_slice to reduce number of arguments.
 struct draw_wall_slice_args {
-	// Used to access texture and tile data for walls, floors, and ceilings.
-	struct mapdef* map;
 	// Data for ray hitting wall slice.
 	struct hitinfo* hit;
 	// Used to compute the "correct" distance from the
