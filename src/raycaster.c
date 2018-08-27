@@ -407,56 +407,162 @@ void draw_sky_slice(const int screen_col, const int adj_angle) {
 		raycast_pixels[j * PROJ_W + screen_col] = get_pixel(map->sky_surf, adj_angle_to_pixel_col, j);
 }
 
-void draw_wall_slice(struct draw_wall_slice_args* args) {
-	// The wall texture we will render.
-	unsigned char wall;
-	// The "correct" distance of the slice. Using this fixes
-	// the fish-eye effect.
-	unsigned int slice_dist;
-	// The height of the slice to render.
-	unsigned int slice_height;
 
-	// Stores the column of pixels from the wall texture we
-	// wish to render.
-	unsigned int tex_col;
+/*struct hitinfo {
+	// Where we hit.
+	int hit_pos[2];
+	// The squared distance.
+	int dist;
+	// The wall texture.
+	int wall_type;
+	// If true, the intersection was along a horizontal grid.
+	// Otherwise, it was vertical.
+	int is_horiz;
+	// Used when correcting for 'fisheye' lens.
+	int quadrant;
+};*/
 
-	// Where we will render the wall slice along the y axis.
-	int screen_slice_y;
-	// The height of the slice on the screen
-	int screen_slice_h;
+/*struct draw_wall_slice_args {
+	// Data for ray hitting wall slice.
+	struct hitinfo* hit;
+	// Used to compute the "correct" distance from the
+	// player to the wall slice so as to avoid the "fish-eye"
+	// effect.
+	int correct_angle;
+	// The angle of the ray adjusted to be from 0 to 360.
+	int adj_angle;
+	// Where we render the wall slice on the screen.
+	int screen_col;
+};*/
 
-	wall = args->hit->wall_type - map->num_floor_ceils;
-	slice_dist = (args->hit->dist * cos128table[args->correct_angle]) >> 7;
+struct slice {
+	// The row of pixels on the screen we want to render from (top-most row going down).
+	int screen_row;
+	// The column of pixels on the screen we want to render from.
+	int screen_col;
+	// The height in pixels of the slice. No width since a slice is just a single line of pixels.
+	int screen_height;
+	// The texture we want to render.
+	int wall_tex;
+	// The column of pixels we want to render.
+	int tex_col;
+};
 
-	// Make sure we don't get any issues computing the slice height.
-	if(slice_dist == 0)
-		slice_dist = 1;
-
-	// Dist to projection * 64 / slice dist.
-	slice_height = (DIST_TO_PROJ << 6) / slice_dist;
-
-	// Use a single column of pixels based on where the ray hit.
-	tex_col = args->hit->is_horiz ? (args->hit->hit_pos[0] % UNIT_SIZE) :
-									(args->hit->hit_pos[1] % UNIT_SIZE);
-
-	// Define the part of the screen we render to such that it is a single column with the
-	// slice's middle pixel at the center of the screen.
-	screen_slice_y = HALF_PROJ_H - (slice_height >> 1);
-	screen_slice_h = (HALF_PROJ_H + (slice_height >> 1)) - screen_slice_y;
+static void draw_wall_slice(struct slice* slice) {
 
 	// Manually copies texture from source to portion of screen.
 	int j;
-	for(j = 0; j < screen_slice_h; ++j) {
+	for(j = 0; j < slice->screen_height; ++j) {
 		// j + screen_slice_y gives us the position to render the current pixel on the screen.
-		if(j + screen_slice_y < 0 || j + screen_slice_y >= 200)
+		if(j + slice->screen_row < 0 || j + slice->screen_row  >= PROJ_H)
 			continue;
 
-		raycast_pixels[(j + screen_slice_y) * PROJ_W + args->screen_col] =
-			get_pixel(map->walls[wall].surf, tex_col, (j << 6) / screen_slice_h);
+		raycast_pixels[(j + slice->screen_row) * PROJ_W + slice->screen_col] =
+			get_pixel(map->walls[slice->wall_tex].surf, slice->tex_col, (j << 6) / slice->screen_height);
+	}
+}
+
+static unsigned int correct_hit_dist_for_fisheye_effect(const int hit_dist, const int correct_angle) {
+	unsigned int correct_dist = (hit_dist * cos128table[correct_angle]) >> 7;
+
+	// Make sure we don't get any issues computing the slice height.
+	if(correct_dist == 0)
+		correct_dist = 1;
+
+	return correct_dist;
+}
+
+static void compute_wall_slice_render_data_from_hit(struct hitinfo* hit, struct slice* slice) {
+	// Height of the slice in the world
+	unsigned int slice_height;
+
+	// Dist to projection * 64 / slice dist.
+	slice_height = (DIST_TO_PROJ << 6) / hit->dist;
+
+	// Define the part of the screen we render to such that it is a single column with the
+	// slice's middle pixel at the center of the screen.
+	slice->screen_row  = HALF_PROJ_H - (slice_height >> 1);
+	slice->screen_height = (HALF_PROJ_H + (slice_height >> 1)) - slice->screen_row;
+
+	slice->wall_tex = hit->wall_type - map->num_floor_ceils;
+	// Use a single column of pixels based on where the ray hit.
+	slice->tex_col = hit->is_horiz ? (hit->hit_pos[0] % UNIT_SIZE) : (hit->hit_pos[1] % UNIT_SIZE);
+}
+
+// TODO: Have struct for player data.
+void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_x, int curr_player_y, int player_rot) {
+	// Stores the precise angle of our current ray.
+	float curr_angle = (float)(player_rot + FOV_HALF);
+	// The curr_angle adjusted to be within 0 and 360.
+	int adj_angle;
+	// The angle used to compute the "corrected" distance so
+	// we avoid the fisheye effect.
+	int correct_angle;
+
+	// Returns info about the hit.
+	struct hitinfo hit;
+	// Data needed to render a wall slice.
+	struct slice wall_slice;
+
+	int i;
+
+	// Update all state variables.
+	player_x = curr_player_x;
+	player_y = curr_player_y;
+	map = curr_map;
+
+	// Begin by clearning the pixel arrays that we copy to.
+	for(i = 0; i < 64000; ++i) {
+		floor_ceiling_pixels[i] = 0;
+		raycast_pixels[i] = 0;
+		thing_pixels[i] = 0;
 	}
 
-	// FLOOR/CEILING CASTING.
-	draw_floor_and_ceiling(screen_slice_y, screen_slice_h, args);
+	//preprocess_things();
+
+	// Now loop through each column of pixels on the screen and do ray casting.
+	for(i = 0; i < PROJ_W; ++i) {
+		adj_angle = get_adjusted_angle((int)curr_angle);
+
+
+		z_buffer[i] = 0;
+		get_ray_hit(adj_angle, &hit);
+		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
+
+			z_buffer[i] = hit.dist;
+
+			// Computes the angle relative to the player rotation.
+			correct_angle = abs(adj_angle - player_rot);
+			hit.dist = correct_hit_dist_for_fisheye_effect(hit.dist, correct_angle);
+
+			// SKY CASTING
+			draw_sky_slice(i, adj_angle);
+
+			// WALL, FLOOR, CEILING CASTING
+
+			//draw_wall_slice(wall_tex, screen_slice_h, screen_slice_y, i, tex_col);
+			compute_wall_slice_render_data_from_hit(&hit, &wall_slice);
+			// TODO: Fix this
+			wall_slice.screen_col = i;
+			draw_wall_slice(&wall_slice);
+			//draw_floor_and_ceiling(screen_slice_y, screen_slice_h, args);
+		}
+
+		curr_angle -= ANGLE_BETWEEN_RAYS;
+	}
+
+	// THING CASTING
+	//draw_things(player_rot);
+
+	// Draw pixel arrays to screen.
+	SDL_UpdateTexture(raycast_texture, NULL, raycast_pixels, PROJ_W << 2);
+	SDL_RenderCopy(renderer, raycast_texture, NULL, NULL);
+
+	SDL_UpdateTexture(floor_ceiling_tex, NULL, floor_ceiling_pixels, PROJ_W << 2);
+	SDL_RenderCopy(renderer, floor_ceiling_tex, NULL, NULL);
+
+	SDL_UpdateTexture(thing_texture, NULL, thing_pixels, PROJ_W << 2);
+	SDL_RenderCopy(renderer, thing_texture, NULL, NULL);
 }
 
 void draw_floor_and_ceiling(int screen_slice_y, int screen_slice_h, struct draw_wall_slice_args* dws) {
@@ -635,77 +741,6 @@ int get_adjusted_angle(int curr_angle) {
 	return adj_angle;
 }
 
-// TODO: Have struct for player data.
-void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_x, int curr_player_y, int player_rot) {
-	// Stores the precise angle of our current ray.
-	float curr_angle = (float)(player_rot + FOV_HALF);
-	// The curr_angle adjusted to be within 0 and 360.
-	int adj_angle;
-	// The angle used to compute the "corrected" distance so
-	// we avoid the fisheye effect.
-	int correct_angle;
-
-	// Returns info about the hit.
-	struct hitinfo hit;
-	// Data needed to render a wall slice.
-	struct draw_wall_slice_args dws;
-
-	int i;
-
-	// Update all state variables.
-	player_x = curr_player_x;
-	player_y = curr_player_y;
-	map = curr_map;
-
-	// Begin by clearning the pixel arrays that we copy to.
-	for(i = 0; i < 64000; ++i) {
-		floor_ceiling_pixels[i] = 0;
-		raycast_pixels[i] = 0;
-		thing_pixels[i] = 0;
-	}
-
-	preprocess_things();
-
-	// Now loop through each column of pixels on the screen and do ray casting.
-	for(i = 0; i < PROJ_W; ++i) {
-		adj_angle = get_adjusted_angle((int)curr_angle);
-
-		// Computes the angle relative to the player rotation.
-		correct_angle = abs(adj_angle - player_rot);
-
-		z_buffer[i] = 0;
-		get_ray_hit(adj_angle, &hit);
-		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
-			// SKY CASTING
-			draw_sky_slice(i, adj_angle);
-
-			z_buffer[i] = hit.dist;
-
-			// WALL, FLOOR, CEILING CASTING
-			dws.hit = &hit;
-			dws.correct_angle = correct_angle;
-			dws.adj_angle = adj_angle;
-			dws.screen_col = i;
-			draw_wall_slice(&dws);
-
-		}
-
-		curr_angle -= ANGLE_BETWEEN_RAYS;
-	}
-
-	// THING CASTING
-	draw_things(player_rot);
-
-	// Draw pixel arrays to screen.
-	SDL_UpdateTexture(raycast_texture, NULL, raycast_pixels, PROJ_W << 2);
-	SDL_RenderCopy(renderer, raycast_texture, NULL, NULL);
-
-	SDL_UpdateTexture(floor_ceiling_tex, NULL, floor_ceiling_pixels, PROJ_W << 2);
-	SDL_RenderCopy(renderer, floor_ceiling_tex, NULL, NULL);
-
-	SDL_UpdateTexture(thing_texture, NULL, thing_pixels, PROJ_W << 2);
-	SDL_RenderCopy(renderer, thing_texture, NULL, NULL);
-}
 
 void sort_things(int s, int e) {
 	if(e <= s)

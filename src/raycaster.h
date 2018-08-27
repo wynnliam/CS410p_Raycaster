@@ -235,7 +235,7 @@ void draw_sky(int screen_col, int adj_angle);
 	ARGUMENTES:
 		args - Please see the draw_wall_slice struct definition above.
 */
-void draw_wall_slice(struct draw_wall_slice_args* args);
+//void draw_wall_slice(struct draw_wall_slice_args* args);
 
 /*
 	Renders the wall and floor for a given column of pixels. This is called by draw_wall_slice.
