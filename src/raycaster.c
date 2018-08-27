@@ -472,7 +472,7 @@ static unsigned int correct_hit_dist_for_fisheye_effect(const int hit_dist, cons
 	return correct_dist;
 }
 
-static void compute_wall_slice_render_data_from_hit(struct hitinfo* hit, struct slice* slice) {
+static void compute_wall_slice_render_data_from_hit_and_screen_col(struct hitinfo* hit, const int screen_col, struct slice* slice) {
 	// Height of the slice in the world
 	unsigned int slice_height;
 
@@ -482,6 +482,7 @@ static void compute_wall_slice_render_data_from_hit(struct hitinfo* hit, struct 
 	// Define the part of the screen we render to such that it is a single column with the
 	// slice's middle pixel at the center of the screen.
 	slice->screen_row  = HALF_PROJ_H - (slice_height >> 1);
+	slice->screen_col = screen_col;
 	slice->screen_height = (HALF_PROJ_H + (slice_height >> 1)) - slice->screen_row;
 
 	slice->wall_tex = hit->wall_type - map->num_floor_ceils;
@@ -518,12 +519,11 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_
 		thing_pixels[i] = 0;
 	}
 
-	//preprocess_things();
+	preprocess_things();
 
 	// Now loop through each column of pixels on the screen and do ray casting.
 	for(i = 0; i < PROJ_W; ++i) {
 		adj_angle = get_adjusted_angle((int)curr_angle);
-
 
 		z_buffer[i] = 0;
 		get_ray_hit(adj_angle, &hit);
@@ -540,10 +540,7 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_
 
 			// WALL, FLOOR, CEILING CASTING
 
-			//draw_wall_slice(wall_tex, screen_slice_h, screen_slice_y, i, tex_col);
-			compute_wall_slice_render_data_from_hit(&hit, &wall_slice);
-			// TODO: Fix this
-			wall_slice.screen_col = i;
+			compute_wall_slice_render_data_from_hit_and_screen_col(&hit, i, &wall_slice);
 			draw_wall_slice(&wall_slice);
 			//draw_floor_and_ceiling(screen_slice_y, screen_slice_h, args);
 		}
@@ -552,7 +549,7 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_
 	}
 
 	// THING CASTING
-	//draw_things(player_rot);
+	draw_things(player_rot);
 
 	// Draw pixel arrays to screen.
 	SDL_UpdateTexture(raycast_texture, NULL, raycast_pixels, PROJ_W << 2);
