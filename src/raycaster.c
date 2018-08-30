@@ -490,6 +490,64 @@ static void compute_wall_slice_render_data_from_hit_and_screen_col(struct hitinf
 	slice->tex_col = hit->is_horiz ? (hit->hit_pos[0] % UNIT_SIZE) : (hit->hit_pos[1] % UNIT_SIZE);
 }
 
+struct floor_ceiling_pixel {
+	unsigned int texture;
+	int screen_row;
+	int screen_col;
+	int world_space_coordinates[2];
+};
+
+int compute_row_for_bottom_of_wall_slice(struct slice* wall_slice) {
+	return wall_slice->screen_row + wall_slice->screen_height;
+}
+
+void project_screen_pixel_to_world_space(const int ray_angle, const int ray_angle_relative_to_player_rot, struct floor_ceiling_pixel* floor_ceil_pixel) {
+	// Compute the distance from the player to the point.
+	int straight_dist = (int)(DIST_TO_PROJ * HALF_UNIT_SIZE / (floor_ceil_pixel->screen_row - HALF_PROJ_H));
+	int dist_to_point = (straight_dist << 7) / (cos128table[ray_angle_relative_to_player_rot]);
+
+	floor_ceil_pixel->world_space_coordinates[0] = player_x + ((dist_to_point * cos128table[ray_angle]) >> 7);
+	floor_ceil_pixel->world_space_coordinates[1] = player_y - ((dist_to_point * sin128table[ray_angle]) >> 7);
+}
+
+void draw_floor_and_ceiling_pixels(struct floor_ceiling_pixel* floor_ceil_pixel) {
+	int texture_x = floor_ceil_pixel->world_space_coordinates[0] % UNIT_SIZE;
+	int texture_y = floor_ceil_pixel->world_space_coordinates[1] % UNIT_SIZE;
+	int floor_screen_pixel = floor_ceil_pixel->screen_row * PROJ_W + floor_ceil_pixel->screen_col;
+	int ceiling_screen_pixel = ((-floor_ceil_pixel->screen_row) + PROJ_H) * PROJ_W + floor_ceil_pixel->screen_col;
+
+	// Put floor pixel.
+	if(map->floor_ceils[floor_ceil_pixel->texture].floor_surf) {
+		floor_ceiling_pixels[floor_screen_pixel] = get_pixel(map->floor_ceils[floor_ceil_pixel->texture].floor_surf, texture_x, texture_y);
+	}
+
+	// Put ceiling pixel.
+	if(map->floor_ceils[floor_ceil_pixel->texture].ceil_surf) {
+		floor_ceiling_pixels[ceiling_screen_pixel] = get_pixel(map->floor_ceils[floor_ceil_pixel->texture].ceil_surf, texture_x, texture_y);
+	}
+}
+
+void draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(struct slice* wall_slice, const int ray_angle, const int ray_angle_relative_to_player_rot) {
+	// Data needed to render a floor (and corresponding ceiling pixel).
+	struct floor_ceiling_pixel floor_ceil_pixel;
+
+	int j;
+	for(j = compute_row_for_bottom_of_wall_slice(wall_slice); j < PROJ_H; ++j) {
+		floor_ceil_pixel.screen_row = j;
+		floor_ceil_pixel.screen_col = wall_slice->screen_col;
+		project_screen_pixel_to_world_space(ray_angle, ray_angle_relative_to_player_rot, &floor_ceil_pixel);
+
+		floor_ceil_pixel.texture  = get_tile(floor_ceil_pixel.world_space_coordinates[0],
+								   			 floor_ceil_pixel.world_space_coordinates[1],
+								   			 map);
+
+		if(floor_ceil_pixel.texture >= map->num_floor_ceils)
+			continue;
+
+		draw_floor_and_ceiling_pixels(&floor_ceil_pixel);
+	}
+}
+
 // TODO: Have struct for player data.
 void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_x, int curr_player_y, int player_rot) {
 	// Stores the precise angle of our current ray.
@@ -543,46 +601,7 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_
 			draw_wall_slice(&wall_slice);
 
 			// FLOOR AND CEILING CASTING
-
-			int straight_dist;
-			int dist_to_point;
-
-			// The floor/ceiling position in "world" space.
-			int p_x, p_y;
-
-			// The floor/ceiling texture type to draw.
-			unsigned int floor_ceil_type;
-
-			// screen_slice_h + screen_slice_y == bottom of the wall slice.
-			int j = 0;
-			for(j = wall_slice.screen_row + wall_slice.screen_height; j < PROJ_H; ++j) {
-				// Compute the distance from the player to the point.
-				straight_dist = (int)(DIST_TO_PROJ * HALF_UNIT_SIZE / (j - HALF_PROJ_H));
-				dist_to_point = (straight_dist << 7) / (cos128table[correct_angle]);
-
-				// Use adjusted so it gives us the direction of the "true" ray angle.
-				p_x = player_x + ((dist_to_point * cos128table[adj_angle]) >> 7);
-				p_y = player_y - ((dist_to_point * sin128table[adj_angle]) >> 7);
-
-				floor_ceil_type = get_tile(p_x, p_y, map);
-
-				if(floor_ceil_type >= map->num_floor_ceils)
-					continue;
-
-				// Put floor pixel.
-				//printf("%d\n", floor_ceil);
-				if(map->floor_ceils[floor_ceil_type].floor_surf) {
-					floor_ceiling_pixels[j * PROJ_W + wall_slice.screen_col] = get_pixel(map->floor_ceils[floor_ceil_type].floor_surf,
-																			  p_x % UNIT_SIZE, p_y % UNIT_SIZE);
-				}
-
-				// Put ceiling pixel.
-				if(map->floor_ceils[floor_ceil_type].ceil_surf) {
-					floor_ceiling_pixels[(-j + PROJ_H) * PROJ_W + wall_slice.screen_col] = get_pixel(map->floor_ceils[floor_ceil_type].ceil_surf,
-																						  p_x % UNIT_SIZE, p_y % UNIT_SIZE);
-				}
-			}
-
+			draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(&wall_slice, adj_angle, correct_angle);
 		}
 
 		curr_angle -= ANGLE_BETWEEN_RAYS;
