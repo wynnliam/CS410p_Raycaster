@@ -10,6 +10,7 @@
 
 // RAYCASTER STATE VARIABLES
 static int player_x, player_y;
+static int player_rot;
 static struct mapdef* map;
 
 static int is_tan_undefined_for_angle(const int deg) {
@@ -407,34 +408,6 @@ void draw_sky_slice(const int screen_col, const int adj_angle) {
 		raycast_pixels[j * PROJ_W + screen_col] = get_pixel(map->sky_surf, adj_angle_to_pixel_col, j);
 }
 
-
-/*struct hitinfo {
-	// Where we hit.
-	int hit_pos[2];
-	// The squared distance.
-	int dist;
-	// The wall texture.
-	int wall_type;
-	// If true, the intersection was along a horizontal grid.
-	// Otherwise, it was vertical.
-	int is_horiz;
-	// Used when correcting for 'fisheye' lens.
-	int quadrant;
-};*/
-
-/*struct draw_wall_slice_args {
-	// Data for ray hitting wall slice.
-	struct hitinfo* hit;
-	// Used to compute the "correct" distance from the
-	// player to the wall slice so as to avoid the "fish-eye"
-	// effect.
-	int correct_angle;
-	// The angle of the ray adjusted to be from 0 to 360.
-	int adj_angle;
-	// Where we render the wall slice on the screen.
-	int screen_col;
-};*/
-
 struct slice {
 	// The row of pixels on the screen we want to render from (top-most row going down).
 	int screen_row;
@@ -549,7 +522,7 @@ void draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(struct slice* wall
 }
 
 // TODO: Have struct for player data.
-void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_x, int curr_player_y, int player_rot) {
+void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_x, int curr_player_y, int curr_player_rot) {
 	// Stores the precise angle of our current ray.
 	float curr_angle = (float)(player_rot + FOV_HALF);
 	// The curr_angle adjusted to be within 0 and 360.
@@ -568,6 +541,7 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_
 	// Update all state variables.
 	player_x = curr_player_x;
 	player_y = curr_player_y;
+	player_rot = curr_player_rot;
 	map = curr_map;
 
 	// Begin by clearning the pixel arrays that we copy to.
@@ -608,7 +582,7 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_
 	}
 
 	// THING CASTING
-	draw_things(player_rot);
+	draw_things();
 
 	// Draw pixel arrays to screen.
 	SDL_UpdateTexture(raycast_texture, NULL, raycast_pixels, PROJ_W << 2);
@@ -621,28 +595,72 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_
 	SDL_RenderCopy(renderer, thing_texture, NULL, NULL);
 }
 
-void draw_things(int player_rot) {
+void project_thing_pos_onto_screen(const int thing_pos[2], int screen_pos[2]) {
+	int x_diff, y_diff;
+	int theta_temp;
+
+	x_diff = thing_pos[0] - player_x;
+	y_diff = thing_pos[1] - player_y;
+
+	theta_temp = (int)(atan2(-y_diff, x_diff) * RAD_TO_DEG);
+
+	// Make sure the angle is between 0 and 360.
+	if(theta_temp < 0)
+		theta_temp += 360;
+
+	screen_pos[1] = player_rot + FOV_HALF - theta_temp;
+
+	if(theta_temp > 270 && player_rot < 90)
+		screen_pos[1] = player_rot + FOV_HALF - theta_temp + 360;
+	if(player_rot > 270 && theta_temp < 90)
+		screen_pos[1] = player_rot + FOV_HALF - theta_temp - 360;
+
+	screen_pos[0] = screen_pos[1] * PROJ_W / FOV;
+}
+
+void compute_thing_dimensions_on_screen(const int thing_sorted_index, const int screen_pos[2], SDL_Rect* thing_screen_rect) {
+	thing_screen_rect->w = (int)(UNIT_SIZE / sqrt(things_sorted[thing_sorted_index]->dist) * DIST_TO_PROJ);
+	thing_screen_rect->h = thing_screen_rect->w;
+	thing_screen_rect->y = HALF_PROJ_H - (thing_screen_rect->h >> 1);
+	thing_screen_rect->x = screen_pos[0] - (thing_screen_rect->w >> 1);
+}
+
+void compute_frame_offset(const int thing_sorted_index, int frame_offset[2]) {
+	unsigned int curr_anim = things_sorted[thing_sorted_index]->curr_anim;
+	// Take starting position and multiply by 64 to go from unit coordinates to pixel coordinates.
+	// This puts us in the correct position for the animation as a whole.
+	frame_offset[0] = (int)(things_sorted[thing_sorted_index]->anims[curr_anim].start_x) << 6;
+	frame_offset[1] = (int)(things_sorted[thing_sorted_index]->anims[curr_anim].start_y) << 6;
+	// Add the current frame to the offset so that we have the correct frame.
+	// Note that since animations progress only horizontally, we don't need to
+	// do anything to the y part of the offset.
+	frame_offset[0] += things_sorted[thing_sorted_index]->anims[curr_anim].curr_frame << 6;
+}
+
+int column_in_bounds_of_screen(const int col) {
+	return col >= 0 && col < PROJ_W;
+}
+
+int thing_not_obscured_by_wall_slice(int thing_sorted_index, int slice_column) {
+	return sqrt(things_sorted[thing_sorted_index]->dist) - 1 < z_buffer[slice_column];
+}
+
+void draw_things() {
 	// The texture point.
 	int t_x, t_y;
 	// RGB value of the sprite texture.
 	unsigned int t_color;
 
-	int x_diff, y_diff;
-
-	// Used to find the sprite position on the screen.
-	int theta_temp;
 	// The position of the sprite on the screen.
-	int scr_x, scr_y;
+	int screen_pos[2];
 
 	// Defines the sprite's screen dimensions and position.
 	SDL_Rect thing_rect;
 	// Defines the column of pixels of the sprite we want.
 	SDL_Rect thing_src_rect;
 
-	// For handling animations.
-	unsigned int curr_anim;
 	// How much we add to t_x, t_y to get the correct animation frame.
-	int frame_offset_x, frame_offset_y;
+	int frame_offset[2];
 
 	int i, j, k, m;
 
@@ -650,66 +668,31 @@ void draw_things(int player_rot) {
 		if(things_sorted[i]->type == 0)
 			continue;
 
-		x_diff = things_sorted[i]->position[0] - player_x;
-		y_diff = things_sorted[i]->position[1] - player_y;
-
-		theta_temp = (int)(atan2(-y_diff, x_diff) * RAD_TO_DEG);
-
-		// Make sure the angle is between 0 and 360.
-		if(theta_temp < 0)
-			theta_temp += 360;
-
-		scr_y = player_rot + FOV_HALF - theta_temp;
-
-
-		if(theta_temp > 270 && player_rot < 90)
-			scr_y = player_rot + FOV_HALF - theta_temp + 360;
-		if(player_rot > 270 && theta_temp < 90)
-			scr_y = player_rot + FOV_HALF - theta_temp - 360;
-
-		scr_x = scr_y * PROJ_W / FOV;
-
-		thing_rect.w = (int)(UNIT_SIZE / sqrt(things_sorted[i]->dist) * DIST_TO_PROJ);
-		thing_rect.h = thing_rect.w;
-		thing_rect.y = HALF_PROJ_H - (thing_rect.h >> 1);
-		thing_rect.x = scr_x - (thing_rect.w >> 1);
+		project_thing_pos_onto_screen(things_sorted[i]->position, screen_pos);
+		compute_thing_dimensions_on_screen(i, screen_pos, &thing_rect);
+		compute_frame_offset(i, frame_offset);
 
 		// The column for the scaled texture.
 		m = 0;
 
-		curr_anim = things_sorted[i]->curr_anim;
-		// Take starting position and multiply by 64 to go from unit coordinates to pixel coordinates.
-		// This puts us in the correct position for the animation as a whole.
-		frame_offset_x = (int)(things_sorted[i]->anims[curr_anim].start_x) << 6;
-		frame_offset_y = (int)(things_sorted[i]->anims[curr_anim].start_y) << 6;
-		// Add the current frame to the offset so that we have the correct frame.
-		// Note that since animations progress only horizontally, we don't need to
-		// do anything to the y part of the offset.
-		frame_offset_x += things_sorted[i]->anims[curr_anim].curr_frame << 6;
-
 		for(j = thing_rect.x; j < thing_rect.x + thing_rect.w; ++j) {
-			if(j >= 0 && j < PROJ_W) {
-				// Render the current slice of sprite only if infront of wall.
-				if(sqrt(things_sorted[i]->dist) - 1 < z_buffer[j]) {
-					thing_src_rect.x = (m << 6) / thing_rect.w;
-					thing_src_rect.y = 0;
-					thing_src_rect.w = 1;
-					thing_src_rect.h = UNIT_SIZE;
+			if(column_in_bounds_of_screen(j) && thing_not_obscured_by_wall_slice(i, j)) {
+				thing_src_rect.x = (m << 6) / thing_rect.w;
+				thing_src_rect.y = 0;
+				thing_src_rect.w = 1;
+				thing_src_rect.h = UNIT_SIZE;
 
-					// Render the column of sprites.
-					//SDL_RenderCopy(renderer, things_sorted[i]->texture, &thing_src_rect, &thing_dest_rect);
-					for(k = 0; k < thing_rect.h; ++k) {
-						if(k + thing_rect.y < 0 || k + thing_rect.y >= 200)
-							continue;
+				// Render the column of sprites.
+				for(k = 0; k < thing_rect.h; ++k) {
+					if(k + thing_rect.y < 0 || k + thing_rect.y >= 200)
+						continue;
 
-						t_x = thing_src_rect.x;
-						t_y = (k << 6) / thing_rect.h;
-						//t_color = (unsigned char*)(things_sorted[i]->surf->pixels + t_y * things_sorted[i]->surf->pitch + t_x * 4);
-						t_color = get_pixel(things_sorted[i]->surf, t_x + frame_offset_x, t_y + frame_offset_y);
-						// Only put a pixel if it is not transparent.
-						if(((unsigned char*)(&t_color))[3] > 0)
-							thing_pixels[(k + thing_rect.y) * PROJ_W + j] = t_color;
-					}
+					t_x = thing_src_rect.x;
+					t_y = (k << 6) / thing_rect.h;
+					t_color = get_pixel(things_sorted[i]->surf, t_x + frame_offset[0], t_y + frame_offset[1]);
+					// Only put a pixel if it is not transparent.
+					if(((unsigned char*)(&t_color))[3] > 0)
+						thing_pixels[(k + thing_rect.y) * PROJ_W + j] = t_color;
 				}
 			}
 

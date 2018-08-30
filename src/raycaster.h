@@ -253,11 +253,8 @@ void draw_floor_and_ceiling(int screen_slice_y, int screen_slice_h, struct draw_
 	we render each thing column by column. We only render the ones we can see. That is, only render
 	the columns of sprites where the corresponding value in the z-buffer is larger (this implies the
 	wall slice of a given column is further away).
-
-	ARGUMENTS:
-		player_rot - the rotation of the player in degrees.
 */
-void draw_things(int player_rot);
+void draw_things();
 
 /*
 	Grabs the pixel of a surface at point (x, y). If the point is within the dimensions
