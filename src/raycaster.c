@@ -521,70 +521,61 @@ void draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(struct slice* wall
 	}
 }
 
-// TODO: Have struct for player data.
-void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_x, int curr_player_y, int curr_player_rot) {
-	// Stores the precise angle of our current ray.
-	float curr_angle = (float)(player_rot + FOV_HALF);
+void update_state_variables(struct mapdef* curr_map, const int curr_player_x, const int curr_player_y, const int curr_player_rot) {
+	player_x = curr_player_x;
+	player_y = curr_player_y;
+	player_rot = curr_player_rot;
+	map = curr_map;
+}
+
+void clean_pixel_arrays() {
+	int i;
+	for(i = 0; i < PROJ_W * PROJ_H; ++i) {
+		floor_ceiling_pixels[i] = 0;
+		raycast_pixels[i] = 0;
+		thing_pixels[i] = 0;
+	}
+}
+
+int ray_hit_wall(struct hitinfo* hit) {
+	return hit->hit_pos[0] != -1 && hit->hit_pos[1] != -1;
+}
+
+void cast_single_ray(const int screen_col, const float curr_angle) {
 	// The curr_angle adjusted to be within 0 and 360.
 	int adj_angle;
 	// The angle used to compute the "corrected" distance so
 	// we avoid the fisheye effect.
 	int correct_angle;
 
-	// Returns info about the hit.
 	struct hitinfo hit;
 	// Data needed to render a wall slice.
 	struct slice wall_slice;
 
-	int i;
+	adj_angle = get_adjusted_angle((int)curr_angle);
 
-	// Update all state variables.
-	player_x = curr_player_x;
-	player_y = curr_player_y;
-	player_rot = curr_player_rot;
-	map = curr_map;
+	z_buffer[screen_col] = 0;
+	get_ray_hit(adj_angle, &hit);
+	if(ray_hit_wall(&hit)) {
+		z_buffer[screen_col] = hit.dist;
 
-	// Begin by clearning the pixel arrays that we copy to.
-	for(i = 0; i < 64000; ++i) {
-		floor_ceiling_pixels[i] = 0;
-		raycast_pixels[i] = 0;
-		thing_pixels[i] = 0;
+		// Computes the angle relative to the player rotation.
+		correct_angle = abs(adj_angle - player_rot);
+		hit.dist = correct_hit_dist_for_fisheye_effect(hit.dist, correct_angle);
+
+		// SKY CASTING
+		draw_sky_slice(screen_col, adj_angle);
+
+		// WALL CASTING
+		compute_wall_slice_render_data_from_hit_and_screen_col(&hit, screen_col, &wall_slice);
+		draw_wall_slice(&wall_slice);
+
+		// FLOOR AND CEILING CASTING
+		draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(&wall_slice, adj_angle, correct_angle);
 	}
+}
 
-	preprocess_things();
-
-	// Now loop through each column of pixels on the screen and do ray casting.
-	for(i = 0; i < PROJ_W; ++i) {
-		adj_angle = get_adjusted_angle((int)curr_angle);
-
-		z_buffer[i] = 0;
-		get_ray_hit(adj_angle, &hit);
-		if(hit.hit_pos[0] != -1 && hit.hit_pos[1] != -1) {
-
-			z_buffer[i] = hit.dist;
-
-			// Computes the angle relative to the player rotation.
-			correct_angle = abs(adj_angle - player_rot);
-			hit.dist = correct_hit_dist_for_fisheye_effect(hit.dist, correct_angle);
-
-			// SKY CASTING
-			draw_sky_slice(i, adj_angle);
-
-			// WALL CASTING
-			compute_wall_slice_render_data_from_hit_and_screen_col(&hit, i, &wall_slice);
-			draw_wall_slice(&wall_slice);
-
-			// FLOOR AND CEILING CASTING
-			draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(&wall_slice, adj_angle, correct_angle);
-		}
-
-		curr_angle -= ANGLE_BETWEEN_RAYS;
-	}
-
-	// THING CASTING
-	draw_things();
-
-	// Draw pixel arrays to screen.
+void render_pixel_arrays_to_screen(SDL_Renderer* renderer) {
 	SDL_UpdateTexture(raycast_texture, NULL, raycast_pixels, PROJ_W << 2);
 	SDL_RenderCopy(renderer, raycast_texture, NULL, NULL);
 
@@ -593,6 +584,27 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_
 
 	SDL_UpdateTexture(thing_texture, NULL, thing_pixels, PROJ_W << 2);
 	SDL_RenderCopy(renderer, thing_texture, NULL, NULL);
+}
+
+void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_x, int curr_player_y, int curr_player_rot) {
+	// Stores the precise angle of our current ray.
+	float curr_angle = (float)(player_rot + FOV_HALF);
+
+	update_state_variables(curr_map, curr_player_x, curr_player_y, curr_player_rot);
+
+	clean_pixel_arrays();
+	preprocess_things();
+
+	int i;
+	for(i = 0; i < PROJ_W; ++i) {
+		cast_single_ray(i, curr_angle);
+		curr_angle -= ANGLE_BETWEEN_RAYS;
+	}
+
+	// THING CASTING
+	draw_things();
+
+	render_pixel_arrays_to_screen(renderer);
 }
 
 void project_thing_pos_onto_screen(const int thing_pos[2], int screen_pos[2]) {
