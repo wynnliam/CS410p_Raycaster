@@ -645,25 +645,72 @@ int thing_not_obscured_by_wall_slice(int thing_sorted_index, int slice_column) {
 	return sqrt(things_sorted[thing_sorted_index]->dist) - 1 < z_buffer[slice_column];
 }
 
-void draw_things() {
+void compute_column_of_thing_texture(const int scaled_column, const SDL_Rect* rect_to_render, SDL_Rect* thing_src_rect) {
+	thing_src_rect->x = (scaled_column << 6) / rect_to_render->w;
+	thing_src_rect->y = 0;
+	thing_src_rect->w = 1;
+	thing_src_rect->h = UNIT_SIZE;
+}
+
+int thing_pixel_row_out_of_screen_bounds(const int pixel) {
+	return pixel < 0 || pixel >= PROJ_H;
+}
+
+int thing_pixel_is_not_transparent(const unsigned int t_color) {
+	return ((unsigned char*)&t_color)[3] > 0;
+}
+
+//thing_rect, thing_src_rect
+void draw_column_of_thing_texture(const int thing_sorted_index, const SDL_Rect* dest, const SDL_Rect* src, const int frame_offset[2], const int col) {
 	// The texture point.
 	int t_x, t_y;
 	// RGB value of the sprite texture.
 	unsigned int t_color;
 
+	int screen_row;
+
+	int k;
+	for(k = 0; k < dest->h; ++k) {
+		screen_row = k + dest->y;
+		if(thing_pixel_row_out_of_screen_bounds(screen_row))
+			continue;
+
+		t_x = (src->x) + frame_offset[0];
+		t_y = ((k << 6) / dest->h) + frame_offset[1];
+		t_color = get_pixel(things_sorted[thing_sorted_index]->surf, t_x, t_y);
+		// Only put a pixel if it is not transparent.
+		if(thing_pixel_is_not_transparent(t_color))
+			thing_pixels[(screen_row) * PROJ_W + col] = t_color;
+	}
+}
+
+void draw_columns_of_thing(const int thing_sorted_index, const SDL_Rect* dest, const int frame_offset[2]) {
+	// Defines the column of pixels of the sprite we want.
+	SDL_Rect src_tex_col;
+	
+	// The column for the scaled texture.
+	int m = 0;
+
+	int j;
+	for(j = dest->x; j < dest->x + dest->w; ++j) {
+		if(column_in_bounds_of_screen(j) && thing_not_obscured_by_wall_slice(thing_sorted_index, j)) {
+			compute_column_of_thing_texture(m, dest, &src_tex_col);
+			draw_column_of_thing_texture(thing_sorted_index, dest, &src_tex_col, frame_offset, j);
+		}
+		++m;
+	}
+}
+
+void draw_things() {
 	// The position of the sprite on the screen.
 	int screen_pos[2];
 
 	// Defines the sprite's screen dimensions and position.
 	SDL_Rect thing_rect;
-	// Defines the column of pixels of the sprite we want.
-	SDL_Rect thing_src_rect;
-
 	// How much we add to t_x, t_y to get the correct animation frame.
 	int frame_offset[2];
 
-	int i, j, k, m;
-
+	int i;
 	for(i = 0; i < map->num_things; ++i) {
 		if(things_sorted[i]->type == 0)
 			continue;
@@ -671,33 +718,8 @@ void draw_things() {
 		project_thing_pos_onto_screen(things_sorted[i]->position, screen_pos);
 		compute_thing_dimensions_on_screen(i, screen_pos, &thing_rect);
 		compute_frame_offset(i, frame_offset);
+		draw_columns_of_thing(i, &thing_rect, frame_offset);
 
-		// The column for the scaled texture.
-		m = 0;
-
-		for(j = thing_rect.x; j < thing_rect.x + thing_rect.w; ++j) {
-			if(column_in_bounds_of_screen(j) && thing_not_obscured_by_wall_slice(i, j)) {
-				thing_src_rect.x = (m << 6) / thing_rect.w;
-				thing_src_rect.y = 0;
-				thing_src_rect.w = 1;
-				thing_src_rect.h = UNIT_SIZE;
-
-				// Render the column of sprites.
-				for(k = 0; k < thing_rect.h; ++k) {
-					if(k + thing_rect.y < 0 || k + thing_rect.y >= 200)
-						continue;
-
-					t_x = thing_src_rect.x;
-					t_y = (k << 6) / thing_rect.h;
-					t_color = get_pixel(things_sorted[i]->surf, t_x + frame_offset[0], t_y + frame_offset[1]);
-					// Only put a pixel if it is not transparent.
-					if(((unsigned char*)(&t_color))[3] > 0)
-						thing_pixels[(k + thing_rect.y) * PROJ_W + j] = t_color;
-				}
-			}
-
-			++m;
-		}
 	}
 }
 
