@@ -672,8 +672,16 @@ int thing_pixel_is_not_transparent(const unsigned int t_color) {
 	return ((unsigned char*)&t_color)[3] > 0;
 }
 
+struct thing_column_render_data {
+	int thing_sorted_index;
+	int screen_column;
+	SDL_Rect* src;
+	const SDL_Rect* dest;
+	const int* frame_offset;
+};
+
 //thing_rect, thing_src_rect
-void draw_column_of_thing_texture(const int thing_sorted_index, const SDL_Rect* dest, const SDL_Rect* src, const int frame_offset[2], const int col) {
+void draw_column_of_thing_texture(struct thing_column_render_data* thing_column_data) {
 	// The texture point.
 	int t_x, t_y;
 	// RGB value of the sprite texture.
@@ -682,21 +690,22 @@ void draw_column_of_thing_texture(const int thing_sorted_index, const SDL_Rect* 
 	int screen_row;
 
 	int k;
-	for(k = 0; k < dest->h; ++k) {
-		screen_row = k + dest->y;
+	for(k = 0; k < thing_column_data->dest->h; ++k) {
+		screen_row = k + thing_column_data->dest->y;
 		if(thing_pixel_row_out_of_screen_bounds(screen_row))
 			continue;
 
-		t_x = (src->x) + frame_offset[0];
-		t_y = ((k << 6) / dest->h) + frame_offset[1];
-		t_color = get_pixel(things_sorted[thing_sorted_index]->surf, t_x, t_y);
+		t_x = (thing_column_data->src->x) + thing_column_data->frame_offset[0];
+		t_y = ((k << 6) / thing_column_data->dest->h) + thing_column_data->frame_offset[1];
+		t_color = get_pixel(things_sorted[thing_column_data->thing_sorted_index]->surf, t_x, t_y);
 		// Only put a pixel if it is not transparent.
 		if(thing_pixel_is_not_transparent(t_color))
-			thing_pixels[(screen_row) * PROJ_W + col] = t_color;
+			thing_pixels[(screen_row) * PROJ_W + thing_column_data->screen_column] = t_color;
 	}
 }
 
 void draw_columns_of_thing(const int thing_sorted_index, const SDL_Rect* dest, const int frame_offset[2]) {
+	struct thing_column_render_data thing_column;
 	// Defines the column of pixels of the sprite we want.
 	SDL_Rect src_tex_col;
 	
@@ -707,7 +716,15 @@ void draw_columns_of_thing(const int thing_sorted_index, const SDL_Rect* dest, c
 	for(j = dest->x; j < dest->x + dest->w; ++j) {
 		if(column_in_bounds_of_screen(j) && thing_not_obscured_by_wall_slice(thing_sorted_index, j)) {
 			compute_column_of_thing_texture(m, dest, &src_tex_col);
-			draw_column_of_thing_texture(thing_sorted_index, dest, &src_tex_col, frame_offset, j);
+
+			thing_column.thing_sorted_index = thing_sorted_index;
+			thing_column.screen_column = j;
+			thing_column.src = &src_tex_col;
+			thing_column.dest = dest;
+			thing_column.frame_offset = frame_offset;
+
+			//draw_column_of_thing_texture(thing_sorted_index, dest, &src_tex_col, frame_offset, j);
+			draw_column_of_thing_texture(&thing_column);
 		}
 		++m;
 	}
