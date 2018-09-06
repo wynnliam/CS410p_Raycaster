@@ -7,47 +7,102 @@
 #include <math.h>
 
 // TODO: Remove constants.
+// TODO: Renaming
+// TODO: Structs
+// TODO: Inline functions
+// TODO: Global variables.
 
 // RAYCASTER STATE VARIABLES
 static int player_x, player_y;
 static int player_rot;
 static struct mapdef* map;
 
+struct thing_column_render_data {
+	int thing_sorted_index;
+	int screen_column;
+	SDL_Rect* src;
+	const SDL_Rect* dest;
+	const int* frame_offset;
+};
+
+static void update_state_variables(struct mapdef*, const int, const int, const int);
+
+static void clean_pixel_arrays();
+
+static void preprocess_things();
+static void compute_distance_to_player_for_each_thing();
+static void sort_things(int, int);
+static int partition(int, int);
+
+static void cast_single_ray(const int, const float);
+static int get_adjusted_angle(int);
+
+static void get_ray_hit(int, struct hitinfo*);
+static void choose_ray_horizontal_or_vertical_hit_pos(int[2], int[2], struct hitinfo*);
+static int both_ray_horizontal_and_vertical_hit_pos_invalid(int[2], int[2]);
+static int ray_hit_pos_is_invalid(int[2]);
+static void set_hit(struct hitinfo*, int[2], const int);
+static void choose_ray_pos_according_to_shortest_dist(struct hitinfo*, int[2], int[2]);
+
+static int ray_hit_wall(struct hitinfo*);
+
+static int compute_initial_ray_pos(const int, int[2], int[2]);
+static void compute_initial_ray_pos_when_angle_in_quad_1(const int, int[2], int[2]);
+static void compute_initial_ray_pos_when_angle_in_quad_2(const int, int[2], int[2]);
+static void compute_initial_ray_pos_when_angle_in_quad_3(const int, int[2], int[2]);
+static void compute_initial_ray_pos_when_angle_in_quad_4(const int, int[2], int[2]);
+static void compute_ray_delta_vectors(const int, int[2], int [2]);
+static void compute_ray_hit_position(int[2], int[2], int[2]);
+static int tile_is_floor_ceil(const int);
+static void move_ray_pos(int[2], int[2]);
+
+static void draw_things();
+static void project_thing_pos_onto_screen(const int[2], int[2]);
+static void compute_thing_dimensions_on_screen(const int, const int[2], SDL_Rect*);
+static void compute_frame_offset(const int, int[2]);
+static void draw_columns_of_thing(const int, const SDL_Rect*, const int[2]);
+static int column_in_bounds_of_screen(const int);
+static int thing_not_obscured_by_wall_slice(int, int);
+static void compute_column_of_thing_texture(const int, const SDL_Rect*, SDL_Rect*);
+static void draw_column_of_thing_texture(struct thing_column_render_data*);
+static int thing_pixel_row_out_of_screen_bounds(const int);
+static int thing_pixel_is_not_transparent(const unsigned int);
+
 static int is_tan_undefined_for_angle(const int deg) {
 	return deg == 0 || deg == 90 || deg == 180 || deg == 270 || deg == 360;
 }
 
-int is_angle_in_quadrant_1(const int deg) {
+static int is_angle_in_quadrant_1(const int deg) {
 	return 1 <= deg && deg <= 89;
 }
 
-int is_angle_in_quadrant_2(const int deg) {
+static int is_angle_in_quadrant_2(const int deg) {
 	return 91 <= deg && deg <= 179;
 }
 
-int is_angle_in_quadrant_3(const int deg) {
+static int is_angle_in_quadrant_3(const int deg) {
 	return 181 <= deg && deg <= 269;
 }
 
-int is_angle_in_quadrant_4(const int deg) {
+static int is_angle_in_quadrant_4(const int deg) {
 	return 271 <= deg && deg <= 359;
 }
 
-void compute_tan_lookup_val_for_angle(const int deg) {
+static void compute_tan_lookup_val_for_angle(const int deg) {
 	if(is_tan_undefined_for_angle(deg))
 		tan128table[deg] = -1;
 	else
 		tan128table[deg] = (int)round(tan(deg * M_PI / 180.0f) * 128);
 }
 
-void compute_inverse_tan_lookup_val_for_angle(const int deg) {
+static void compute_inverse_tan_lookup_val_for_angle(const int deg) {
 	if(is_tan_undefined_for_angle(deg))
 		tan1table[deg] = -1;
 	else
 		tan1table[deg] = (int)round(128.0 / tan(deg * M_PI / 180.0f));
 }
 
-void compute_delta_lookup_vals_quadrant_1(const int deg) {
+static void compute_delta_lookup_vals_quadrant_1(const int deg) {
 	// 64 / tan(ray_angle). We must account for the 128.
 	delta_h_x[deg] = (1 << 13) / tan128table[deg];
 	delta_h_y[deg]= -UNIT_SIZE;
@@ -57,7 +112,7 @@ void compute_delta_lookup_vals_quadrant_1(const int deg) {
 	delta_v_y[deg] = -((tan128table[deg] << UNIT_POWER) >> 7);
 }
 
-void compute_delta_lookup_vals_quadrant_2(const int deg) {
+static void compute_delta_lookup_vals_quadrant_2(const int deg) {
 	// -64, since we are travelling in the negative y direction.
 	delta_h_y[deg] = -UNIT_SIZE;
 	// Computes -64 / tan(deg). Negative since we're
@@ -68,7 +123,7 @@ void compute_delta_lookup_vals_quadrant_2(const int deg) {
 	delta_v_y[deg] = -((1 << 13) / tan128table[deg - 90]);
 }
 
-void compute_delta_lookup_vals_quadrant_3(const int deg) {
+static void compute_delta_lookup_vals_quadrant_3(const int deg) {
 	delta_h_y[deg] = UNIT_SIZE;
 	delta_h_x[deg]  = -(1 << 13) / tan128table[deg - 180];
 
@@ -77,7 +132,7 @@ void compute_delta_lookup_vals_quadrant_3(const int deg) {
 	delta_v_y[deg]  = (UNIT_SIZE * tan128table[deg - 180]) >> 7;
 }
 
-void compute_delta_lookup_vals_quadrant_4(const int deg) {
+static void compute_delta_lookup_vals_quadrant_4(const int deg) {
 	delta_h_y[deg] = UNIT_SIZE;
 	// Computes 64 * tan(ray_angle)
 	delta_h_x[deg] = (UNIT_SIZE * tan128table[deg - 270]) >> 7;
@@ -87,7 +142,7 @@ void compute_delta_lookup_vals_quadrant_4(const int deg) {
 	delta_v_y[deg] = (1 << 13) / tan128table[deg - 270];
 }
 
-void compute_delta_lookup_vals_for_angle(const int deg) {
+static void compute_delta_lookup_vals_for_angle(const int deg) {
 	if(is_tan_undefined_for_angle(deg)) {
 		delta_h_x[deg] = 0;
 		delta_h_y[deg] = 0;
@@ -106,7 +161,7 @@ void compute_delta_lookup_vals_for_angle(const int deg) {
 	}
 }
 
-void compute_lookup_vals_for_angle(const int deg) {
+static void compute_lookup_vals_for_angle(const int deg) {
 	// Stores the angle in radians.
 	float curr_angle;
 
@@ -161,196 +216,9 @@ int get_dist_sqrd(int x1, int y1, int x2, int y2) {
 	return d_x + d_y;
 }
 
-static void compute_initial_ray_pos_when_angle_in_quad_1(const int ray_angle, int curr_h[2], int curr_v[2]) {
-	int alpha = ray_angle;
-
-	// Divide player_y by 64, floor that, multiply by 64, and then subtract 1.
-	curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
-	// Multiply player_y and curr_h[1] by 128, then divide by the tan * 128. This will
-	// undo the the 128 multiplication without having a divide by 0 (For example, tan128table[1]).
-	curr_h[0] = (((player_y - curr_h[1]) * tan1table[alpha]) >> 7) + player_x;
-
-	// Divide player_x by 64, floor the result, multiply by 64 and add 64.
-	curr_v[0]= ((player_x >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
-	// Get the tan(curr_v[0] - player_x) and subtract that from player_y.
-	curr_v[1]= player_y - (((curr_v[0]- player_x) * tan128table[alpha]) >> 7);
-}
-
-static void compute_initial_ray_pos_when_angle_in_quad_2(const int ray_angle, int curr_h[2], int curr_v[2]) {
-	// Adjusts the angle so its between 1 and 89.
-	int alpha = ray_angle - 90;
-	// Compute floor(player_y / 64) * 64 - 1.
-	curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
-	// Computes player_x - (player_y * curr_h[1]) * tan(ray_angle).
-	curr_h[0] = player_x - ((tan128table[alpha] * (player_y - curr_h[1])) >> 7);
-
-	// Compute floor(player_x / 64) * 64 - 1.
-	curr_v[0] = ((player_x >> UNIT_POWER) << UNIT_POWER) - 1;
-	// Compute player_y - (player_x - curr_v[0]) / tan(ray_angle).
-	curr_v[1] = player_y - (((player_x - curr_v[0]) * tan1table[alpha]) >> 7);
-}
-
-static void compute_initial_ray_pos_when_angle_in_quad_3(const int ray_angle, int curr_h[2], int curr_v[2]) {
-	// Adjusts the angle so its between 1 and 89.
-	int alpha = ray_angle - 180;
-
-	// Computes floor(player_y / 64) * 64 + 64.
-	curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
-	// Computes player_x - (curr_h[1] - player_y / tan(ray_angle).
-	curr_h[0] = player_x - (((curr_h[1]- player_y) * tan1table[alpha]) >> 7);
-
-	// Computes floor(player x / 64) * 64 - 1.
-	curr_v[0] = ((player_x >> UNIT_POWER) << UNIT_POWER) - 1;
-	// Computes tan(ray_angle) * (player_x - curr_v[0]) + player_y.
-	curr_v[1] = ((tan128table[alpha] * (player_x  - curr_v[0])) >> 7) + player_y;
-}
-
-static void compute_initial_ray_pos_when_angle_in_quad_4(const int ray_angle, int curr_h[2], int curr_v[2]) {
-	// Adjusts the angle so its between 1 and 89.
-	int alpha = ray_angle - 270;
-
-	// Computes floor(player_y / 64) * 64 + 64
-	curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
-	// Computes (curr_h[1] - player_y) * tan(ray_angle) + player_x
-	curr_h[0] = (((curr_h[1] - player_y) * tan128table[alpha]) >> 7) + player_x;
-
-	// Computes floor(player_x / 64) * 64 + 64
-	curr_v[0] = ((player_x >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
-	// Computes (curr_v[0] - player_x) / tan(ray_angle) + player_y.
-	curr_v[1] = (((curr_v[0] - player_x) * tan1table[alpha]) >> 7) + player_y;
-}
-
-static int compute_initial_ray_pos(const int ray_angle, int curr_h[2], int curr_v[2]) {
-	if(is_tan_undefined_for_angle(ray_angle))
-		return 0;
-
-	int alpha;
-
-	if(is_angle_in_quadrant_1(ray_angle)) {
-		compute_initial_ray_pos_when_angle_in_quad_1(ray_angle, curr_h, curr_v);
-	} else if(is_angle_in_quadrant_2(ray_angle)) {
-		compute_initial_ray_pos_when_angle_in_quad_2(ray_angle, curr_h, curr_v);
-	} else if(is_angle_in_quadrant_3(ray_angle)) {
-		compute_initial_ray_pos_when_angle_in_quad_3(ray_angle, curr_h, curr_v);
-	} else if(is_angle_in_quadrant_4(ray_angle)) {
-		compute_initial_ray_pos_when_angle_in_quad_4(ray_angle, curr_h, curr_v);
-	}
-
-	return 1;
-}
-
-static void compute_ray_delta_vectors(const int ray_angle, int delta_h[2], int delta_v[2]) {
-	delta_h[0] = delta_h_x[ray_angle];
-	delta_h[1] = delta_h_y[ray_angle];
-	delta_v[0] = delta_v_x[ray_angle];
-	delta_v[1] = delta_v_y[ray_angle];
-}
-
-static int tile_is_floor_ceil(const int tile) {
-	return -1 < tile && tile < map->num_floor_ceils;
-}
-
-static void move_ray_pos(int ray_pos[2], int ray_delta[2]) {
-	ray_pos[0] += ray_delta[0];
-	ray_pos[1] += ray_delta[1];
-}
-
-static void compute_ray_hit_position(int curr_pos[2], int delta[2], int hit[2]) {
-	int tile;
-
-	tile = get_tile(curr_pos[0], curr_pos[1], map);
-	while(tile_is_floor_ceil(tile)) {
-		move_ray_pos(curr_pos, delta);
-		tile = get_tile(curr_pos[0], curr_pos[1], map);
-	}
-
-	// We went outside the bounds of the map.
-	if(tile == -1) {
-		hit[0] = -1;
-		hit[1] = -1;
-	} else {
-		hit[0] = curr_pos[0];
-		hit[1] = curr_pos[1];
-	}
-}
-
-static int both_ray_horizontal_and_vertical_hit_pos_invalid(int hit_h[2], int hit_v[2]) {
-	return hit_h[0] == -1 && hit_h[1] == -1 && hit_v[0] == -1 && hit_v[1] == -1;
-}
-
-static int ray_hit_pos_is_invalid(int hit_pos[2]) {
-	return hit_pos[0] == -1 && hit_pos[1] == -1;
-}
-
-static void set_hit(struct hitinfo* to_set, int hit_pos[2], const int is_horiz) {
-	to_set->hit_pos[0] = hit_pos[0];
-	to_set->hit_pos[1] = hit_pos[1];
-	to_set->is_horiz = is_horiz;
-	to_set->dist = sqrt(get_dist_sqrd(player_x, player_y, hit_pos[0], hit_pos[1]));
-}
-
-static void choose_ray_pos_according_to_shortest_dist(struct hitinfo* hit, int hit_h[2], int hit_v[2]) {
-	int h_dist;
-	int v_dist;
-	
-	h_dist = get_dist_sqrd(player_x, player_y, hit_h[0], hit_h[1]);
-	v_dist = get_dist_sqrd(player_x, player_y, hit_v[0], hit_v[1]);
-
-	if(h_dist < v_dist) {
-		set_hit(hit, hit_h, 1);
-	} else {
-		set_hit(hit, hit_v, 0);
-	}
-}
-
-static void choose_ray_horizontal_or_vertical_hit_pos(int hit_h[2], int hit_v[2], struct hitinfo* hit) {
-	if(both_ray_horizontal_and_vertical_hit_pos_invalid(hit_h, hit_v)) {
-		hit->hit_pos[0] = -1;
-		hit->hit_pos[1] = -1;
-	} else if(ray_hit_pos_is_invalid(hit_h)) {
-		set_hit(hit, hit_v, 0);
-	} else if(ray_hit_pos_is_invalid(hit_v)) {
-		set_hit(hit, hit_h, 1);
-	} else {
-		choose_ray_pos_according_to_shortest_dist(hit, hit_h, hit_v);
-	}
-}
-
-void get_ray_hit(int ray_angle, struct hitinfo* hit) {
-	// Stores the position of the ray as it moves
-	// from one grid line to the next. x is 0, y is 1
-	int curr_h[2];
-	int curr_v[2];
-	// How much we move from curr_x and curr_y.
-	int delta_h[2];
-	int delta_v[2];
-	// Where the final ray position is traveling along
-	// horizontal and vertical grid lines.
-	int hit_h[2];
-	int hit_v[2];
-
-	if(compute_initial_ray_pos(ray_angle, curr_h, curr_v) == 0) {
-		hit->hit_pos[0] = -1;
-		hit->hit_pos[1] = -1;
-		return;
-	}
-
-	compute_ray_delta_vectors(ray_angle, delta_h, delta_v);
-
-	// Now find the point that is a wall by travelling along horizontal gridlines.
-	compute_ray_hit_position(curr_h, delta_h, hit_h);
-	// Now find the point that is a wall by travelling along vertical gridlines.
-	compute_ray_hit_position(curr_v, delta_v, hit_v);
-
-	// Now choose either the horizontal or vertical intersection
-	// point. Or choose -1, -1 to denote an error.
-	choose_ray_horizontal_or_vertical_hit_pos(hit_h, hit_v, hit);
-
-	hit->wall_type = get_tile(hit->hit_pos[0], hit->hit_pos[1], map);
-}
 
 // TODO: Move this elsewhere.
-unsigned int get_pixel(SDL_Surface* surface, int x, int y) {
+static unsigned int get_pixel(SDL_Surface* surface, int x, int y) {
 	if(!surface)
 		return 0;
 	if(x < 0 || x >= surface->w)
@@ -392,7 +260,7 @@ unsigned int get_pixel(SDL_Surface* surface, int x, int y) {
 	return result;
 }
 
-void draw_sky_slice(const int screen_col, const int adj_angle) {
+static void draw_sky_slice(const int screen_col, const int adj_angle) {
 	if(!map || !map->sky_surf)
 		return;
 
@@ -470,11 +338,11 @@ struct floor_ceiling_pixel {
 	int world_space_coordinates[2];
 };
 
-int compute_row_for_bottom_of_wall_slice(struct slice* wall_slice) {
+static int compute_row_for_bottom_of_wall_slice(struct slice* wall_slice) {
 	return wall_slice->screen_row + wall_slice->screen_height;
 }
 
-void project_screen_pixel_to_world_space(const int ray_angle, const int ray_angle_relative_to_player_rot, struct floor_ceiling_pixel* floor_ceil_pixel) {
+static void project_screen_pixel_to_world_space(const int ray_angle, const int ray_angle_relative_to_player_rot, struct floor_ceiling_pixel* floor_ceil_pixel) {
 	// Compute the distance from the player to the point.
 	int straight_dist = (int)(DIST_TO_PROJ * HALF_UNIT_SIZE / (floor_ceil_pixel->screen_row - HALF_PROJ_H));
 	int dist_to_point = (straight_dist << 7) / (cos128table[ray_angle_relative_to_player_rot]);
@@ -483,7 +351,7 @@ void project_screen_pixel_to_world_space(const int ray_angle, const int ray_angl
 	floor_ceil_pixel->world_space_coordinates[1] = player_y - ((dist_to_point * sin128table[ray_angle]) >> 7);
 }
 
-void draw_floor_and_ceiling_pixels(struct floor_ceiling_pixel* floor_ceil_pixel) {
+static void draw_floor_and_ceiling_pixels(struct floor_ceiling_pixel* floor_ceil_pixel) {
 	int texture_x = floor_ceil_pixel->world_space_coordinates[0] % UNIT_SIZE;
 	int texture_y = floor_ceil_pixel->world_space_coordinates[1] % UNIT_SIZE;
 	int floor_screen_pixel = floor_ceil_pixel->screen_row * PROJ_W + floor_ceil_pixel->screen_col;
@@ -500,7 +368,7 @@ void draw_floor_and_ceiling_pixels(struct floor_ceiling_pixel* floor_ceil_pixel)
 	}
 }
 
-void draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(struct slice* wall_slice, const int ray_angle, const int ray_angle_relative_to_player_rot) {
+static void draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(struct slice* wall_slice, const int ray_angle, const int ray_angle_relative_to_player_rot) {
 	// Data needed to render a floor (and corresponding ceiling pixel).
 	struct floor_ceiling_pixel floor_ceil_pixel;
 
@@ -521,14 +389,48 @@ void draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(struct slice* wall
 	}
 }
 
-void update_state_variables(struct mapdef* curr_map, const int curr_player_x, const int curr_player_y, const int curr_player_rot) {
+
+
+static void render_pixel_arrays_to_screen(SDL_Renderer* renderer) {
+	SDL_UpdateTexture(raycast_texture, NULL, raycast_pixels, PROJ_W << 2);
+	SDL_RenderCopy(renderer, raycast_texture, NULL, NULL);
+
+	SDL_UpdateTexture(floor_ceiling_tex, NULL, floor_ceiling_pixels, PROJ_W << 2);
+	SDL_RenderCopy(renderer, floor_ceiling_tex, NULL, NULL);
+
+	SDL_UpdateTexture(thing_texture, NULL, thing_pixels, PROJ_W << 2);
+	SDL_RenderCopy(renderer, thing_texture, NULL, NULL);
+}
+
+void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_x, int curr_player_y, int curr_player_rot) {
+	// Stores the precise angle of our current ray.
+	float curr_angle = (float)(player_rot + FOV_HALF);
+
+	update_state_variables(curr_map, curr_player_x, curr_player_y, curr_player_rot);
+
+	clean_pixel_arrays();
+	preprocess_things();
+
+	int i;
+	for(i = 0; i < PROJ_W; ++i) {
+		cast_single_ray(i, curr_angle);
+		curr_angle -= ANGLE_BETWEEN_RAYS;
+	}
+
+	// THING CASTING
+	draw_things();
+
+	render_pixel_arrays_to_screen(renderer);
+}
+
+static void update_state_variables(struct mapdef* curr_map, const int curr_player_x, const int curr_player_y, const int curr_player_rot) {
 	player_x = curr_player_x;
 	player_y = curr_player_y;
 	player_rot = curr_player_rot;
 	map = curr_map;
 }
 
-void clean_pixel_arrays() {
+static void clean_pixel_arrays() {
 	int i;
 	for(i = 0; i < PROJ_W * PROJ_H; ++i) {
 		floor_ceiling_pixels[i] = 0;
@@ -537,11 +439,66 @@ void clean_pixel_arrays() {
 	}
 }
 
-int ray_hit_wall(struct hitinfo* hit) {
-	return hit->hit_pos[0] != -1 && hit->hit_pos[1] != -1;
+static void preprocess_things() {
+	compute_distance_to_player_for_each_thing();
+	sort_things(0, map->num_things - 1);
 }
 
-void cast_single_ray(const int screen_col, const float curr_angle) {
+static void compute_distance_to_player_for_each_thing() {
+	unsigned int i;
+
+	// Compute the distance between each thing and the player.
+	for(i = 0; i < map->num_things; ++i) {
+		map->things[i].dist = get_dist_sqrd(map->things[i].position[0], map->things[i].position[1],
+											player_x, player_y);
+
+		if(map->things[i].dist == 0)
+			map->things[i].dist = 1;
+
+		// Add the thing to the sorted list.
+		things_sorted[i] = &(map->things[i]);
+	}
+}
+
+static void sort_things(int s, int e) {
+	if(e <= s)
+		return;
+
+	int m = partition(s, e);
+
+	sort_things(s, m);
+	sort_things(m + 1, e);
+}
+
+static int partition(int s, int e) {
+	int i = s - 1;
+	int j = e + 1;
+
+	int p_dist = things_sorted[s]->dist;
+
+	struct thingdef* temp;
+
+	while(1) {
+		do {
+			i += 1;
+		} while(things_sorted[i]->dist > p_dist);
+
+		do {
+			j -= 1;
+		} while(things_sorted[j]->dist < p_dist);
+
+		if(i >= j)
+			return j;
+
+		if(things_sorted[i]->dist < things_sorted[j]->dist) {
+			temp = things_sorted[i];
+			things_sorted[i] = things_sorted[j];
+			things_sorted[j] = temp;
+		}
+	}
+}
+
+static void cast_single_ray(const int screen_col, const float curr_angle) {
 	// The curr_angle adjusted to be within 0 and 360.
 	int adj_angle;
 	// The angle used to compute the "corrected" distance so
@@ -575,39 +532,240 @@ void cast_single_ray(const int screen_col, const float curr_angle) {
 	}
 }
 
-void render_pixel_arrays_to_screen(SDL_Renderer* renderer) {
-	SDL_UpdateTexture(raycast_texture, NULL, raycast_pixels, PROJ_W << 2);
-	SDL_RenderCopy(renderer, raycast_texture, NULL, NULL);
+static int get_adjusted_angle(int curr_angle) {
+	int adj_angle = curr_angle;
 
-	SDL_UpdateTexture(floor_ceiling_tex, NULL, floor_ceiling_pixels, PROJ_W << 2);
-	SDL_RenderCopy(renderer, floor_ceiling_tex, NULL, NULL);
+	// Make the angle between 0 and 360.
+	if(adj_angle < 0)
+		adj_angle += 360;
+	if(adj_angle > 360)
+		adj_angle -= 360;
 
-	SDL_UpdateTexture(thing_texture, NULL, thing_pixels, PROJ_W << 2);
-	SDL_RenderCopy(renderer, thing_texture, NULL, NULL);
+	// First, we must deal with bad angles. These angles will break the raycaster, since
+	// it will produce NaN's.
+	if(adj_angle == 360)
+		adj_angle = 0;
+	if(adj_angle == 0 || adj_angle == 90 || adj_angle == 180 || adj_angle == 270)
+		adj_angle += 1;
+
+	return adj_angle;
 }
 
-void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_x, int curr_player_y, int curr_player_rot) {
-	// Stores the precise angle of our current ray.
-	float curr_angle = (float)(player_rot + FOV_HALF);
+static void get_ray_hit(int ray_angle, struct hitinfo* hit) {
+	// Stores the position of the ray as it moves
+	// from one grid line to the next. x is 0, y is 1
+	int curr_h[2];
+	int curr_v[2];
+	// How much we move from curr_x and curr_y.
+	int delta_h[2];
+	int delta_v[2];
+	// Where the final ray position is traveling along
+	// horizontal and vertical grid lines.
+	int hit_h[2];
+	int hit_v[2];
 
-	update_state_variables(curr_map, curr_player_x, curr_player_y, curr_player_rot);
-
-	clean_pixel_arrays();
-	preprocess_things();
-
-	int i;
-	for(i = 0; i < PROJ_W; ++i) {
-		cast_single_ray(i, curr_angle);
-		curr_angle -= ANGLE_BETWEEN_RAYS;
+	if(compute_initial_ray_pos(ray_angle, curr_h, curr_v) == 0) {
+		hit->hit_pos[0] = -1;
+		hit->hit_pos[1] = -1;
+		return;
 	}
 
-	// THING CASTING
-	draw_things();
+	compute_ray_delta_vectors(ray_angle, delta_h, delta_v);
 
-	render_pixel_arrays_to_screen(renderer);
+	// Now find the point that is a wall by travelling along horizontal gridlines.
+	compute_ray_hit_position(curr_h, delta_h, hit_h);
+	// Now find the point that is a wall by travelling along vertical gridlines.
+	compute_ray_hit_position(curr_v, delta_v, hit_v);
+
+	// Now choose either the horizontal or vertical intersection
+	// point. Or choose -1, -1 to denote an error.
+	choose_ray_horizontal_or_vertical_hit_pos(hit_h, hit_v, hit);
+
+	hit->wall_type = get_tile(hit->hit_pos[0], hit->hit_pos[1], map);
 }
 
-void project_thing_pos_onto_screen(const int thing_pos[2], int screen_pos[2]) {
+static int compute_initial_ray_pos(const int ray_angle, int curr_h[2], int curr_v[2]) {
+	if(is_tan_undefined_for_angle(ray_angle))
+		return 0;
+
+	int alpha;
+
+	if(is_angle_in_quadrant_1(ray_angle)) {
+		compute_initial_ray_pos_when_angle_in_quad_1(ray_angle, curr_h, curr_v);
+	} else if(is_angle_in_quadrant_2(ray_angle)) {
+		compute_initial_ray_pos_when_angle_in_quad_2(ray_angle, curr_h, curr_v);
+	} else if(is_angle_in_quadrant_3(ray_angle)) {
+		compute_initial_ray_pos_when_angle_in_quad_3(ray_angle, curr_h, curr_v);
+	} else if(is_angle_in_quadrant_4(ray_angle)) {
+		compute_initial_ray_pos_when_angle_in_quad_4(ray_angle, curr_h, curr_v);
+	}
+
+	return 1;
+}
+
+static void compute_initial_ray_pos_when_angle_in_quad_1(const int ray_angle, int curr_h[2], int curr_v[2]) {
+	int alpha = ray_angle;
+
+	// Divide player_y by 64, floor that, multiply by 64, and then subtract 1.
+	curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
+	// Multiply player_y and curr_h[1] by 128, then divide by the tan * 128. This will
+	// undo the the 128 multiplication without having a divide by 0 (For example, tan128table[1]).
+	curr_h[0] = (((player_y - curr_h[1]) * tan1table[alpha]) >> 7) + player_x;
+
+	// Divide player_x by 64, floor the result, multiply by 64 and add 64.
+	curr_v[0]= ((player_x >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
+	// Get the tan(curr_v[0] - player_x) and subtract that from player_y.
+	curr_v[1]= player_y - (((curr_v[0]- player_x) * tan128table[alpha]) >> 7);
+}
+
+static void compute_initial_ray_pos_when_angle_in_quad_2(const int ray_angle, int curr_h[2], int curr_v[2]) {
+	// Adjusts the angle so its between 1 and 89.
+	int alpha = ray_angle - 90;
+	// Compute floor(player_y / 64) * 64 - 1.
+	curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) - 1;
+	// Computes player_x - (player_y * curr_h[1]) * tan(ray_angle).
+	curr_h[0] = player_x - ((tan128table[alpha] * (player_y - curr_h[1])) >> 7);
+
+	// Compute floor(player_x / 64) * 64 - 1.
+	curr_v[0] = ((player_x >> UNIT_POWER) << UNIT_POWER) - 1;
+	// Compute player_y - (player_x - curr_v[0]) / tan(ray_angle).
+	curr_v[1] = player_y - (((player_x - curr_v[0]) * tan1table[alpha]) >> 7);
+}
+
+static void compute_initial_ray_pos_when_angle_in_quad_3(const int ray_angle, int curr_h[2], int curr_v[2]) {
+	// Adjusts the angle so its between 1 and 89.
+	int alpha = ray_angle - 180;
+
+	// Computes floor(player_y / 64) * 64 + 64.
+	curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
+	// Computes player_x - (curr_h[1] - player_y / tan(ray_angle).
+	curr_h[0] = player_x - (((curr_h[1]- player_y) * tan1table[alpha]) >> 7);
+
+	// Computes floor(player x / 64) * 64 - 1.
+	curr_v[0] = ((player_x >> UNIT_POWER) << UNIT_POWER) - 1;
+	// Computes tan(ray_angle) * (player_x - curr_v[0]) + player_y.
+	curr_v[1] = ((tan128table[alpha] * (player_x  - curr_v[0])) >> 7) + player_y;
+}
+
+static void compute_initial_ray_pos_when_angle_in_quad_4(const int ray_angle, int curr_h[2], int curr_v[2]) {
+	// Adjusts the angle so its between 1 and 89.
+	int alpha = ray_angle - 270;
+
+	// Computes floor(player_y / 64) * 64 + 64
+	curr_h[1] = ((player_y >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
+	// Computes (curr_h[1] - player_y) * tan(ray_angle) + player_x
+	curr_h[0] = (((curr_h[1] - player_y) * tan128table[alpha]) >> 7) + player_x;
+
+	// Computes floor(player_x / 64) * 64 + 64
+	curr_v[0] = ((player_x >> UNIT_POWER) << UNIT_POWER) + UNIT_SIZE;
+	// Computes (curr_v[0] - player_x) / tan(ray_angle) + player_y.
+	curr_v[1] = (((curr_v[0] - player_x) * tan1table[alpha]) >> 7) + player_y;
+}
+
+static void compute_ray_delta_vectors(const int ray_angle, int delta_h[2], int delta_v[2]) {
+	delta_h[0] = delta_h_x[ray_angle];
+	delta_h[1] = delta_h_y[ray_angle];
+	delta_v[0] = delta_v_x[ray_angle];
+	delta_v[1] = delta_v_y[ray_angle];
+}
+
+static void compute_ray_hit_position(int curr_pos[2], int delta[2], int hit[2]) {
+	int tile;
+
+	tile = get_tile(curr_pos[0], curr_pos[1], map);
+	while(tile_is_floor_ceil(tile)) {
+		move_ray_pos(curr_pos, delta);
+		tile = get_tile(curr_pos[0], curr_pos[1], map);
+	}
+
+	// We went outside the bounds of the map.
+	if(tile == -1) {
+		hit[0] = -1;
+		hit[1] = -1;
+	} else {
+		hit[0] = curr_pos[0];
+		hit[1] = curr_pos[1];
+	}
+}
+
+static int tile_is_floor_ceil(const int tile) {
+	return -1 < tile && tile < map->num_floor_ceils;
+}
+
+static void move_ray_pos(int ray_pos[2], int ray_delta[2]) {
+	ray_pos[0] += ray_delta[0];
+	ray_pos[1] += ray_delta[1];
+}
+
+static void choose_ray_horizontal_or_vertical_hit_pos(int hit_h[2], int hit_v[2], struct hitinfo* hit) {
+	if(both_ray_horizontal_and_vertical_hit_pos_invalid(hit_h, hit_v)) {
+		hit->hit_pos[0] = -1;
+		hit->hit_pos[1] = -1;
+	} else if(ray_hit_pos_is_invalid(hit_h)) {
+		set_hit(hit, hit_v, 0);
+	} else if(ray_hit_pos_is_invalid(hit_v)) {
+		set_hit(hit, hit_h, 1);
+	} else {
+		choose_ray_pos_according_to_shortest_dist(hit, hit_h, hit_v);
+	}
+}
+
+static int both_ray_horizontal_and_vertical_hit_pos_invalid(int hit_h[2], int hit_v[2]) {
+	return hit_h[0] == -1 && hit_h[1] == -1 && hit_v[0] == -1 && hit_v[1] == -1;
+}
+
+static int ray_hit_pos_is_invalid(int hit_pos[2]) {
+	return hit_pos[0] == -1 && hit_pos[1] == -1;
+}
+
+static void set_hit(struct hitinfo* to_set, int hit_pos[2], const int is_horiz) {
+	to_set->hit_pos[0] = hit_pos[0];
+	to_set->hit_pos[1] = hit_pos[1];
+	to_set->is_horiz = is_horiz;
+	to_set->dist = sqrt(get_dist_sqrd(player_x, player_y, hit_pos[0], hit_pos[1]));
+}
+
+static void choose_ray_pos_according_to_shortest_dist(struct hitinfo* hit, int hit_h[2], int hit_v[2]) {
+	int h_dist;
+	int v_dist;
+	
+	h_dist = get_dist_sqrd(player_x, player_y, hit_h[0], hit_h[1]);
+	v_dist = get_dist_sqrd(player_x, player_y, hit_v[0], hit_v[1]);
+
+	if(h_dist < v_dist) {
+		set_hit(hit, hit_h, 1);
+	} else {
+		set_hit(hit, hit_v, 0);
+	}
+}
+
+static int ray_hit_wall(struct hitinfo* hit) {
+	return hit->hit_pos[0] != -1 && hit->hit_pos[1] != -1;
+}
+
+static void draw_things() {
+	// The position of the sprite on the screen.
+	int screen_pos[2];
+
+	// Defines the sprite's screen dimensions and position.
+	SDL_Rect thing_rect;
+	// How much we add to t_x, t_y to get the correct animation frame.
+	int frame_offset[2];
+
+	int i;
+	for(i = 0; i < map->num_things; ++i) {
+		if(things_sorted[i]->type == 0)
+			continue;
+
+		project_thing_pos_onto_screen(things_sorted[i]->position, screen_pos);
+		compute_thing_dimensions_on_screen(i, screen_pos, &thing_rect);
+		compute_frame_offset(i, frame_offset);
+		draw_columns_of_thing(i, &thing_rect, frame_offset);
+
+	}
+}
+
+static void project_thing_pos_onto_screen(const int thing_pos[2], int screen_pos[2]) {
 	int x_diff, y_diff;
 	int theta_temp;
 
@@ -630,14 +788,14 @@ void project_thing_pos_onto_screen(const int thing_pos[2], int screen_pos[2]) {
 	screen_pos[0] = screen_pos[1] * PROJ_W / FOV;
 }
 
-void compute_thing_dimensions_on_screen(const int thing_sorted_index, const int screen_pos[2], SDL_Rect* thing_screen_rect) {
+static void compute_thing_dimensions_on_screen(const int thing_sorted_index, const int screen_pos[2], SDL_Rect* thing_screen_rect) {
 	thing_screen_rect->w = (int)(UNIT_SIZE / sqrt(things_sorted[thing_sorted_index]->dist) * DIST_TO_PROJ);
 	thing_screen_rect->h = thing_screen_rect->w;
 	thing_screen_rect->y = HALF_PROJ_H - (thing_screen_rect->h >> 1);
 	thing_screen_rect->x = screen_pos[0] - (thing_screen_rect->w >> 1);
 }
 
-void compute_frame_offset(const int thing_sorted_index, int frame_offset[2]) {
+static void compute_frame_offset(const int thing_sorted_index, int frame_offset[2]) {
 	unsigned int curr_anim = things_sorted[thing_sorted_index]->curr_anim;
 	// Take starting position and multiply by 64 to go from unit coordinates to pixel coordinates.
 	// This puts us in the correct position for the animation as a whole.
@@ -649,62 +807,7 @@ void compute_frame_offset(const int thing_sorted_index, int frame_offset[2]) {
 	frame_offset[0] += things_sorted[thing_sorted_index]->anims[curr_anim].curr_frame << 6;
 }
 
-int column_in_bounds_of_screen(const int col) {
-	return col >= 0 && col < PROJ_W;
-}
-
-int thing_not_obscured_by_wall_slice(int thing_sorted_index, int slice_column) {
-	return sqrt(things_sorted[thing_sorted_index]->dist) - 1 < z_buffer[slice_column];
-}
-
-void compute_column_of_thing_texture(const int scaled_column, const SDL_Rect* rect_to_render, SDL_Rect* thing_src_rect) {
-	thing_src_rect->x = (scaled_column << 6) / rect_to_render->w;
-	thing_src_rect->y = 0;
-	thing_src_rect->w = 1;
-	thing_src_rect->h = UNIT_SIZE;
-}
-
-int thing_pixel_row_out_of_screen_bounds(const int pixel) {
-	return pixel < 0 || pixel >= PROJ_H;
-}
-
-int thing_pixel_is_not_transparent(const unsigned int t_color) {
-	return ((unsigned char*)&t_color)[3] > 0;
-}
-
-struct thing_column_render_data {
-	int thing_sorted_index;
-	int screen_column;
-	SDL_Rect* src;
-	const SDL_Rect* dest;
-	const int* frame_offset;
-};
-
-//thing_rect, thing_src_rect
-void draw_column_of_thing_texture(struct thing_column_render_data* thing_column_data) {
-	// The texture point.
-	int t_x, t_y;
-	// RGB value of the sprite texture.
-	unsigned int t_color;
-
-	int screen_row;
-
-	int k;
-	for(k = 0; k < thing_column_data->dest->h; ++k) {
-		screen_row = k + thing_column_data->dest->y;
-		if(thing_pixel_row_out_of_screen_bounds(screen_row))
-			continue;
-
-		t_x = (thing_column_data->src->x) + thing_column_data->frame_offset[0];
-		t_y = ((k << 6) / thing_column_data->dest->h) + thing_column_data->frame_offset[1];
-		t_color = get_pixel(things_sorted[thing_column_data->thing_sorted_index]->surf, t_x, t_y);
-		// Only put a pixel if it is not transparent.
-		if(thing_pixel_is_not_transparent(t_color))
-			thing_pixels[(screen_row) * PROJ_W + thing_column_data->screen_column] = t_color;
-	}
-}
-
-void draw_columns_of_thing(const int thing_sorted_index, const SDL_Rect* dest, const int frame_offset[2]) {
+static void draw_columns_of_thing(const int thing_sorted_index, const SDL_Rect* dest, const int frame_offset[2]) {
 	struct thing_column_render_data thing_column;
 	// Defines the column of pixels of the sprite we want.
 	SDL_Rect src_tex_col;
@@ -730,101 +833,49 @@ void draw_columns_of_thing(const int thing_sorted_index, const SDL_Rect* dest, c
 	}
 }
 
-void draw_things() {
-	// The position of the sprite on the screen.
-	int screen_pos[2];
+static int column_in_bounds_of_screen(const int col) {
+	return col >= 0 && col < PROJ_W;
+}
 
-	// Defines the sprite's screen dimensions and position.
-	SDL_Rect thing_rect;
-	// How much we add to t_x, t_y to get the correct animation frame.
-	int frame_offset[2];
+static int thing_not_obscured_by_wall_slice(int thing_sorted_index, int slice_column) {
+	return sqrt(things_sorted[thing_sorted_index]->dist) - 1 < z_buffer[slice_column];
+}
 
-	int i;
-	for(i = 0; i < map->num_things; ++i) {
-		if(things_sorted[i]->type == 0)
+static void compute_column_of_thing_texture(const int scaled_column, const SDL_Rect* rect_to_render, SDL_Rect* thing_src_rect) {
+	thing_src_rect->x = (scaled_column << 6) / rect_to_render->w;
+	thing_src_rect->y = 0;
+	thing_src_rect->w = 1;
+	thing_src_rect->h = UNIT_SIZE;
+}
+
+static void draw_column_of_thing_texture(struct thing_column_render_data* thing_column_data) {
+	// The texture point.
+	int t_x, t_y;
+	// RGB value of the sprite texture.
+	unsigned int t_color;
+
+	int screen_row;
+
+	int k;
+	for(k = 0; k < thing_column_data->dest->h; ++k) {
+		screen_row = k + thing_column_data->dest->y;
+		if(thing_pixel_row_out_of_screen_bounds(screen_row))
 			continue;
 
-		project_thing_pos_onto_screen(things_sorted[i]->position, screen_pos);
-		compute_thing_dimensions_on_screen(i, screen_pos, &thing_rect);
-		compute_frame_offset(i, frame_offset);
-		draw_columns_of_thing(i, &thing_rect, frame_offset);
-
+		t_x = (thing_column_data->src->x) + thing_column_data->frame_offset[0];
+		t_y = ((k << 6) / thing_column_data->dest->h) + thing_column_data->frame_offset[1];
+		t_color = get_pixel(things_sorted[thing_column_data->thing_sorted_index]->surf, t_x, t_y);
+		// Only put a pixel if it is not transparent.
+		if(thing_pixel_is_not_transparent(t_color))
+			thing_pixels[(screen_row) * PROJ_W + thing_column_data->screen_column] = t_color;
 	}
 }
 
-void preprocess_things() {
-	unsigned int i;
-
-	// Compute the distance between each thing and the player.
-	for(i = 0; i < map->num_things; ++i) {
-		map->things[i].dist = get_dist_sqrd(map->things[i].position[0], map->things[i].position[1],
-											player_x, player_y);
-
-		if(map->things[i].dist == 0)
-			map->things[i].dist = 1;
-
-		// Add the thing to the sorted list.
-		things_sorted[i] = &(map->things[i]);
-	}
-
-	// Now, sort the things according to distance.
-	sort_things(0, map->num_things - 1);
+static int thing_pixel_row_out_of_screen_bounds(const int pixel) {
+	return pixel < 0 || pixel >= PROJ_H;
 }
 
-int get_adjusted_angle(int curr_angle) {
-	int adj_angle = curr_angle;
-
-	// Make the angle between 0 and 360.
-	if(adj_angle < 0)
-		adj_angle += 360;
-	if(adj_angle > 360)
-		adj_angle -= 360;
-
-	// First, we must deal with bad angles. These angles will break the raycaster, since
-	// it will produce NaN's.
-	if(adj_angle == 360)
-		adj_angle = 0;
-	if(adj_angle == 0 || adj_angle == 90 || adj_angle == 180 || adj_angle == 270)
-		adj_angle += 1;
-
-	return adj_angle;
+static int thing_pixel_is_not_transparent(const unsigned int t_color) {
+	return ((unsigned char*)&t_color)[3] > 0;
 }
 
-
-void sort_things(int s, int e) {
-	if(e <= s)
-		return;
-
-	int m = partition(s, e);
-
-	sort_things(s, m);
-	sort_things(m + 1, e);
-}
-
-int partition(int s, int e) {
-	int i = s - 1;
-	int j = e + 1;
-
-	int p_dist = things_sorted[s]->dist;
-
-	struct thingdef* temp;
-
-	while(1) {
-		do {
-			i += 1;
-		} while(things_sorted[i]->dist > p_dist);
-
-		do {
-			j -= 1;
-		} while(things_sorted[j]->dist < p_dist);
-
-		if(i >= j)
-			return j;
-
-		if(things_sorted[i]->dist < things_sorted[j]->dist) {
-			temp = things_sorted[i];
-			things_sorted[i] = things_sorted[j];
-			things_sorted[j] = temp;
-		}
-	}
-}
