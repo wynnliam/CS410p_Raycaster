@@ -85,6 +85,11 @@ static int player_x, player_y;
 static int player_rot;
 static struct mapdef* map;
 
+// Stores the precise angle of our current ray.
+static float curr_ray_angle;
+// The curr_ray_angle adjusted to be within 0 and 360.
+static int adj_ray_angle;
+
 struct wall_slice {
 	// The row of pixels on the screen we want to render from (top-most row going down).
 	int screen_row;
@@ -136,8 +141,8 @@ static void compute_distance_to_player_for_each_thing();
 static void sort_things(int, int);
 static int partition(int, int);
 
-static void cast_single_ray(const int, const float);
-static int get_adjusted_angle(int);
+static void cast_single_ray(const int);
+static void update_adjusted_angle();
 
 static void get_ray_hit(int, struct hitinfo*);
 static void choose_ray_horizontal_or_vertical_hit_pos(int[2], int[2], struct hitinfo*);
@@ -159,14 +164,14 @@ static void move_ray_pos(int[2], int[2]);
 static int ray_hit_wall(struct hitinfo*);
 static unsigned int correct_hit_dist_for_fisheye_effect(const int, const int);
 
-static void draw_sky_slice(const int, const int);
+static void draw_sky_slice(const int);
 
 static void compute_wall_slice_render_data_from_hit_and_screen_col(struct hitinfo*, const int, struct wall_slice*);
 static void draw_wall_slice(struct wall_slice*);
 
-static void draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(struct wall_slice*, const int, const int);
+static void draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(struct wall_slice*, const int);
 static int compute_row_for_bottom_of_wall_slice(struct wall_slice*);
-static void project_screen_pixel_to_world_space(const int, const int, struct floor_ceiling_pixel*);
+static void project_screen_pixel_to_world_space(const int, struct floor_ceiling_pixel*);
 static void draw_floor_and_ceiling_pixels(struct floor_ceiling_pixel*);
 
 static void draw_things();
@@ -307,17 +312,16 @@ void initialize_render_textures(SDL_Renderer* renderer) {
 }
 
 void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_x, int curr_player_y, int curr_player_rot) {
-	// Stores the precise angle of our current ray.
-	float curr_ray_angle = (float)(player_rot + FOV_HALF);
 
 	update_state_variables(curr_map, curr_player_x, curr_player_y, curr_player_rot);
 
 	clean_pixel_arrays();
 	preprocess_things();
 
-	int i;
-	for(i = 0; i < PROJ_W; ++i) {
-		cast_single_ray(i, curr_ray_angle);
+	int screen_col;
+	for(screen_col = 0; screen_col < PROJ_W; ++screen_col) {
+		cast_single_ray(screen_col);
+
 		curr_ray_angle -= ANGLE_BETWEEN_RAYS;
 	}
 
@@ -332,6 +336,8 @@ static void update_state_variables(struct mapdef* curr_map, const int curr_playe
 	player_y = curr_player_y;
 	player_rot = curr_player_rot;
 	map = curr_map;
+
+	curr_ray_angle = (float)(player_rot + FOV_HALF);
 }
 
 static void clean_pixel_arrays() {
@@ -402,16 +408,14 @@ static int partition(int s, int e) {
 	}
 }
 
-static void cast_single_ray(const int screen_col, const float curr_ray_angle) {
-	// The curr_ray_angle adjusted to be within 0 and 360.
-	int adj_ray_angle;
+static void cast_single_ray(const int screen_col) {
 	int ray_angle_relative_to_player_rot;
 
 	struct hitinfo hit;
 	// Data needed to render a wall slice.
 	struct wall_slice wall_slice;
 
-	adj_ray_angle = get_adjusted_angle((int)curr_ray_angle);
+	update_adjusted_angle();
 
 	z_buffer[screen_col] = 0;
 	get_ray_hit(adj_ray_angle, &hit);
@@ -423,19 +427,19 @@ static void cast_single_ray(const int screen_col, const float curr_ray_angle) {
 		hit.dist = correct_hit_dist_for_fisheye_effect(hit.dist, ray_angle_relative_to_player_rot);
 
 		// SKY CASTING
-		draw_sky_slice(screen_col, adj_ray_angle);
+		draw_sky_slice(screen_col);
 
 		// WALL CASTING
 		compute_wall_slice_render_data_from_hit_and_screen_col(&hit, screen_col, &wall_slice);
 		draw_wall_slice(&wall_slice);
 
 		// FLOOR AND CEILING CASTING
-		draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(&wall_slice, adj_ray_angle, ray_angle_relative_to_player_rot);
+		draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(&wall_slice, ray_angle_relative_to_player_rot);
 	}
 }
 
-static int get_adjusted_angle(int curr_ray_angle) {
-	int adj_ray_angle = curr_ray_angle;
+static void update_adjusted_angle() {
+	adj_ray_angle = curr_ray_angle;
 
 	// Make the angle between 0 and 360.
 	if(adj_ray_angle < 0)
@@ -449,8 +453,6 @@ static int get_adjusted_angle(int curr_ray_angle) {
 		adj_ray_angle = 0;
 	if(adj_ray_angle == 0 || adj_ray_angle == 90 || adj_ray_angle == 180 || adj_ray_angle == 270)
 		adj_ray_angle += 1;
-
-	return adj_ray_angle;
 }
 
 static void get_ray_hit(int ray_angle, struct hitinfo* hit) {
@@ -655,7 +657,7 @@ static unsigned int correct_hit_dist_for_fisheye_effect(const int hit_dist, cons
 	return correct_dist;
 }
 
-static void draw_sky_slice(const int screen_col, const int adj_ray_angle) {
+static void draw_sky_slice(const int screen_col) {
 	if(!map || !map->sky_surf)
 		return;
 
@@ -703,7 +705,7 @@ static void draw_wall_slice(struct wall_slice* slice) {
 	}
 }
 
-static void draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(struct wall_slice* wall_slice, const int ray_angle, const int ray_angle_relative_to_player_rot) {
+static void draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(struct wall_slice* wall_slice, const int ray_angle_relative_to_player_rot) {
 	// Data needed to render a floor (and corresponding ceiling pixel).
 	struct floor_ceiling_pixel floor_ceil_pixel;
 
@@ -711,7 +713,7 @@ static void draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(struct wall
 	for(j = compute_row_for_bottom_of_wall_slice(wall_slice); j < PROJ_H; ++j) {
 		floor_ceil_pixel.screen_row = j;
 		floor_ceil_pixel.screen_col = wall_slice->screen_col;
-		project_screen_pixel_to_world_space(ray_angle, ray_angle_relative_to_player_rot, &floor_ceil_pixel);
+		project_screen_pixel_to_world_space(ray_angle_relative_to_player_rot, &floor_ceil_pixel);
 
 		floor_ceil_pixel.texture  = get_tile(floor_ceil_pixel.world_space_coordinates[0],
 								   			 floor_ceil_pixel.world_space_coordinates[1],
@@ -728,13 +730,13 @@ static int compute_row_for_bottom_of_wall_slice(struct wall_slice* wall_slice) {
 	return wall_slice->screen_row + wall_slice->screen_height;
 }
 
-static void project_screen_pixel_to_world_space(const int ray_angle, const int ray_angle_relative_to_player_rot, struct floor_ceiling_pixel* floor_ceil_pixel) {
+static void project_screen_pixel_to_world_space(const int ray_angle_relative_to_player_rot, struct floor_ceiling_pixel* floor_ceil_pixel) {
 	// Compute the distance from the player to the point.
 	int straight_dist = (int)(DIST_TO_PROJ * HALF_UNIT_SIZE / (floor_ceil_pixel->screen_row - HALF_PROJ_H));
 	int dist_to_point = (straight_dist << 7) / (cos128table[ray_angle_relative_to_player_rot]);
 
-	floor_ceil_pixel->world_space_coordinates[0] = player_x + ((dist_to_point * cos128table[ray_angle]) >> 7);
-	floor_ceil_pixel->world_space_coordinates[1] = player_y - ((dist_to_point * sin128table[ray_angle]) >> 7);
+	floor_ceil_pixel->world_space_coordinates[0] = player_x + ((dist_to_point * cos128table[adj_ray_angle]) >> 7);
+	floor_ceil_pixel->world_space_coordinates[1] = player_y - ((dist_to_point * sin128table[adj_ray_angle]) >> 7);
 }
 
 static void draw_floor_and_ceiling_pixels(struct floor_ceiling_pixel* floor_ceil_pixel) {
