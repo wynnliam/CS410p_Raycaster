@@ -17,6 +17,26 @@ static int player_x, player_y;
 static int player_rot;
 static struct mapdef* map;
 
+struct slice {
+	// The row of pixels on the screen we want to render from (top-most row going down).
+	int screen_row;
+	// The column of pixels on the screen we want to render from.
+	int screen_col;
+	// The height in pixels of the slice. No width since a slice is just a single line of pixels.
+	int screen_height;
+	// The texture we want to render.
+	int wall_tex;
+	// The column of pixels we want to render.
+	int tex_col;
+};
+
+struct floor_ceiling_pixel {
+	unsigned int texture;
+	int screen_row;
+	int screen_col;
+	int world_space_coordinates[2];
+};
+
 struct thing_column_render_data {
 	int thing_sorted_index;
 	int screen_column;
@@ -44,8 +64,6 @@ static int ray_hit_pos_is_invalid(int[2]);
 static void set_hit(struct hitinfo*, int[2], const int);
 static void choose_ray_pos_according_to_shortest_dist(struct hitinfo*, int[2], int[2]);
 
-static int ray_hit_wall(struct hitinfo*);
-
 static int compute_initial_ray_pos(const int, int[2], int[2]);
 static void compute_initial_ray_pos_when_angle_in_quad_1(const int, int[2], int[2]);
 static void compute_initial_ray_pos_when_angle_in_quad_2(const int, int[2], int[2]);
@@ -55,6 +73,19 @@ static void compute_ray_delta_vectors(const int, int[2], int [2]);
 static void compute_ray_hit_position(int[2], int[2], int[2]);
 static int tile_is_floor_ceil(const int);
 static void move_ray_pos(int[2], int[2]);
+
+static int ray_hit_wall(struct hitinfo*);
+static unsigned int correct_hit_dist_for_fisheye_effect(const int, const int);
+
+static void draw_sky_slice(const int, const int);
+
+static void compute_wall_slice_render_data_from_hit_and_screen_col(struct hitinfo*, const int, struct slice*);
+static void draw_wall_slice(struct slice*);
+
+static void draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(struct slice*, const int, const int);
+static int compute_row_for_bottom_of_wall_slice(struct slice*);
+static void project_screen_pixel_to_world_space(const int, const int, struct floor_ceiling_pixel*);
+static void draw_floor_and_ceiling_pixels(struct floor_ceiling_pixel*);
 
 static void draw_things();
 static void project_thing_pos_onto_screen(const int[2], int[2]);
@@ -67,6 +98,8 @@ static void compute_column_of_thing_texture(const int, const SDL_Rect*, SDL_Rect
 static void draw_column_of_thing_texture(struct thing_column_render_data*);
 static int thing_pixel_row_out_of_screen_bounds(const int);
 static int thing_pixel_is_not_transparent(const unsigned int);
+
+static void render_pixel_arrays_to_screen(SDL_Renderer*);
 
 static int is_tan_undefined_for_angle(const int deg) {
 	return deg == 0 || deg == 90 || deg == 180 || deg == 270 || deg == 360;
@@ -260,147 +293,6 @@ static unsigned int get_pixel(SDL_Surface* surface, int x, int y) {
 	return result;
 }
 
-static void draw_sky_slice(const int screen_col, const int adj_angle) {
-	if(!map || !map->sky_surf)
-		return;
-
-	// A skybox has 640 columns of pixels.
-	// There are 360 degrees in a circle.
-	// So to convert an angle to the corresponding column,
-	// we do 640 / 360, which is roughly 1.77. We can just round this
-	// to two.
-	int adj_angle_to_pixel_col = (adj_angle << 1) % SKYBOX_TEX_WIDTH;
-
-	int j;
-	for(j = 0; j < PROJ_H; ++j)
-		raycast_pixels[j * PROJ_W + screen_col] = get_pixel(map->sky_surf, adj_angle_to_pixel_col, j);
-}
-
-struct slice {
-	// The row of pixels on the screen we want to render from (top-most row going down).
-	int screen_row;
-	// The column of pixels on the screen we want to render from.
-	int screen_col;
-	// The height in pixels of the slice. No width since a slice is just a single line of pixels.
-	int screen_height;
-	// The texture we want to render.
-	int wall_tex;
-	// The column of pixels we want to render.
-	int tex_col;
-};
-
-static void draw_wall_slice(struct slice* slice) {
-
-	// Manually copies texture from source to portion of screen.
-	int j;
-	for(j = 0; j < slice->screen_height; ++j) {
-		// j + screen_slice_y gives us the position to render the current pixel on the screen.
-		if(j + slice->screen_row < 0 || j + slice->screen_row  >= PROJ_H)
-			continue;
-
-		raycast_pixels[(j + slice->screen_row) * PROJ_W + slice->screen_col] =
-			get_pixel(map->walls[slice->wall_tex].surf, slice->tex_col, (j << 6) / slice->screen_height);
-	}
-}
-
-static unsigned int correct_hit_dist_for_fisheye_effect(const int hit_dist, const int correct_angle) {
-	unsigned int correct_dist = (hit_dist * cos128table[correct_angle]) >> 7;
-
-	// Make sure we don't get any issues computing the slice height.
-	if(correct_dist == 0)
-		correct_dist = 1;
-
-	return correct_dist;
-}
-
-static void compute_wall_slice_render_data_from_hit_and_screen_col(struct hitinfo* hit, const int screen_col, struct slice* slice) {
-	// Height of the slice in the world
-	unsigned int slice_height;
-
-	// Dist to projection * 64 / slice dist.
-	slice_height = (DIST_TO_PROJ << 6) / hit->dist;
-
-	// Define the part of the screen we render to such that it is a single column with the
-	// slice's middle pixel at the center of the screen.
-	slice->screen_row  = HALF_PROJ_H - (slice_height >> 1);
-	slice->screen_col = screen_col;
-	slice->screen_height = (HALF_PROJ_H + (slice_height >> 1)) - slice->screen_row;
-
-	slice->wall_tex = hit->wall_type - map->num_floor_ceils;
-	// Use a single column of pixels based on where the ray hit.
-	slice->tex_col = hit->is_horiz ? (hit->hit_pos[0] % UNIT_SIZE) : (hit->hit_pos[1] % UNIT_SIZE);
-}
-
-struct floor_ceiling_pixel {
-	unsigned int texture;
-	int screen_row;
-	int screen_col;
-	int world_space_coordinates[2];
-};
-
-static int compute_row_for_bottom_of_wall_slice(struct slice* wall_slice) {
-	return wall_slice->screen_row + wall_slice->screen_height;
-}
-
-static void project_screen_pixel_to_world_space(const int ray_angle, const int ray_angle_relative_to_player_rot, struct floor_ceiling_pixel* floor_ceil_pixel) {
-	// Compute the distance from the player to the point.
-	int straight_dist = (int)(DIST_TO_PROJ * HALF_UNIT_SIZE / (floor_ceil_pixel->screen_row - HALF_PROJ_H));
-	int dist_to_point = (straight_dist << 7) / (cos128table[ray_angle_relative_to_player_rot]);
-
-	floor_ceil_pixel->world_space_coordinates[0] = player_x + ((dist_to_point * cos128table[ray_angle]) >> 7);
-	floor_ceil_pixel->world_space_coordinates[1] = player_y - ((dist_to_point * sin128table[ray_angle]) >> 7);
-}
-
-static void draw_floor_and_ceiling_pixels(struct floor_ceiling_pixel* floor_ceil_pixel) {
-	int texture_x = floor_ceil_pixel->world_space_coordinates[0] % UNIT_SIZE;
-	int texture_y = floor_ceil_pixel->world_space_coordinates[1] % UNIT_SIZE;
-	int floor_screen_pixel = floor_ceil_pixel->screen_row * PROJ_W + floor_ceil_pixel->screen_col;
-	int ceiling_screen_pixel = ((-floor_ceil_pixel->screen_row) + PROJ_H) * PROJ_W + floor_ceil_pixel->screen_col;
-
-	// Put floor pixel.
-	if(map->floor_ceils[floor_ceil_pixel->texture].floor_surf) {
-		floor_ceiling_pixels[floor_screen_pixel] = get_pixel(map->floor_ceils[floor_ceil_pixel->texture].floor_surf, texture_x, texture_y);
-	}
-
-	// Put ceiling pixel.
-	if(map->floor_ceils[floor_ceil_pixel->texture].ceil_surf) {
-		floor_ceiling_pixels[ceiling_screen_pixel] = get_pixel(map->floor_ceils[floor_ceil_pixel->texture].ceil_surf, texture_x, texture_y);
-	}
-}
-
-static void draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(struct slice* wall_slice, const int ray_angle, const int ray_angle_relative_to_player_rot) {
-	// Data needed to render a floor (and corresponding ceiling pixel).
-	struct floor_ceiling_pixel floor_ceil_pixel;
-
-	int j;
-	for(j = compute_row_for_bottom_of_wall_slice(wall_slice); j < PROJ_H; ++j) {
-		floor_ceil_pixel.screen_row = j;
-		floor_ceil_pixel.screen_col = wall_slice->screen_col;
-		project_screen_pixel_to_world_space(ray_angle, ray_angle_relative_to_player_rot, &floor_ceil_pixel);
-
-		floor_ceil_pixel.texture  = get_tile(floor_ceil_pixel.world_space_coordinates[0],
-								   			 floor_ceil_pixel.world_space_coordinates[1],
-								   			 map);
-
-		if(floor_ceil_pixel.texture >= map->num_floor_ceils)
-			continue;
-
-		draw_floor_and_ceiling_pixels(&floor_ceil_pixel);
-	}
-}
-
-
-
-static void render_pixel_arrays_to_screen(SDL_Renderer* renderer) {
-	SDL_UpdateTexture(raycast_texture, NULL, raycast_pixels, PROJ_W << 2);
-	SDL_RenderCopy(renderer, raycast_texture, NULL, NULL);
-
-	SDL_UpdateTexture(floor_ceiling_tex, NULL, floor_ceiling_pixels, PROJ_W << 2);
-	SDL_RenderCopy(renderer, floor_ceiling_tex, NULL, NULL);
-
-	SDL_UpdateTexture(thing_texture, NULL, thing_pixels, PROJ_W << 2);
-	SDL_RenderCopy(renderer, thing_texture, NULL, NULL);
-}
 
 void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_x, int curr_player_y, int curr_player_rot) {
 	// Stores the precise angle of our current ray.
@@ -741,6 +633,126 @@ static void choose_ray_pos_according_to_shortest_dist(struct hitinfo* hit, int h
 
 static int ray_hit_wall(struct hitinfo* hit) {
 	return hit->hit_pos[0] != -1 && hit->hit_pos[1] != -1;
+}
+
+static unsigned int correct_hit_dist_for_fisheye_effect(const int hit_dist, const int correct_angle) {
+	unsigned int correct_dist = (hit_dist * cos128table[correct_angle]) >> 7;
+
+	// Make sure we don't get any issues computing the slice height.
+	if(correct_dist == 0)
+		correct_dist = 1;
+
+	return correct_dist;
+}
+
+static void draw_sky_slice(const int screen_col, const int adj_angle) {
+	if(!map || !map->sky_surf)
+		return;
+
+	// A skybox has 640 columns of pixels.
+	// There are 360 degrees in a circle.
+	// So to convert an angle to the corresponding column,
+	// we do 640 / 360, which is roughly 1.77. We can just round this
+	// to two.
+	int adj_angle_to_pixel_col = (adj_angle << 1) % SKYBOX_TEX_WIDTH;
+
+	int j;
+	for(j = 0; j < PROJ_H; ++j)
+		raycast_pixels[j * PROJ_W + screen_col] = get_pixel(map->sky_surf, adj_angle_to_pixel_col, j);
+}
+
+static void compute_wall_slice_render_data_from_hit_and_screen_col(struct hitinfo* hit, const int screen_col, struct slice* slice) {
+	// Height of the slice in the world
+	unsigned int slice_height;
+
+	// Dist to projection * 64 / slice dist.
+	slice_height = (DIST_TO_PROJ << 6) / hit->dist;
+
+	// Define the part of the screen we render to such that it is a single column with the
+	// slice's middle pixel at the center of the screen.
+	slice->screen_row  = HALF_PROJ_H - (slice_height >> 1);
+	slice->screen_col = screen_col;
+	slice->screen_height = (HALF_PROJ_H + (slice_height >> 1)) - slice->screen_row;
+
+	slice->wall_tex = hit->wall_type - map->num_floor_ceils;
+	// Use a single column of pixels based on where the ray hit.
+	slice->tex_col = hit->is_horiz ? (hit->hit_pos[0] % UNIT_SIZE) : (hit->hit_pos[1] % UNIT_SIZE);
+}
+
+static void draw_wall_slice(struct slice* slice) {
+
+	// Manually copies texture from source to portion of screen.
+	int j;
+	for(j = 0; j < slice->screen_height; ++j) {
+		// j + screen_slice_y gives us the position to render the current pixel on the screen.
+		if(j + slice->screen_row < 0 || j + slice->screen_row  >= PROJ_H)
+			continue;
+
+		raycast_pixels[(j + slice->screen_row) * PROJ_W + slice->screen_col] =
+			get_pixel(map->walls[slice->wall_tex].surf, slice->tex_col, (j << 6) / slice->screen_height);
+	}
+}
+
+static void draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(struct slice* wall_slice, const int ray_angle, const int ray_angle_relative_to_player_rot) {
+	// Data needed to render a floor (and corresponding ceiling pixel).
+	struct floor_ceiling_pixel floor_ceil_pixel;
+
+	int j;
+	for(j = compute_row_for_bottom_of_wall_slice(wall_slice); j < PROJ_H; ++j) {
+		floor_ceil_pixel.screen_row = j;
+		floor_ceil_pixel.screen_col = wall_slice->screen_col;
+		project_screen_pixel_to_world_space(ray_angle, ray_angle_relative_to_player_rot, &floor_ceil_pixel);
+
+		floor_ceil_pixel.texture  = get_tile(floor_ceil_pixel.world_space_coordinates[0],
+								   			 floor_ceil_pixel.world_space_coordinates[1],
+								   			 map);
+
+		if(floor_ceil_pixel.texture >= map->num_floor_ceils)
+			continue;
+
+		draw_floor_and_ceiling_pixels(&floor_ceil_pixel);
+	}
+}
+
+static int compute_row_for_bottom_of_wall_slice(struct slice* wall_slice) {
+	return wall_slice->screen_row + wall_slice->screen_height;
+}
+
+static void project_screen_pixel_to_world_space(const int ray_angle, const int ray_angle_relative_to_player_rot, struct floor_ceiling_pixel* floor_ceil_pixel) {
+	// Compute the distance from the player to the point.
+	int straight_dist = (int)(DIST_TO_PROJ * HALF_UNIT_SIZE / (floor_ceil_pixel->screen_row - HALF_PROJ_H));
+	int dist_to_point = (straight_dist << 7) / (cos128table[ray_angle_relative_to_player_rot]);
+
+	floor_ceil_pixel->world_space_coordinates[0] = player_x + ((dist_to_point * cos128table[ray_angle]) >> 7);
+	floor_ceil_pixel->world_space_coordinates[1] = player_y - ((dist_to_point * sin128table[ray_angle]) >> 7);
+}
+
+static void draw_floor_and_ceiling_pixels(struct floor_ceiling_pixel* floor_ceil_pixel) {
+	int texture_x = floor_ceil_pixel->world_space_coordinates[0] % UNIT_SIZE;
+	int texture_y = floor_ceil_pixel->world_space_coordinates[1] % UNIT_SIZE;
+	int floor_screen_pixel = floor_ceil_pixel->screen_row * PROJ_W + floor_ceil_pixel->screen_col;
+	int ceiling_screen_pixel = ((-floor_ceil_pixel->screen_row) + PROJ_H) * PROJ_W + floor_ceil_pixel->screen_col;
+
+	// Put floor pixel.
+	if(map->floor_ceils[floor_ceil_pixel->texture].floor_surf) {
+		floor_ceiling_pixels[floor_screen_pixel] = get_pixel(map->floor_ceils[floor_ceil_pixel->texture].floor_surf, texture_x, texture_y);
+	}
+
+	// Put ceiling pixel.
+	if(map->floor_ceils[floor_ceil_pixel->texture].ceil_surf) {
+		floor_ceiling_pixels[ceiling_screen_pixel] = get_pixel(map->floor_ceils[floor_ceil_pixel->texture].ceil_surf, texture_x, texture_y);
+	}
+}
+
+static void render_pixel_arrays_to_screen(SDL_Renderer* renderer) {
+	SDL_UpdateTexture(raycast_texture, NULL, raycast_pixels, PROJ_W << 2);
+	SDL_RenderCopy(renderer, raycast_texture, NULL, NULL);
+
+	SDL_UpdateTexture(floor_ceiling_tex, NULL, floor_ceiling_pixels, PROJ_W << 2);
+	SDL_RenderCopy(renderer, floor_ceiling_tex, NULL, NULL);
+
+	SDL_UpdateTexture(thing_texture, NULL, thing_pixels, PROJ_W << 2);
+	SDL_RenderCopy(renderer, thing_texture, NULL, NULL);
 }
 
 static void draw_things() {
