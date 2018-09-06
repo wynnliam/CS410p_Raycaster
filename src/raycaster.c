@@ -5,8 +5,6 @@
 #include <stdio.h>
 #include <math.h>
 
-// TODO: Remove constants.
-
 // TODO: Move this elsewhere.
 //------------------------------------------------------------------
 int get_tile(int x, int y, struct mapdef* map) {
