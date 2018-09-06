@@ -45,6 +45,20 @@ struct thing_column_render_data {
 	const int* frame_offset;
 };
 
+static void compute_lookup_vals_for_angle(const int);
+static void compute_tan_lookup_val_for_angle(const int);
+static void compute_inverse_tan_lookup_val_for_angle(const int);
+static int is_tan_undefined_for_angle(const int);
+static void compute_delta_lookup_vals_for_angle(const int);
+static void compute_delta_lookup_vals_quadrant_1(const int);
+static void compute_delta_lookup_vals_quadrant_2(const int);
+static void compute_delta_lookup_vals_quadrant_3(const int);
+static void compute_delta_lookup_vals_quadrant_4(const int);
+static int is_angle_in_quadrant_1(const int);
+static int is_angle_in_quadrant_2(const int);
+static int is_angle_in_quadrant_3(const int);
+static int is_angle_in_quadrant_4(const int);
+
 static void update_state_variables(struct mapdef*, const int, const int, const int);
 
 static void clean_pixel_arrays();
@@ -101,8 +115,61 @@ static int thing_pixel_is_not_transparent(const unsigned int);
 
 static void render_pixel_arrays_to_screen(SDL_Renderer*);
 
+void initialize_lookup_tables() {
+	int deg;
+
+	for(deg = 0; deg <= 360; ++deg)
+		compute_lookup_vals_for_angle(deg);
+}
+
+static void compute_lookup_vals_for_angle(const int deg) {
+	// Stores the angle in radians.
+	float curr_angle;
+
+	compute_tan_lookup_val_for_angle(deg);
+	compute_inverse_tan_lookup_val_for_angle(deg);
+	sin128table[deg] = (int)round(sin(deg * M_PI / 180.0f) * 128);
+	cos128table[deg] = (int)round(cos(deg * M_PI / 180.0f) * 128);
+	sin1table[deg] = (int)(round(128.0 / sin(deg * M_PI / 180.0f)));
+
+	compute_delta_lookup_vals_for_angle(deg);
+}
+
+static void compute_tan_lookup_val_for_angle(const int deg) {
+	if(is_tan_undefined_for_angle(deg))
+		tan128table[deg] = -1;
+	else
+		tan128table[deg] = (int)round(tan(deg * M_PI / 180.0f) * 128);
+}
+
+static void compute_inverse_tan_lookup_val_for_angle(const int deg) {
+	if(is_tan_undefined_for_angle(deg))
+		tan1table[deg] = -1;
+	else
+		tan1table[deg] = (int)round(128.0 / tan(deg * M_PI / 180.0f));
+}
+
 static int is_tan_undefined_for_angle(const int deg) {
 	return deg == 0 || deg == 90 || deg == 180 || deg == 270 || deg == 360;
+}
+
+static void compute_delta_lookup_vals_for_angle(const int deg) {
+	if(is_tan_undefined_for_angle(deg)) {
+		delta_h_x[deg] = 0;
+		delta_h_y[deg] = 0;
+		delta_v_x[deg] = 0;
+		delta_v_y[deg] = 0;
+	}
+
+	if(is_angle_in_quadrant_1(deg)) {
+		compute_delta_lookup_vals_quadrant_1(deg);
+	} else if(is_angle_in_quadrant_2(deg)) {
+		compute_delta_lookup_vals_quadrant_2(deg);
+	} else if(is_angle_in_quadrant_3(deg)) {
+		compute_delta_lookup_vals_quadrant_3(deg);
+	} else if(is_angle_in_quadrant_4(deg)) {
+		compute_delta_lookup_vals_quadrant_4(deg);
+	}
 }
 
 static int is_angle_in_quadrant_1(const int deg) {
@@ -119,20 +186,6 @@ static int is_angle_in_quadrant_3(const int deg) {
 
 static int is_angle_in_quadrant_4(const int deg) {
 	return 271 <= deg && deg <= 359;
-}
-
-static void compute_tan_lookup_val_for_angle(const int deg) {
-	if(is_tan_undefined_for_angle(deg))
-		tan128table[deg] = -1;
-	else
-		tan128table[deg] = (int)round(tan(deg * M_PI / 180.0f) * 128);
-}
-
-static void compute_inverse_tan_lookup_val_for_angle(const int deg) {
-	if(is_tan_undefined_for_angle(deg))
-		tan1table[deg] = -1;
-	else
-		tan1table[deg] = (int)round(128.0 / tan(deg * M_PI / 180.0f));
 }
 
 static void compute_delta_lookup_vals_quadrant_1(const int deg) {
@@ -173,45 +226,6 @@ static void compute_delta_lookup_vals_quadrant_4(const int deg) {
 	delta_v_x[deg] = UNIT_SIZE;
 	// Computes 64 / tan(ray_angle)
 	delta_v_y[deg] = (1 << 13) / tan128table[deg - 270];
-}
-
-static void compute_delta_lookup_vals_for_angle(const int deg) {
-	if(is_tan_undefined_for_angle(deg)) {
-		delta_h_x[deg] = 0;
-		delta_h_y[deg] = 0;
-		delta_v_x[deg] = 0;
-		delta_v_y[deg] = 0;
-	}
-
-	if(is_angle_in_quadrant_1(deg)) {
-		compute_delta_lookup_vals_quadrant_1(deg);
-	} else if(is_angle_in_quadrant_2(deg)) {
-		compute_delta_lookup_vals_quadrant_2(deg);
-	} else if(is_angle_in_quadrant_3(deg)) {
-		compute_delta_lookup_vals_quadrant_3(deg);
-	} else if(is_angle_in_quadrant_4(deg)) {
-		compute_delta_lookup_vals_quadrant_4(deg);
-	}
-}
-
-static void compute_lookup_vals_for_angle(const int deg) {
-	// Stores the angle in radians.
-	float curr_angle;
-
-	compute_tan_lookup_val_for_angle(deg);
-	compute_inverse_tan_lookup_val_for_angle(deg);
-	sin128table[deg] = (int)round(sin(deg * M_PI / 180.0f) * 128);
-	cos128table[deg] = (int)round(cos(deg * M_PI / 180.0f) * 128);
-	sin1table[deg] = (int)(round(128.0 / sin(deg * M_PI / 180.0f)));
-
-	compute_delta_lookup_vals_for_angle(deg);
-}
-
-void initialize_lookup_tables() {
-	int deg;
-
-	for(deg = 0; deg <= 360; ++deg)
-		compute_lookup_vals_for_angle(deg);
 }
 
 void initialize_render_textures(SDL_Renderer* renderer) {
