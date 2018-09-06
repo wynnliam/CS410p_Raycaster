@@ -42,7 +42,6 @@
 #define ANGLE_BETWEEN_RAYS	0.1875
 // Multiply a radian value to get its approximated degree.
 #define RAD_TO_DEG 			57.296
-
 // Experimentation with this value showed twice the screen size
 // worked very well.
 #define SKYBOX_TEX_WIDTH		640

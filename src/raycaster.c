@@ -6,10 +6,6 @@
 #include <math.h>
 
 // TODO: Remove constants.
-// TODO: Renaming
-// TODO: Structs
-// TODO: Inline functions
-// TODO: Global variables.
 
 // TODO: Move this elsewhere.
 //------------------------------------------------------------------
@@ -303,9 +299,9 @@ static void compute_delta_lookup_vals_quadrant_4(const int deg) {
 }
 
 void initialize_render_textures(SDL_Renderer* renderer) {
-	floor_ceiling_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
-	raycast_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
-	thing_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 200);
+	floor_ceiling_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, PROJ_W, PROJ_H);
+	raycast_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, PROJ_W, PROJ_H);
+	thing_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, PROJ_W, PROJ_H);
 
 	SDL_SetTextureBlendMode(floor_ceiling_tex, SDL_BLENDMODE_BLEND);
 	SDL_SetTextureBlendMode(raycast_texture, SDL_BLENDMODE_BLEND);
