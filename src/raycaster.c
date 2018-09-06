@@ -1,7 +1,6 @@
 // Liam Wynn, 5/13/2018, CS410p: Full Stack Web Development
 
 #include "raycaster.h"
-//#include "map.h"
 
 #include <stdio.h>
 #include <math.h>
@@ -12,12 +11,81 @@
 // TODO: Inline functions
 // TODO: Global variables.
 
+// TODO: Move this elsewhere.
+//------------------------------------------------------------------
+int get_tile(int x, int y, struct mapdef* map) {
+	int grid_x = x >> UNIT_POWER;
+	int grid_y = y >> UNIT_POWER;
+
+	if(grid_x < 0 || grid_x > map->map_w - 1)
+		return -1;
+	if(grid_y < 0 || grid_y > map->map_h - 1)
+		return -1;
+
+	return map->layout[grid_y * map->map_w + grid_x];
+}
+
+int get_dist_sqrd(int x1, int y1, int x2, int y2) {
+	int d_x, d_y;
+
+	d_x = x1 - x2;
+	d_y = y1 - y2;
+
+	d_x *= d_x;
+	d_y *= d_y;
+
+	return d_x + d_y;
+}
+
+static unsigned int get_pixel(SDL_Surface* surface, int x, int y) {
+	if(!surface)
+		return 0;
+	if(x < 0 || x >= surface->w)
+		return 0;
+	if(y < 0 || y >= surface->h)
+		return 0;
+
+	// Stores the channels of the pixel color.
+	unsigned char* channels;
+	// Used to compute channels and decides how we construct result.
+	int bytes_per_pixel = surface->format->BytesPerPixel;
+	// What we will return.
+	unsigned int result;
+
+	channels = (unsigned char*)surface->pixels + y * surface->pitch + x * bytes_per_pixel;
+
+	switch(bytes_per_pixel) {
+		case 1:
+			result = 0xFF000000 | channels[0] << 16 | channels[1] << 8 | channels[2];
+			break;
+		case 2:
+			if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
+			result = *(unsigned short*)(channels);
+			break;
+		case 3:
+			if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
+				result = 0xFF000000 | channels[0] << 16 | channels[1] << 8 | channels[2];
+			else
+				result = 0xFF000000 | channels[2] << 16 | channels[1] << 8 | channels[0];
+			break;
+		case 4:
+			result = *(unsigned int*)channels;
+			break;
+		default:
+			result = 0;
+			break;
+	}
+
+	return result;
+}
+//------------------------------------------------------------------
+
 // RAYCASTER STATE VARIABLES
 static int player_x, player_y;
 static int player_rot;
 static struct mapdef* map;
 
-struct slice {
+struct wall_slice {
 	// The row of pixels on the screen we want to render from (top-most row going down).
 	int screen_row;
 	// The column of pixels on the screen we want to render from.
@@ -93,11 +161,11 @@ static unsigned int correct_hit_dist_for_fisheye_effect(const int, const int);
 
 static void draw_sky_slice(const int, const int);
 
-static void compute_wall_slice_render_data_from_hit_and_screen_col(struct hitinfo*, const int, struct slice*);
-static void draw_wall_slice(struct slice*);
+static void compute_wall_slice_render_data_from_hit_and_screen_col(struct hitinfo*, const int, struct wall_slice*);
+static void draw_wall_slice(struct wall_slice*);
 
-static void draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(struct slice*, const int, const int);
-static int compute_row_for_bottom_of_wall_slice(struct slice*);
+static void draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(struct wall_slice*, const int, const int);
+static int compute_row_for_bottom_of_wall_slice(struct wall_slice*);
 static void project_screen_pixel_to_world_space(const int, const int, struct floor_ceiling_pixel*);
 static void draw_floor_and_ceiling_pixels(struct floor_ceiling_pixel*);
 
@@ -238,79 +306,9 @@ void initialize_render_textures(SDL_Renderer* renderer) {
 	SDL_SetTextureBlendMode(thing_texture, SDL_BLENDMODE_BLEND);
 }
 
-// TODO: Add to some kind of utils file.
-int get_tile(int x, int y, struct mapdef* map) {
-	int grid_x = x >> UNIT_POWER;
-	int grid_y = y >> UNIT_POWER;
-
-	if(grid_x < 0 || grid_x > map->map_w - 1)
-		return -1;
-	if(grid_y < 0 || grid_y > map->map_h - 1)
-		return -1;
-
-	return map->layout[grid_y * map->map_w + grid_x];
-}
-
-int get_dist_sqrd(int x1, int y1, int x2, int y2) {
-	int d_x, d_y;
-
-	d_x = x1 - x2;
-	d_y = y1 - y2;
-
-	d_x *= d_x;
-	d_y *= d_y;
-
-	return d_x + d_y;
-}
-
-
-// TODO: Move this elsewhere.
-static unsigned int get_pixel(SDL_Surface* surface, int x, int y) {
-	if(!surface)
-		return 0;
-	if(x < 0 || x >= surface->w)
-		return 0;
-	if(y < 0 || y >= surface->h)
-		return 0;
-
-	// Stores the channels of the pixel color.
-	unsigned char* channels;
-	// Used to compute channels and decides how we construct result.
-	int bytes_per_pixel = surface->format->BytesPerPixel;
-	// What we will return.
-	unsigned int result;
-
-	channels = (unsigned char*)surface->pixels + y * surface->pitch + x * bytes_per_pixel;
-
-	switch(bytes_per_pixel) {
-		case 1:
-			result = 0xFF000000 | channels[0] << 16 | channels[1] << 8 | channels[2];
-			break;
-		case 2:
-			if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
-			result = *(unsigned short*)(channels);
-			break;
-		case 3:
-			if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
-				result = 0xFF000000 | channels[0] << 16 | channels[1] << 8 | channels[2];
-			else
-				result = 0xFF000000 | channels[2] << 16 | channels[1] << 8 | channels[0];
-			break;
-		case 4:
-			result = *(unsigned int*)channels;
-			break;
-		default:
-			result = 0;
-			break;
-	}
-
-	return result;
-}
-
-
 void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_x, int curr_player_y, int curr_player_rot) {
 	// Stores the precise angle of our current ray.
-	float curr_angle = (float)(player_rot + FOV_HALF);
+	float curr_ray_angle = (float)(player_rot + FOV_HALF);
 
 	update_state_variables(curr_map, curr_player_x, curr_player_y, curr_player_rot);
 
@@ -319,8 +317,8 @@ void cast_rays(SDL_Renderer* renderer, struct mapdef* curr_map, int curr_player_
 
 	int i;
 	for(i = 0; i < PROJ_W; ++i) {
-		cast_single_ray(i, curr_angle);
-		curr_angle -= ANGLE_BETWEEN_RAYS;
+		cast_single_ray(i, curr_ray_angle);
+		curr_ray_angle -= ANGLE_BETWEEN_RAYS;
 	}
 
 	// THING CASTING
@@ -404,57 +402,55 @@ static int partition(int s, int e) {
 	}
 }
 
-static void cast_single_ray(const int screen_col, const float curr_angle) {
-	// The curr_angle adjusted to be within 0 and 360.
-	int adj_angle;
-	// The angle used to compute the "corrected" distance so
-	// we avoid the fisheye effect.
-	int correct_angle;
+static void cast_single_ray(const int screen_col, const float curr_ray_angle) {
+	// The curr_ray_angle adjusted to be within 0 and 360.
+	int adj_ray_angle;
+	int ray_angle_relative_to_player_rot;
 
 	struct hitinfo hit;
 	// Data needed to render a wall slice.
-	struct slice wall_slice;
+	struct wall_slice wall_slice;
 
-	adj_angle = get_adjusted_angle((int)curr_angle);
+	adj_ray_angle = get_adjusted_angle((int)curr_ray_angle);
 
 	z_buffer[screen_col] = 0;
-	get_ray_hit(adj_angle, &hit);
+	get_ray_hit(adj_ray_angle, &hit);
 	if(ray_hit_wall(&hit)) {
 		z_buffer[screen_col] = hit.dist;
 
 		// Computes the angle relative to the player rotation.
-		correct_angle = abs(adj_angle - player_rot);
-		hit.dist = correct_hit_dist_for_fisheye_effect(hit.dist, correct_angle);
+		ray_angle_relative_to_player_rot = abs(adj_ray_angle - player_rot);
+		hit.dist = correct_hit_dist_for_fisheye_effect(hit.dist, ray_angle_relative_to_player_rot);
 
 		// SKY CASTING
-		draw_sky_slice(screen_col, adj_angle);
+		draw_sky_slice(screen_col, adj_ray_angle);
 
 		// WALL CASTING
 		compute_wall_slice_render_data_from_hit_and_screen_col(&hit, screen_col, &wall_slice);
 		draw_wall_slice(&wall_slice);
 
 		// FLOOR AND CEILING CASTING
-		draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(&wall_slice, adj_angle, correct_angle);
+		draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(&wall_slice, adj_ray_angle, ray_angle_relative_to_player_rot);
 	}
 }
 
-static int get_adjusted_angle(int curr_angle) {
-	int adj_angle = curr_angle;
+static int get_adjusted_angle(int curr_ray_angle) {
+	int adj_ray_angle = curr_ray_angle;
 
 	// Make the angle between 0 and 360.
-	if(adj_angle < 0)
-		adj_angle += 360;
-	if(adj_angle > 360)
-		adj_angle -= 360;
+	if(adj_ray_angle < 0)
+		adj_ray_angle += 360;
+	if(adj_ray_angle > 360)
+		adj_ray_angle -= 360;
 
 	// First, we must deal with bad angles. These angles will break the raycaster, since
 	// it will produce NaN's.
-	if(adj_angle == 360)
-		adj_angle = 0;
-	if(adj_angle == 0 || adj_angle == 90 || adj_angle == 180 || adj_angle == 270)
-		adj_angle += 1;
+	if(adj_ray_angle == 360)
+		adj_ray_angle = 0;
+	if(adj_ray_angle == 0 || adj_ray_angle == 90 || adj_ray_angle == 180 || adj_ray_angle == 270)
+		adj_ray_angle += 1;
 
-	return adj_angle;
+	return adj_ray_angle;
 }
 
 static void get_ray_hit(int ray_angle, struct hitinfo* hit) {
@@ -659,7 +655,7 @@ static unsigned int correct_hit_dist_for_fisheye_effect(const int hit_dist, cons
 	return correct_dist;
 }
 
-static void draw_sky_slice(const int screen_col, const int adj_angle) {
+static void draw_sky_slice(const int screen_col, const int adj_ray_angle) {
 	if(!map || !map->sky_surf)
 		return;
 
@@ -668,14 +664,14 @@ static void draw_sky_slice(const int screen_col, const int adj_angle) {
 	// So to convert an angle to the corresponding column,
 	// we do 640 / 360, which is roughly 1.77. We can just round this
 	// to two.
-	int adj_angle_to_pixel_col = (adj_angle << 1) % SKYBOX_TEX_WIDTH;
+	int adj_angle_to_pixel_col = (adj_ray_angle << 1) % SKYBOX_TEX_WIDTH;
 
 	int j;
 	for(j = 0; j < PROJ_H; ++j)
 		raycast_pixels[j * PROJ_W + screen_col] = get_pixel(map->sky_surf, adj_angle_to_pixel_col, j);
 }
 
-static void compute_wall_slice_render_data_from_hit_and_screen_col(struct hitinfo* hit, const int screen_col, struct slice* slice) {
+static void compute_wall_slice_render_data_from_hit_and_screen_col(struct hitinfo* hit, const int screen_col, struct wall_slice* slice) {
 	// Height of the slice in the world
 	unsigned int slice_height;
 
@@ -693,7 +689,7 @@ static void compute_wall_slice_render_data_from_hit_and_screen_col(struct hitinf
 	slice->tex_col = hit->is_horiz ? (hit->hit_pos[0] % UNIT_SIZE) : (hit->hit_pos[1] % UNIT_SIZE);
 }
 
-static void draw_wall_slice(struct slice* slice) {
+static void draw_wall_slice(struct wall_slice* slice) {
 
 	// Manually copies texture from source to portion of screen.
 	int j;
@@ -707,7 +703,7 @@ static void draw_wall_slice(struct slice* slice) {
 	}
 }
 
-static void draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(struct slice* wall_slice, const int ray_angle, const int ray_angle_relative_to_player_rot) {
+static void draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(struct wall_slice* wall_slice, const int ray_angle, const int ray_angle_relative_to_player_rot) {
 	// Data needed to render a floor (and corresponding ceiling pixel).
 	struct floor_ceiling_pixel floor_ceil_pixel;
 
@@ -728,7 +724,7 @@ static void draw_column_of_floor_and_ceiling_from_wall_and_ray_angle(struct slic
 	}
 }
 
-static int compute_row_for_bottom_of_wall_slice(struct slice* wall_slice) {
+static int compute_row_for_bottom_of_wall_slice(struct wall_slice* wall_slice) {
 	return wall_slice->screen_row + wall_slice->screen_height;
 }
 
