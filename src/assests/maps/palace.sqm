@@ -34,7 +34,7 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/baroque/carpet1.bmp";
-	tex_1 = "./src/assests/textures/skybox/sk1.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
 }
 
 # The paintings for the North Wing
@@ -1026,16 +1026,6 @@ component {
 	tex_1 = "0";
 }
 
-component {
-	x = "9";
-	y = "20";
-	w = "1";
-	h = "2";
-
-	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
-	tex_1 = "0";
-}
 
 component {
 	x = "9";
@@ -1050,17 +1040,6 @@ component {
 
 component {
 	x = "9";
-	y = "34";
-	w = "1";
-	h = "2";
-
-	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
-	tex_1 = "0";
-}
-
-component {
-	x = "9";
 	y = "36";
 	w = "1";
 	h = "9";
@@ -1069,6 +1048,7 @@ component {
 	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
 	tex_1 = "0";
 }
+
 # EXTENSION OF LOWER WING
 
 # Flooring
@@ -1087,7 +1067,30 @@ component {
 component {
 	x = "10";
 	y = "44";
-	w = "50";
+	w = "12";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
+	tex_1 = "0";
+}
+
+
+component {
+	x = "24";
+	y = "44";
+	w = "14";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "40";
+	y = "44";
+	w = "30";
 	h = "1";
 
 	is_floor_ciel = "0";
@@ -1628,3 +1631,52 @@ thing {
 	anim_class = "0";
 	sprite_sheet = "./src/assests/sprites/columns/column1.bmp";
 }
+
+# Connects Palace Lower Wing to Courtyard.
+component {
+	x = "9";
+	y = "20";
+	w = "2";
+	h = "2";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "9";
+	y = "34";
+	w = "2";
+	h = "2";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "22";
+	y = "43";
+	w = "2";
+	h = "2";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "38";
+	y = "43";
+	w = "2";
+	h = "2";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
+	tex_1 = "0";
+}
+
+# COURTYARD
+
+# Walls surrounding courtyard.
