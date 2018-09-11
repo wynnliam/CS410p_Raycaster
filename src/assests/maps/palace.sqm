@@ -3,7 +3,7 @@
 # Metadata about the map.
 properties {
 	# String
-	name = "demo world";
+	name = "Palace";
 	# String - 0 will denote "NULL"
 	sky_tex = "./src/assests/textures/test/skybox.bmp";
 }
@@ -1019,13 +1019,56 @@ component {
 	x = "9";
 	y = "8";
 	w = "1";
-	h = "37";
+	h = "12";
 
 	is_floor_ciel = "0";
 	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
 	tex_1 = "0";
 }
 
+component {
+	x = "9";
+	y = "20";
+	w = "1";
+	h = "2";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "9";
+	y = "22";
+	w = "1";
+	h = "12";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "9";
+	y = "34";
+	w = "1";
+	h = "2";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "9";
+	y = "36";
+	w = "1";
+	h = "9";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
+	tex_1 = "0";
+}
 # EXTENSION OF LOWER WING
 
 # Flooring
