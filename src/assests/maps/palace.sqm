@@ -34,7 +34,7 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/baroque/carpet1.bmp";
-	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
+	tex_1 = "./src/assests/textures/skybox/sk1.bmp";
 }
 
 # The paintings for the North Wing
