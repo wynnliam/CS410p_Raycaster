@@ -1026,7 +1026,6 @@ component {
 	tex_1 = "0";
 }
 
-
 component {
 	x = "9";
 	y = "22";
@@ -1074,7 +1073,6 @@ component {
 	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
 	tex_1 = "0";
 }
-
 
 component {
 	x = "24";
@@ -1680,3 +1678,106 @@ component {
 # COURTYARD
 
 # Walls surrounding courtyard.
+# West Wall
+component {
+	x = "10";
+	y = "8";
+	w = "1";
+	h = "12";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "10";
+	y = "22";
+	w = "1";
+	h = "12";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "10";
+	y = "36";
+	w = "1";
+	h = "8";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+# South Wall
+component {
+	x = "10";
+	y = "43";
+	w = "12";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "24";
+	y = "43";
+	w = "14";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "40";
+	y = "43";
+	w = "30";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+# North wall
+component {
+	x = "11";
+	y = "8";
+	w = "49";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall2.bmp";
+	tex_1 = "0";
+}
+
+# East wall
+component {
+	x = "51";
+	y = "8";
+	w = "1";
+	h = "36";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+# Courtyard
+component {
+	x = "11";
+	y = "9";
+	w = "50";
+	h = "34";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
+	tex_1 = "0";
+}
