@@ -218,7 +218,6 @@ component {
 }
 
 # The sourthern wall of the North Wing Room
-
 component {
 	x = "0";
 	y = "7";
@@ -233,7 +232,18 @@ component {
 component {
 	x = "6";
 	y = "7";
-	w = "18";
+	w = "7";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "15";
+	y = "7";
+	w = "8";
 	h = "1";
 
 	is_floor_ciel = "0";
@@ -1639,7 +1649,7 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
-	tex_1 = "0";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
 }
 
 component {
@@ -1650,7 +1660,7 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
-	tex_1 = "0";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
 }
 
 component {
@@ -1661,7 +1671,7 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
-	tex_1 = "0";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
 }
 
 component {
@@ -1672,7 +1682,19 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
-	tex_1 = "0";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
+}
+
+# Connects the North Wing to the courtyard.
+component {
+	x = "13";
+	y = "7";
+	w = "2";
+	h = "2";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
 }
 
 # COURTYARD
@@ -1686,7 +1708,7 @@ component {
 	h = "12";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/baroque/ext1.bmp";
 	tex_1 = "0";
 }
 
@@ -1697,7 +1719,7 @@ component {
 	h = "12";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/baroque/ext1.bmp";
 	tex_1 = "0";
 }
 
@@ -1708,7 +1730,7 @@ component {
 	h = "8";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/baroque/ext1.bmp";
 	tex_1 = "0";
 }
 
@@ -1720,7 +1742,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/baroque/ext1.bmp";
 	tex_1 = "0";
 }
 
@@ -1731,7 +1753,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/baroque/ext1.bmp";
 	tex_1 = "0";
 }
 
@@ -1742,7 +1764,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/baroque/ext1.bmp";
 	tex_1 = "0";
 }
 
@@ -1754,7 +1776,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall2.bmp";
+	tex_0 = "./src/assests/textures/baroque/ext1.bmp";
 	tex_1 = "0";
 }
 
@@ -1766,7 +1788,7 @@ component {
 	h = "36";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/baroque/ext1.bmp";
 	tex_1 = "0";
 }
 
@@ -1778,6 +1800,6 @@ component {
 	h = "34";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
+	tex_0 = "./src/assests/textures/grass/grass1.bmp";
 	tex_1 = "0";
 }
