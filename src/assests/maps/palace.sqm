@@ -243,7 +243,7 @@ component {
 component {
 	x = "15";
 	y = "7";
-	w = "8";
+	w = "9";
 	h = "1";
 
 	is_floor_ciel = "0";
@@ -268,7 +268,18 @@ component {
 	x = "23";
 	y = "1";
 	w = "1";
-	h = "6";
+	h = "2";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "23";
+	y = "5";
+	w = "1";
+	h = "2";
 
 	is_floor_ciel = "0";
 	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
@@ -1803,3 +1814,66 @@ component {
 	tex_0 = "./src/assests/textures/grass/grass1.bmp";
 	tex_1 = "0";
 }
+
+# Connects the Main Room to the North Wing
+component {
+	x = "23";
+	y = "3";
+	w = "1";
+	h = "2";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
+}
+
+# The Main Room
+# Floor
+component {
+	x = "24";
+	y = "1";
+	w = "20";
+	h = "6";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
+}
+
+# North Wall
+component {
+	x = "24";
+	y = "0";
+	w = "21";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
+	tex_1 = "0";
+}
+
+# South Wall
+component {
+	x = "24";
+	y = "7";
+	w = "21";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
+	tex_1 = "0";
+}
+
+# East Wall
+component {
+	x = "44";
+	y = "1";
+	w = "1";
+	h = "6";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
+	tex_1 = "0";
+}
+
+# Connects the Main room to Courtyard.
