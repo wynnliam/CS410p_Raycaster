@@ -1783,11 +1783,33 @@ component {
 component {
 	x = "11";
 	y = "8";
-	w = "49";
+	w = "22";
 	h = "1";
 
 	is_floor_ciel = "0";
 	tex_0 = "./src/assests/textures/baroque/ext1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "35";
+	y = "8";
+	w = "10";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/baroque/ext1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "45";
+	y = "8";
+	w = "15";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
 	tex_1 = "0";
 }
 
@@ -1799,7 +1821,7 @@ component {
 	h = "36";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/baroque/ext1.bmp";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
 	tex_1 = "0";
 }
 
@@ -1856,7 +1878,18 @@ component {
 component {
 	x = "24";
 	y = "7";
-	w = "21";
+	w = "9";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/baroque/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "35";
+	y = "7";
+	w = "10";
 	h = "1";
 
 	is_floor_ciel = "0";
@@ -1877,3 +1910,24 @@ component {
 }
 
 # Connects the Main room to Courtyard.
+component {
+	x = "33";
+	y = "7";
+	w = "2";
+	h = "1";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
+}
+
+component {
+	x = "33";
+	y = "8";
+	w = "2";
+	h = "1";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/grass/grass1.bmp";
+	tex_1 = "0";
+}
