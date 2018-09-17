@@ -1809,7 +1809,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/wall/stone1.bmp";
 	tex_1 = "0";
 }
 
@@ -1821,7 +1821,7 @@ component {
 	h = "36";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/wall/stone1.bmp";
 	tex_1 = "0";
 }
 
