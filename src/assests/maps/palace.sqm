@@ -1826,6 +1826,46 @@ component {
 }
 
 # Courtyard
+
+# Covered area surounding the courtyard
+# North
+component {
+	x = "11";
+	y = "9";
+	w = "34";
+	h = "2";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/floor/cobblestone1.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
+}
+
+# West
+component {
+	x = "11";
+	y = "11";
+	w = "2";
+	h = "30";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/floor/cobblestone1.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
+}
+
+# South
+component {
+	x = "11";
+	y = "41";
+	w = "49";
+	h = "2";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/floor/cobblestone1.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
+}
+
+# The grass of the courtyard itself.
+
 component {
 	x = "11";
 	y = "9";
@@ -1914,7 +1954,7 @@ component {
 	x = "33";
 	y = "7";
 	w = "2";
-	h = "1";
+	h = "2";
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
