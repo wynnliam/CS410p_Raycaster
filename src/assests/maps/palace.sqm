@@ -1816,6 +1816,17 @@ component {
 # East wall
 component {
 	x = "51";
+	y = "22";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/wall/stone2.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "51";
 	y = "8";
 	w = "1";
 	h = "36";
@@ -1864,6 +1875,67 @@ component {
 	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
 }
 
+# Area under the fountain
+component {
+	x = "30";
+	y = "21";
+	w = "3";
+	h = "3";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/floor/cobblestone1.bmp";
+	tex_1 = "0";
+}
+
+# Cobblestone paths leading to fountain
+# Northward -- towards main room
+component {
+	x = "31";
+	y = "11";
+	w = "1";
+	h = "10";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/floor/cobblestone1.bmp";
+	tex_1 = "0";
+}
+
+# Westward -- towards lower wing
+component {
+	x = "13";
+	y = "22";
+	w = "17";
+	h = "1";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/floor/cobblestone1.bmp";
+	tex_1 = "0";
+}
+
+# Southward -- towards extension of lower wing
+component {
+	x = "31";
+	y = "24";
+	w = "1";
+	h = "17";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/floor/cobblestone1.bmp";
+	tex_1 = "0";
+}
+
+# Eastward -- Towards the gate
+component {
+	x = "33";
+	y = "21";
+	w = "18";
+	h = "3";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/floor/cobblestone1.bmp";
+	tex_1 = "0";
+}
+
 # The grass of the courtyard itself.
 
 component {
@@ -1876,6 +1948,19 @@ component {
 	tex_0 = "./src/assests/textures/grass/grass1.bmp";
 	tex_1 = "0";
 }
+
+# Things in the courtyard
+thing {
+	type = "1";
+
+	x = "2016";
+	y = "1440";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/fountain/fountain1.bmp";
+}
+
 
 # Connects the Main Room to the North Wing
 component {
