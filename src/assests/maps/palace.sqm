@@ -11,8 +11,8 @@ properties {
 # Player spawn.
 thing {
 	type = "0";
-	x = "448";
-	y = "1024";
+	x = "2712";
+	y = "1048";
 	rot = "90";
 
 	anim_class = "0";
@@ -1936,8 +1936,30 @@ component {
 	tex_1 = "0";
 }
 
-# The grass of the courtyard itself.
+# Area under the statue
+component {
+	x = "41";
+	y = "15";
+	w = "3";
+	h = "3";
 
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/floor/cobblestone1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "42";
+	y = "18";
+	w = "1";
+	h = "3";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/floor/cobblestone1.bmp";
+	tex_1 = "0";
+}
+
+# The grass of the courtyard itself.
 component {
 	x = "11";
 	y = "9";
@@ -1950,6 +1972,7 @@ component {
 }
 
 # Things in the courtyard
+# The fountain
 thing {
 	type = "1";
 
@@ -1959,6 +1982,18 @@ thing {
 
 	anim_class = "0";
 	sprite_sheet = "./src/assests/sprites/fountain/fountain1.bmp";
+}
+
+# Statue
+thing {
+	type = "1";
+
+	x = "2716";
+	y = "1052";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/statue.bmp";
 }
 
 
