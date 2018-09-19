@@ -1959,6 +1959,28 @@ component {
 	tex_1 = "0";
 }
 
+component {
+	x = "20";
+	y = "31";
+	w = "3";
+	h = "3";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/floor/cobblestone1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "21";
+	y = "23";
+	w = "1";
+	h = "8";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/floor/cobblestone1.bmp";
+	tex_1 = "0";
+}
+
 # The grass of the courtyard itself.
 component {
 	x = "11";
@@ -1984,7 +2006,7 @@ thing {
 	sprite_sheet = "./src/assests/sprites/fountain/fountain1.bmp";
 }
 
-# Statue
+# Statues
 thing {
 	type = "1";
 
@@ -1996,6 +2018,16 @@ thing {
 	sprite_sheet = "./src/assests/sprites/statue.bmp";
 }
 
+thing {
+	type = "1";
+
+	x = "1376";
+	y = "2080";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/st_michael_statue.bmp";
+}
 
 # Connects the Main Room to the North Wing
 component {
