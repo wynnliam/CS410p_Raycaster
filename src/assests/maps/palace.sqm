@@ -2029,6 +2029,183 @@ thing {
 	sprite_sheet = "./src/assests/sprites/st_michael_statue.bmp";
 }
 
+# Trees
+thing {
+	type = "1";
+
+	x = "2112";
+	y = "1312";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2240";
+	y = "1312";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2368";
+	y = "1312";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2496";
+	y = "1312";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2642";
+	y = "1312";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2784";
+	y = "1312";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2912";
+	y = "1312";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "3040";
+	y = "1312";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2112";
+	y = "1568";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2240";
+	y = "1568";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2368";
+	y = "1568";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2496";
+	y = "1568";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2642";
+	y = "1568";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2784";
+	y = "1568";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2912";
+	y = "1568";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "3040";
+	y = "1568";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
 # Connects the Main Room to the North Wing
 component {
 	x = "23";
