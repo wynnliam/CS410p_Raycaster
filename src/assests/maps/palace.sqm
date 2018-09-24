@@ -2209,78 +2209,463 @@ thing {
 thing {
 	type = "1";
 
-	x = "1860";
-	y = "1024";
+	x = "864";
+	y = "1504";
 	rot = "0";
 
 	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
 }
 
 thing {
 	type = "1";
 
-	x = "1876";
-	y = "952";
+	x = "992";
+	y = "1504";
 	rot = "0";
 
 	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
 }
 
 thing {
 	type = "1";
 
-	x = "1836";
-	y = "1000";
+	x = "1120";
+	y = "1504";
 	rot = "0";
 
 	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
 }
 
 thing {
 	type = "1";
 
-	x = "1700";
-	y = "1328";
+	x = "1248";
+	y = "1504";
 	rot = "0";
 
 	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
 }
 
 thing {
 	type = "1";
 
-	x = "1115";
-	y = "1133";
+	x = "864";
+	y = "1376";
 	rot = "0";
 
 	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
 }
 
 thing {
 	type = "1";
 
-	x = "1070";
-	y = "1150";
+	x = "992";
+	y = "1376";
 	rot = "0";
 
 	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
 }
 
 thing {
 	type = "1";
 
-	x = "1208";
-	y = "1323";
+	x = "1120";
+	y = "1376";
 	rot = "0";
 
 	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1248";
+	y = "1376";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1440";
+	y = "1504";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1568";
+	y = "1504";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1696";
+	y = "1504";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1824";
+	y = "1504";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1440";
+	y = "1376";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1568";
+	y = "1376";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1696";
+	y = "1376";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1824";
+	y = "1376";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1952";
+	y = "1568";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1952";
+	y = "1696";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1952";
+	y = "1824";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1952";
+	y = "1952";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1952";
+	y = "2080";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1952";
+	y = "2208";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1952";
+	y = "2336";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1952";
+	y = "2464";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2080";
+	y = "1696";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2080";
+	y = "1824";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2080";
+	y = "1952";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2080";
+	y = "2080";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2080";
+	y = "2208";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2080";
+	y = "2336";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2080";
+	y = "2464";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1952";
+	y = "736";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1952";
+	y = "864";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1952";
+	y = "992";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1952";
+	y = "1120";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1952";
+	y = "1248";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2080";
+	y = "736";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2080";
+	y = "864";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2080";
+	y = "992";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2080";
+	y = "1120";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2080";
+	y = "1248";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2080";
+	y = "1376";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
 }
 
 # Bench
@@ -2298,8 +2683,8 @@ thing {
 thing {
 	type = "1";
 
-	x = "1324";
-	y = "949";
+	x = "1368";
+	y = "964";
 	rot = "0";
 
 	anim_class = "0";
@@ -2309,8 +2694,8 @@ thing {
 thing {
 	type = "1";
 
-	x = "1376";
-	y = "985";
+	x = "1308";
+	y = "1024";
 	rot = "0";
 
 	anim_class = "0";
@@ -2320,8 +2705,8 @@ thing {
 thing {
 	type = "1";
 
-	x = "1320";
-	y = "1021";
+	x = "1344";
+	y = "1076";
 	rot = "0";
 
 	anim_class = "0";
@@ -2331,8 +2716,20 @@ thing {
 thing {
 	type = "1";
 
-	x = "1351";
-	y = "1064";
+	x = "1386";
+	y = "1055";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
+}
+
+# Bushes by bench
+thing {
+	type = "1";
+
+	x = "1446";
+	y = "982";
 	rot = "0";
 
 	anim_class = "0";
@@ -2342,8 +2739,8 @@ thing {
 thing {
 	type = "1";
 
-	x = "2266";
-	y = "1987";
+	x = "1288";
+	y = "982";
 	rot = "0";
 
 	anim_class = "0";
@@ -2353,272 +2750,14 @@ thing {
 thing {
 	type = "1";
 
-	x = "2314";
-	y = "2031";
+	x = "1278";
+	y = "1084";
 	rot = "0";
 
 	anim_class = "0";
 	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
 }
 
-thing {
-	type = "1";
-
-	x = "2314";
-	y = "1967";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "2314";
-	y = "2495";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "2239";
-	y = "2460";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "2734";
-	y = "2328";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "2754";
-	y = "2304";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "2704";
-	y = "2244";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "3132";
-	y = "1808";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-thing {
-	type = "1";
-
-	x = "3044";
-	y = "1912";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-thing {
-	type = "1";
-
-	x = "2654";
-	y = "2094";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-thing {
-	type = "1";
-
-	x = "2659";
-	y = "2491";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-thing {
-	type = "1";
-
-	x = "2947";
-	y = "2491";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-thing {
-	type = "1";
-
-	x = "3007";
-	y = "2515";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "1960";
-	y = "2432";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-thing {
-	type = "1";
-
-	x = "1647";
-	y = "2367";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-thing {
-	type = "1";
-
-	x = "1764";
-	y = "1791";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-thing {
-	type = "1";
-
-	x = "1720";
-	y = "1823";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-thing {
-	type = "1";
-
-	x = "1016";
-	y = "1999";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-thing {
-	type = "1";
-
-	x = "992";
-	y = "1943";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "3002";
-	y = "700";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-thing {
-	type = "1";
-
-	x = "3177";
-	y = "1075";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-thing {
-	type = "1";
-
-	x = "3086";
-	y = "1145";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-thing {
-	type = "1";
-
-	x = "2966";
-	y = "1089";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-thing {
-	type = "1";
-
-	x = "2396";
-	y = "823";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-thing {
-	type = "1";
-
-	x = "2231";
-	y = "889";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-thing {
-	type = "1";
-
-	x = "2205";
-	y = "1097";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
 # Connects the Main Room to the North Wing
 component {
 	x = "23";
