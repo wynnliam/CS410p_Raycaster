@@ -2758,6 +2758,84 @@ thing {
 	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
 }
 
+# Bigtree
+thing {
+	type = "1";
+
+	x = "2672";
+	y = "1909";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bigtree.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2702";
+	y = "1836";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flowers1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2647";
+	y = "1896";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flowers2.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2677";
+	y = "1986";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flowers3.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2725";
+	y = "1950";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flowers4.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2671";
+	y = "1872";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flowers5.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2665";
+	y = "1968";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flowers6.bmp";
+}
+
 # Connects the Main Room to the North Wing
 component {
 	x = "23";
