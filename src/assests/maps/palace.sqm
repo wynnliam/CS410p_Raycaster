@@ -2657,17 +2657,6 @@ thing {
 	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
 }
 
-thing {
-	type = "1";
-
-	x = "2080";
-	y = "1376";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
-}
-
 # Bench
 thing {
 	type = "1";
