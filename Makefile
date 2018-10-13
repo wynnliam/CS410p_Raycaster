@@ -1,5 +1,5 @@
 CMP= ~/emsdk/emscripten/1.38.0/emcc
-FLG= -s WASM=1 -s USE_SDL=2 -s ALLOW_MEMORY_GROWTH=1 -O3 --preload-file ./src/assests -o ./public/raycaster.js
+FLG= -s WASM=1 -s USE_SDL=2 -s ALLOW_MEMORY_GROWTH=1 -O3 --embed-file ./src/assests -o ./public/raycaster.js
 
 SRC= ./src/*.c \
 	 ./src/parse/*.c
