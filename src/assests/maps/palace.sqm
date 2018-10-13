@@ -2722,7 +2722,7 @@ thing {
 	rot = "0";
 
 	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
+	sprite_sheet = "./src/assests/sprites/foliage/bush1.bmp";
 }
 
 thing {
@@ -2733,7 +2733,7 @@ thing {
 	rot = "0";
 
 	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
+	sprite_sheet = "./src/assests/sprites/foliage/bush1.bmp";
 }
 
 thing {
@@ -2744,7 +2744,7 @@ thing {
 	rot = "0";
 
 	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
+	sprite_sheet = "./src/assests/sprites/foliage/bush1.bmp";
 }
 
 # Bigtree
