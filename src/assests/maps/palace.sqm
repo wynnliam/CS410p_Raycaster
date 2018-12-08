@@ -5,7 +5,7 @@ properties {
 	# String
 	name = "Palace";
 	# String - 0 will denote "NULL"
-	sky_tex = "./src/assests/textures/skybox/sky1.bmp";
+	sky_tex = "./src/assests/textures/test/skybox.bmp";
 }
 
 # Player spawn.
@@ -1994,18 +1994,6 @@ component {
 }
 
 # Things in the courtyard
-# The fountain
-thing {
-	type = "1";
-
-	x = "2016";
-	y = "1440";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/fountain/fountain1.bmp";
-}
-
 # Statues
 thing {
 	type = "1";
@@ -2657,174 +2645,6 @@ thing {
 	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
 }
 
-# Bench
-thing {
-	type = "1";
-
-	x = "1349";
-	y = "1029";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/outdoor/bench.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "1368";
-	y = "964";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "1308";
-	y = "1024";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "1344";
-	y = "1076";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "1386";
-	y = "1055";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree2.bmp";
-}
-
-# Bushes by bench
-thing {
-	type = "1";
-
-	x = "1446";
-	y = "982";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/bush1.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "1288";
-	y = "982";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/bush1.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "1278";
-	y = "1084";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/bush1.bmp";
-}
-
-# Bigtree
-thing {
-	type = "1";
-
-	x = "2672";
-	y = "1909";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/bigtree.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "2702";
-	y = "1836";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/flowers1.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "2647";
-	y = "1896";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/flowers2.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "2677";
-	y = "1986";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/flowers3.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "2725";
-	y = "1950";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/flowers4.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "2671";
-	y = "1872";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/flowers5.bmp";
-}
-
-thing {
-	type = "1";
-
-	x = "2665";
-	y = "1968";
-	rot = "0";
-
-	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/flowers6.bmp";
-}
-
 # Connects the Main Room to the North Wing
 component {
 	x = "23";
@@ -2838,6 +2658,18 @@ component {
 }
 
 # The Main Room
+# Carpet
+component {
+	x = "26";
+	y = "3";
+	w = "16";
+	h = "2";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/baroque/carpet1.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
+}
+
 # Floor
 component {
 	x = "24";
@@ -2848,6 +2680,163 @@ component {
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/baroque/floor1.bmp";
 	tex_1 = "./src/assests/textures/baroque/ceiling1.bmp";
+}
+
+# Imperial City Mural
+component {
+	x = "30";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/imperial_city/m00.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "31";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/imperial_city/m01.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "32";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/imperial_city/m02.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "33";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/imperial_city/m03.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "34";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/imperial_city/m04.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "35";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/imperial_city/m05.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "36";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/imperial_city/m06.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "37";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/imperial_city/m07.bmp";
+	tex_1 = "0";
+}
+
+# Vases for Main Room
+thing {
+	type = "1";
+
+	x = "2464";
+	y = "96";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1888";
+	y = "96";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/vases/vase1.bmp";
+}
+
+# Columns
+thing {
+	type = "1";
+
+	x = "1568";
+	y = "416";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/column1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "1568";
+	y = "96";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/column1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2784";
+	y = "96";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/column1.bmp";
+}
+
+thing {
+	type = "1";
+
+	x = "2784";
+	y = "416";
+	rot = "72";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/column1.bmp";
 }
 
 # North Wall
