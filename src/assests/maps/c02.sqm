@@ -1,0 +1,158 @@
+# Liam Wynn, 12/11/2018, Raycaster
+
+# Metadata about the map.
+properties {
+	# String
+	name = "Cloud Top Respite";
+	# String - 0 will denote "NULL"
+	sky_tex = "./src/assests/textures/skybox/sky01.bmp";
+}
+
+# Player spawn.
+thing {
+	type = "0";
+	x = "640";
+	y = "576";
+	rot = "90";
+
+	anim_class = "0";
+	sprite_sheet = "0";
+}
+
+### MAIN ROOM ###
+
+# Details
+# Pillars in the main roo
+component {
+	x = "4";
+	y = "2";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/floor2.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "4";
+	y = "5";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/floor2.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "4";
+	y = "8";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/floor2.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "4";
+	y = "11";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/floor2.bmp";
+	tex_1 = "0";
+}
+
+# Flooring
+component {
+	x = "1";
+	y = "1";
+	w = "7";
+	h = "12";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/test/floor.bmp";
+	tex_1 = "./src/assests/textures/test/floor.bmp";
+}
+
+component {
+	x = "8";
+	y = "7";
+	w = "5";
+	h = "6";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/test/floor.bmp";
+	tex_1 = "./src/assests/textures/test/floor.bmp";
+}
+
+# Walls
+component {
+	x = "0";
+	y = "0";
+	w = "9";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+ 
+component {
+	x = "8";
+	y = "1";
+	w = "1";
+	h = "5";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall2.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "8";
+	y = "6";
+	w = "6";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "13";
+	y = "7";
+	w = "1";
+	h = "6";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall2.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "13";
+	w = "14";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "1";
+	w = "1";
+	h = "12";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall2.bmp";
+	tex_1 = "0";
+}
