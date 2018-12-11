@@ -25,7 +25,7 @@ void update_anim_class_2(struct thingdef* thing);
 
 // TODO: This whole function should be elsewhere.
 void initialize_map(struct mapdef* map, SDL_Renderer* renderer) {
-	FILE* demo_map_file = fopen("./src/assests/maps/palace.sqm", "r");
+	FILE* demo_map_file = fopen("./src/assests/maps/c01.sqm", "r");
 	struct map_data* map_data = parse_to_map_data(demo_map_file);
 
 	build_mapdef_from_map_data(map, map_data, &player_x, &player_y, &player_rot);

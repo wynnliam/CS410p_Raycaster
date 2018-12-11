@@ -3,7 +3,7 @@
 # Metadata about the map.
 properties {
 	# String
-	name = "Palace";
+	name = "Francisco Leopold Art Gallery";
 	# String - 0 will denote "NULL"
 	sky_tex = "./src/assests/textures/skybox/sky01.bmp";
 }
