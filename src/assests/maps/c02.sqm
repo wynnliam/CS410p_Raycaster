@@ -106,7 +106,18 @@ component {
 	x = "8";
 	y = "1";
 	w = "1";
-	h = "5";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall2.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "8";
+	y = "4";
+	w = "1";
+	h = "2";
 
 	is_floor_ciel = "0";
 	tex_0 = "./src/assests/textures/test/wall2.bmp";
@@ -154,5 +165,98 @@ component {
 
 	is_floor_ciel = "0";
 	tex_0 = "./src/assests/textures/test/wall2.bmp";
+	tex_1 = "0";
+}
+
+### Doorways between main room and rock garden ###
+component {
+	x = "8";
+	y = "2";
+	w = "1";
+	h = "2";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/test/floor.bmp";
+	tex_1 = "0";
+}
+
+### ROCK GARDEN ###
+
+# Flooring
+component {
+	x = "9";
+	y = "1";
+	w = "9";
+	h = "5";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/test/floor.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "14";
+	y = "6";
+	w = "7";
+	h = "7";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/test/floor.bmp";
+	tex_1 = "0";
+}
+
+# Walls
+component {
+	x = "9";
+	y = "0";
+	w = "10";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "18";
+	y = "1";
+	w = "1";
+	h = "4";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall2.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "18";
+	y = "5";
+	w = "4";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "21";
+	y = "6";
+	w = "1";
+	h = "7";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall2.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "14";
+	y = "13";
+	w = "8";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/test/wall1.bmp";
 	tex_1 = "0";
 }
