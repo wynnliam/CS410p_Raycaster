@@ -331,3 +331,14 @@ component {
 	tex_0 = "./src/assests/textures/test/wall1.bmp";
 	tex_1 = "0";
 }
+
+# Things in Main Main room
+thing {
+	type = "1";
+	x = "224";
+	y = "448";
+	rot = "90";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/pots/big_pot.bmp";
+}
