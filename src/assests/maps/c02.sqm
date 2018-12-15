@@ -22,7 +22,7 @@ thing {
 ### MAIN ROOM ###
 
 # Details
-# Pillars in the main roo
+# Pillars in the main room
 component {
 	x = "11";
 	y = "2";
@@ -30,7 +30,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/floor2.bmp";
+	tex_0 = "./src/assests/textures/wall/temple_01.bmp";
 	tex_1 = "0";
 }
 
@@ -41,7 +41,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/floor2.bmp";
+	tex_0 = "./src/assests/textures/wall/temple_01.bmp";
 	tex_1 = "0";
 }
 
@@ -52,7 +52,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/floor2.bmp";
+	tex_0 = "./src/assests/textures/wall/temple_01.bmp";
 	tex_1 = "0";
 }
 
@@ -63,7 +63,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/floor2.bmp";
+	tex_0 = "./src/assests/textures/wall/temple_01.bmp";
 	tex_1 = "0";
 }
 
