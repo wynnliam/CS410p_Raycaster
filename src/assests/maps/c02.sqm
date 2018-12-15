@@ -76,7 +76,7 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/test/floor.bmp";
-	tex_1 = "./src/assests/textures/test/floor.bmp";
+	tex_1 = "./src/assests/textures/ceiling/temple_ceil_01.bmp";
 }
 
 component {
@@ -87,7 +87,7 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/test/floor.bmp";
-	tex_1 = "./src/assests/textures/test/floor.bmp";
+	tex_1 = "./src/assests/textures/ceiling/temple_ceil_01.bmp";
 }
 
 # Walls
@@ -306,7 +306,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/wall/temple_02.bmp";
 	tex_1 = "0";
 }
 
@@ -317,7 +317,7 @@ component {
 	h = "6";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall2.bmp";
+	tex_0 = "./src/assests/textures/wall/temple_02.bmp";
 	tex_1 = "0";
 }
 
@@ -328,7 +328,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/test/wall1.bmp";
+	tex_0 = "./src/assests/textures/wall/temple_02.bmp";
 	tex_1 = "0";
 }
 
