@@ -190,6 +190,57 @@ component {
 	tex_1 = "0";
 }
 
+# Things in the main room
+thing {
+	type = "1";
+	x = "1120";
+	y = "640";
+	rot = "90";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/sculptures/king_rock.bmp";
+}
+
+thing {
+	type = "1";
+	x = "992";
+	y = "800";
+	rot = "90";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/pillar_0.bmp";
+}
+
+thing {
+	type = "1";
+	x = "992";
+	y = "480";
+	rot = "90";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/pillar_1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1248";
+	y = "480";
+	rot = "90";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/pillar_2.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1248";
+	y = "800";
+	rot = "90";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/pillar_3.bmp";
+}
+
 ### Doorways between main room and rock garden ###
 component {
 	x = "15";
