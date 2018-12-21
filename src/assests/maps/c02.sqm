@@ -69,13 +69,35 @@ component {
 
 # Flooring
 component {
+	x = "9";
+	y = "2";
+	w = "1";
+	h = "10";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/floor/temple_floor_2.bmp";
+	tex_1 = "./src/assests/textures/measure/solid/545454.bmp";
+}
+
+component {
+	x = "13";
+	y = "2";
+	w = "1";
+	h = "10";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/floor/temple_floor_2.bmp";
+	tex_1 = "./src/assests/textures/measure/solid/545454.bmp";
+}
+
+component {
 	x = "8";
 	y = "1";
 	w = "7";
 	h = "12";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/measure/solid/ffffff.bmp";
+	tex_0 = "./src/assests/textures/floor/temple_floor_1.bmp";
 	tex_1 = "./src/assests/textures/measure/solid/545454.bmp";
 }
 
@@ -86,7 +108,7 @@ component {
 	h = "4";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/measure/solid/6a0505.bmp";
+	tex_0 = "./src/assests/textures/floor/pebbles.bmp";
 	tex_1 = "0";
 }
 
@@ -97,7 +119,7 @@ component {
 	h = "6";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/measure/solid/ffffff.bmp";
+	tex_0 = "./src/assests/textures/floor/temple_floor_1.bmp";
 	tex_1 = "./src/assests/textures/measure/solid/545454.bmp";
 }
 
@@ -109,7 +131,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/solid/c1a18a.bmp";
+	tex_0 = "./src/assests/textures/wall/stone1.bmp";
 	tex_1 = "0";
 }
  
@@ -120,7 +142,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/solid/c1a18a.bmp";
+	tex_0 = "./src/assests/textures/wall/stone1.bmp";
 	tex_1 = "0";
 }
 
@@ -131,7 +153,7 @@ component {
 	h = "2";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/solid/c1a18a.bmp";
+	tex_0 = "./src/assests/textures/wall/stone1.bmp";
 	tex_1 = "0";
 }
 
@@ -142,7 +164,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/solid/c1a18a.bmp";
+	tex_0 = "./src/assests/textures/wall/stone1.bmp";
 	tex_1 = "0";
 }
 
@@ -153,7 +175,7 @@ component {
 	h = "6";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/solid/c1a18a.bmp";
+	tex_0 = "./src/assests/textures/wall/stone1.bmp";
 	tex_1 = "0";
 }
 
@@ -164,7 +186,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/solid/c1a18a.bmp";
+	tex_0 = "./src/assests/textures/wall/stone1.bmp";
 	tex_1 = "0";
 }
 
@@ -175,7 +197,7 @@ component {
 	h = "5";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/solid/c1a18a.bmp";
+	tex_0 = "./src/assests/textures/wall/stone1.bmp";
 	tex_1 = "0";
 }
 
@@ -186,7 +208,7 @@ component {
 	h = "5";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/solid/c1a18a.bmp";
+	tex_0 = "./src/assests/textures/wall/stone1.bmp";
 	tex_1 = "0";
 }
 
@@ -249,7 +271,7 @@ component {
 	h = "2";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/measure/solid/ffffff.bmp";
+	tex_0 = "./src/assests/textures/floor/temple_floor_1.bmp";
 	tex_1 = "./src/assests/textures/measure/solid/545454.bmp";
 }
 
