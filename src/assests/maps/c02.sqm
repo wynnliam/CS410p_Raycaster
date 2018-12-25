@@ -415,13 +415,26 @@ component {
 	h = "2";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/measure/solid/ffffff.bmp";
-	tex_1 = "./src/assests/textures/measure/solid/ffffff.bmp";
+	tex_0 = "./src/assests/textures/floor/temple_floor_1.bmp";
+	tex_1 = "./src/assests/textures/ceiling/temple_ceil_02.bmp";
 }
 
 ### MAIN MAIN ROOM ###
 
 # Flooring
+
+# Capreting
+component {
+	x = "2";
+	y = "5";
+	w = "4";
+	h = "4";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/floor/temple_floor_2.bmp";
+	tex_1 = "./src/assests/textures/ceiling/temple_ceil_02.bmp";
+}
+
 component {
 	x = "1";
 	y = "4";
@@ -429,8 +442,8 @@ component {
 	h = "6";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/measure/solid/ffffff.bmp";
-	tex_1 = "./src/assests/textures/measure/solid/ffffff.bmp";
+	tex_0 = "./src/assests/textures/floor/temple_floor_1.bmp";
+	tex_1 = "./src/assests/textures/ceiling/temple_ceil_02.bmp";
 }
 
 # Walls
@@ -441,7 +454,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/solid/6a0505.bmp";
+	tex_0 = "./src/assests/textures/wall/temple_wall_03.bmp";
 	tex_1 = "0";
 }
 
@@ -452,7 +465,7 @@ component {
 	h = "6";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/solid/6a0505.bmp";
+	tex_0 = "./src/assests/textures/wall/temple_wall_03.bmp";
 	tex_1 = "0";
 }
 
@@ -463,7 +476,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/solid/6a0505.bmp";
+	tex_0 = "./src/assests/textures/wall/temple_wall_03.bmp";
 	tex_1 = "0";
 }
 
