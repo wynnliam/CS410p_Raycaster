@@ -74,3 +74,34 @@ component {
 	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
 	tex_1 = "0";
 }
+
+# FEASOG
+thing {
+	type = "1";
+	x = "736";
+	y = "1184";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/rock_carvings/feasog/feasog_00.bmp";
+}
+
+thing {
+	type = "1";
+	x = "672";
+	y = "1248";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/rock_carvings/feasog/feasog_01.bmp";
+}
+
+thing {
+	type = "1";
+	x = "672";
+	y = "1120";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/rock_carvings/feasog/feasog_02.bmp";
+}
