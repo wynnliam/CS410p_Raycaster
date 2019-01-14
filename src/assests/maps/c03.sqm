@@ -257,3 +257,183 @@ thing {
 	sprite_sheet = "./src/assests/sprites/rock_carvings/carving_14.bmp";
 }
 
+# GRASS SHRUBS
+thing {
+	type = "1";
+	x = "592";
+	y = "533";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_0/grass_shrub00.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1250";
+	y = "815";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_0/grass_shrub01.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1068";
+	y = "1205";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_0/grass_shrub02.bmp";
+}
+
+thing {
+	type = "1";
+	x = "626";
+	y = "1545";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_0/grass_shrub03.bmp";
+}
+
+thing {
+	type = "1";
+	x = "869";
+	y = "1869";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_0/grass_shrub04.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1321";
+	y = "1910";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_0/grass_shurb05.bmp";
+}
+
+thing {
+	type = "1";
+	x = "809";
+	y = "1707";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_0/grass_shurb06.bmp";
+}
+
+thing {
+	type = "1";
+	x = "169";
+	y = "1747";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_0/grass_shurb07.bmp";
+}
+
+thing {
+	type = "1";
+	x = "175";
+	y = "2232";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_0/grass_shurb08.bmp";
+}
+
+thing {
+	type = "1";
+	x = "625";
+	y = "2082";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_0/grass_shurb09.bmp";
+}
+
+thing {
+	type = "1";
+	x = "625";
+	y = "1378";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_0/grass_shurb10.bmp";
+}
+
+thing {
+	type = "1";
+	x = "335";
+	y = "622";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_0/grass_shurb11.bmp";
+}
+
+thing {
+	type = "1";
+	x = "623";
+	y = "238";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_0/grass_shurb12.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1073";
+	y = "178";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_0/grass_shurb13.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1385";
+	y = "394";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_0/grass_shurb14.bmp";
+}
+
+thing {
+	type = "1";
+	x = "880";
+	y = "128";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_0/grass_shurb15.bmp";
+}
+
+thing {
+	type = "1";
+	x = "528";
+	y = "2440";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_0/grass_shurb16.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1073";
+	y = "940";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_0/grass_shurb17.bmp";
+}
