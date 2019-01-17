@@ -437,3 +437,64 @@ thing {
 	anim_class = "0";
 	sprite_sheet = "./src/assests/sprites/foliage/grass/type_0/grass_shurb17.bmp";
 }
+
+# Bushes
+thing {
+	type = "1";
+	x = "423";
+	y = "1293";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_0/bush_shrub01.bmp";
+}
+
+thing {
+	type = "1";
+	x = "909";
+	y = "2049";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_0/bush_shrub02.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1371";
+	y = "971";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_0/bush_shrub03.bmp";
+}
+
+thing {
+	type = "1";
+	x = "701";
+	y = "167";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_0/bush_shrub04.bmp";
+}
+
+thing {
+	type = "1";
+	x = "158";
+	y = "657";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_0/bush_shrub02.bmp";
+}
+
+thing {
+	type = "1";
+	x = "511";
+	y = "1485";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_0/bush_shrub03.bmp";
+}
