@@ -1,0 +1,82 @@
+# Liam Wynn, 1/20/2019, Raycaster
+
+# Metadata about the map.
+properties {
+	# String
+	name = "Bellington Estate";
+	# String - 0 will denote "NULL"
+	sky_tex = "./src/assests/textures/skybox/sky03.bmp";
+}
+
+# Player spawn.
+thing {
+	type = "0";
+	x = "160";
+	y = "128";
+	rot = "270";
+
+	anim_class = "0";
+	sprite_sheet = "0";
+}
+
+# Entrance Area
+
+# Ground
+component {
+	x = "1";
+	y = "1";
+	w = "5";
+	h = "10";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Walls
+# Northmost wall
+component {
+	x = "0";
+	y = "0";
+	w = "7";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Southernmost wall
+component {
+	x = "0";
+	y = "11";
+	w = "7";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Eastmost wall
+component {
+	x = "6";
+	y = "1";
+	w = "1";
+	h = "10";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "1";
+	w = "1";
+	h = "10";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
