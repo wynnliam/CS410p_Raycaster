@@ -338,6 +338,37 @@ component {
 	tex_1 = "0";
 }
 
+# Artifacts
+thing {
+	type = "1";
+	x = "1184";
+	y = "224";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/artifact/dragon_skull/dragon_skull.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1184";
+	y = "384";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/artifact/gem/gem.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1184";
+	y = "608";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/artifact/grungors_monument/grungors_monument.bmp";
+}
+
 # Connects Garden with Cellar
 component {
 	x = "19";
