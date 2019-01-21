@@ -211,8 +211,8 @@ component {
 	h = "2";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
-	tex_1 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/baroque/floor2.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling2.bmp";
 }
 
 # Connects Hall 2 With Garden
@@ -333,8 +333,8 @@ component {
 	h = "10";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
-	tex_1 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/baroque/floor2.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling2.bmp";
 }
 
 # Northmost Wall
