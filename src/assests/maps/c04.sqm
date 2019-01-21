@@ -504,3 +504,105 @@ component {
 	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
 	tex_1 = "0";
 }
+
+# Barrels
+thing {
+	type = "1";
+	x = "886";
+	y = "2171";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/barrels/barrel_2.bmp";
+}
+
+thing {
+	type = "1";
+	x = "882";
+	y = "2009";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/barrels/barrel_2.bmp";
+}
+
+thing {
+	type = "1";
+	x = "942";
+	y = "2147";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/barrels/barrel_1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "927";
+	y = "1944";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/barrels/barrel_2.bmp";
+}
+
+thing {
+	type = "1";
+	x = "910";
+	y = "2095";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/barrels/barrel_1.bmp";
+}
+
+
+thing {
+	type = "1";
+	x = "871";
+	y = "1908";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/barrels/barrel_2.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1047";
+	y = "1913";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/barrels/barrel_2.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1017";
+	y = "1988";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/barrels/barrel_2.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1049";
+	y = "2044";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/barrels/barrel_1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1067";
+	y = "2188";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/barrels/barrel_2.bmp";
+}
