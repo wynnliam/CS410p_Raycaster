@@ -31,6 +31,17 @@ component {
 	tex_1 = "0";
 }
 
+component {
+	x = "3";
+	y = "11";
+	w = "2";
+	h = "2";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
 # Entrance Area
 
 # Ground
@@ -94,6 +105,19 @@ component {
 }
 
 # ESTATE INTERIOR
+
+# Connects Hall 1 with Hall 2
+component {
+	x = "8";
+	y = "11";
+	w = "6";
+	h = "2";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
 # Hall 1
 
 # Flooring
@@ -147,6 +171,141 @@ component {
 # Westernmost wall
 component {
 	x = "7";
+	y = "1";
+	w = "1";
+	h = "10";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Connects Hall 2 With Artifact Room
+component {
+	x = "17";
+	y = "11";
+	w = "2";
+	h = "2";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Hall 2
+
+# Flooring
+component {
+	x = "1";
+	y = "13";
+	w = "20";
+	h = "5";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Northmost Wall
+component {
+	x = "0";
+	y = "18";
+	w = "22";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Southmost Wall
+component {
+	x = "0";
+	y = "12";
+	w = "22";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Eastmost wall
+component {
+	x = "20";
+	y = "13";
+	w = "1";
+	h = "5";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Westernmost wall
+component {
+	x = "0";
+	y = "13";
+	w = "1";
+	h = "5";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Room for Artifacts
+# Flooring
+component {
+	x = "16";
+	y = "1";
+	w = "5";
+	h = "10";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Northmost Wall
+component {
+	x = "15";
+	y = "0";
+	w = "7";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Southmost Wall
+component {
+	x = "15";
+	y = "11";
+	w = "7";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Eastmost Wall
+component {
+	x = "21";
+	y = "1";
+	w = "1";
+	h = "10";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Westernmost Wall
+component {
+	x = "15";
 	y = "1";
 	w = "1";
 	h = "10";
