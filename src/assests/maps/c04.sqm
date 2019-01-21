@@ -163,7 +163,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/baroque/wall2.bmp";
 	tex_1 = "0";
 }
 
@@ -175,7 +175,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/baroque/wall2.bmp";
 	tex_1 = "0";
 }
 
@@ -187,7 +187,7 @@ component {
 	h = "10";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/baroque/wall2.bmp";
 	tex_1 = "0";
 }
 
@@ -199,7 +199,7 @@ component {
 	h = "10";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/baroque/wall2.bmp";
 	tex_1 = "0";
 }
 
@@ -284,7 +284,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/baroque/wall2.bmp";
 	tex_1 = "0";
 }
 
@@ -296,19 +296,19 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/baroque/wall2.bmp";
 	tex_1 = "0";
 }
 
 # Eastmost wall
 component {
-	x = "20";
+	x = "21";
 	y = "13";
 	w = "1";
 	h = "5";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/baroque/wall2.bmp";
 	tex_1 = "0";
 }
 
@@ -320,7 +320,7 @@ component {
 	h = "5";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/baroque/wall2.bmp";
 	tex_1 = "0";
 }
 
