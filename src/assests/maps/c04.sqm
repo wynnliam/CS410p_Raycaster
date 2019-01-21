@@ -28,7 +28,7 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
-	tex_1 = "0";
+	tex_1 = "./src/assests/textures/measure/measure_01.bmp";
 }
 
 component {
@@ -39,7 +39,7 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
-	tex_1 = "0";
+	tex_1 = "./src/assests/textures/measure/measure_01.bmp";
 }
 
 # Entrance Area
@@ -115,7 +115,7 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
-	tex_1 = "0";
+	tex_1 = "./src/assests/textures/measure/measure_01.bmp";
 }
 
 # Hall 1
@@ -129,7 +129,7 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
-	tex_1 = "0";
+	tex_1 = "./src/assests/textures/measure/measure_01.bmp";
 }
 
 # Northmost wall
@@ -189,7 +189,7 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
-	tex_1 = "0";
+	tex_1 = "./src/assests/textures/measure/measure_01.bmp";
 }
 
 # Connects Hall 2 With Garden
@@ -201,7 +201,7 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
-	tex_1 = "0";
+	tex_1 = "./src/assests/textures/measure/measure_01.bmp";
 }
 
 component {
@@ -212,7 +212,7 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
-	tex_1 = "0";
+	tex_1 = "./src/assests/textures/measure/measure_01.bmp";
 }
 
 # Hall 2
@@ -226,7 +226,7 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
-	tex_1 = "0";
+	tex_1 = "./src/assests/textures/measure/measure_01.bmp";
 }
 
 # Northmost Wall
@@ -287,7 +287,7 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
-	tex_1 = "0";
+	tex_1 = "./src/assests/textures/measure/measure_01.bmp";
 }
 
 # Northmost Wall
@@ -347,7 +347,7 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
-	tex_1 = "0";
+	tex_1 = "./src/assests/textures/measure/measure_01.bmp";
 }
 
 # Garden
@@ -423,7 +423,7 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
-	tex_1 = "0";
+	tex_1 = "./src/assests/textures/measure/measure_01.bmp";
 }
 
 # Northmost Wall
