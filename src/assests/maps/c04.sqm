@@ -19,6 +19,18 @@ thing {
 	sprite_sheet = "0";
 }
 
+# Connects Entrance to Estate Interior
+component {
+	x = "6";
+	y = "5";
+	w = "2";
+	h = "2";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
 # Entrance Area
 
 # Ground
@@ -72,6 +84,69 @@ component {
 
 component {
 	x = "0";
+	y = "1";
+	w = "1";
+	h = "10";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# ESTATE INTERIOR
+# Hall 1
+
+# Flooring
+component {
+	x = "8";
+	y = "1";
+	w = "6";
+	h = "10";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Northmost wall
+component {
+	x = "7";
+	y = "0";
+	w = "8";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Southern most wall
+component {
+	x = "7";
+	y = "11";
+	w = "8";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Eastmost wall
+component {
+	x = "14";
+	y = "1";
+	w = "1";
+	h = "10";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Westernmost wall
+component {
+	x = "7";
 	y = "1";
 	w = "1";
 	h = "10";
