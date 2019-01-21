@@ -107,6 +107,18 @@ component {
 # ESTATE INTERIOR
 
 # Connects Hall 1 with Hall 2
+# Carpeting
+component {
+	x = "10";
+	y = "11";
+	w = "2";
+	h = "2";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/baroque/carpet2.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling2.bmp";
+}
+
 component {
 	x = "8";
 	y = "11";
@@ -126,6 +138,17 @@ component {
 	y = "3";
 	w = "2";
 	h = "8";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/baroque/carpet2.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling2.bmp";
+}
+
+component {
+	x = "10";
+	y = "13";
+	w = "2";
+	h = "2";
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/baroque/carpet2.bmp";
