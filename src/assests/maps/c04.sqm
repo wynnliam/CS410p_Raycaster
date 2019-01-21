@@ -11,7 +11,7 @@ properties {
 # Player spawn.
 thing {
 	type = "0";
-	x = "160";
+	x = "224";
 	y = "128";
 	rot = "270";
 
@@ -192,6 +192,29 @@ component {
 	tex_1 = "0";
 }
 
+# Connects Hall 2 With Garden
+component {
+	x = "6";
+	y = "18";
+	w = "2";
+	h = "2";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "14";
+	y = "18";
+	w = "2";
+	h = "2";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
 # Hall 2
 
 # Flooring
@@ -309,6 +332,142 @@ component {
 	y = "1";
 	w = "1";
 	h = "10";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Connects Garden with Cellar
+component {
+	x = "19";
+	y = "27";
+	w = "2";
+	h = "2";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Garden
+
+# Flooring
+component {
+	x = "1";
+	y = "20";
+	w = "20";
+	h = "7";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Northmost Wall
+component {
+	x = "0";
+	y = "19";
+	w = "22";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Southernmost Wall
+component {
+	x = "0";
+	y = "27";
+	w = "22";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Eastmost Wall
+component {
+	x = "21";
+	y = "20";
+	w = "1";
+	h = "7";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Westernmost Wall
+component {
+	x = "0";
+	y = "20";
+	w = "1";
+	h = "7";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Cellar
+
+# Flooring
+component {
+	x = "13";
+	y = "29";
+	w = "8";
+	h = "6";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Northmost Wall
+component {
+	x = "12";
+	y = "28";
+	w = "10";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Southernmost Wall
+component {
+	x = "12";
+	y = "35";
+	w = "10";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Eastmost Wall
+component {
+	x = "21";
+	y = "29";
+	w = "1";
+	h = "6";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_1 = "0";
+}
+
+# Westernmost Wall
+component {
+	x = "12";
+	y = "29";
+	w = "1";
+	h = "6";
 
 	is_floor_ciel = "0";
 	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
