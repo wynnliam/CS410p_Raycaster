@@ -295,7 +295,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/art/estate_art/paintings/abstract_trash.bmp";
+	tex_0 = "./src/assests/textures/art/estate_art/paintings/road_in_sieges.bmp";
 	tex_1 = "0";
 }
 
