@@ -287,7 +287,29 @@ component {
 	tex_1 = "0";
 }
 
-# Abstract Trash
+# Mesas
+component {
+	x = "10";
+	y = "18";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/estate_art/paintings/mesas_1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "11";
+	y = "18";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/estate_art/paintings/mesas_2.bmp";
+	tex_1 = "0";
+}
+
 component {
 	x = "0";
 	y = "15";
