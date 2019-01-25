@@ -225,6 +225,18 @@ component {
 	tex_1 = "0";
 }
 
+# Scene In Sieges
+component {
+	x = "14";
+	y = "9";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/estate_art/paintings/scene_in_sieges.bmp";
+	tex_1 = "0";
+}
+
 # Northmost wall
 component {
 	x = "7";
