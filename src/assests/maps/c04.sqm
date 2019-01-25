@@ -193,12 +193,35 @@ component {
 # Mrs. Bellington
 component {
 	x = "14";
-	y = "3";
+	y = "4";
 	w = "1";
 	h = "1";
 
 	is_floor_ciel = "0";
 	tex_0 = "./src/assests/textures/art/estate_art/paintings/mrs_bellington.bmp";
+	tex_1 = "0";
+}
+
+# 10000 Years Later
+component {
+	x = "14";
+	y = "6";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/estate_art/paintings/10000_years_later_1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "14";
+	y = "7";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/art/estate_art/paintings/10000_years_later_2.bmp";
 	tex_1 = "0";
 }
 
