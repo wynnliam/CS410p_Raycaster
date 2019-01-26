@@ -285,6 +285,17 @@ component {
 	tex_1 = "0";
 }
 
+# Decorative vase
+thing {
+	type = "1";
+	x = "544";
+	y = "640";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/interior_decorations/vase.bmp";
+}
+
 # Connects Hall 2 With Artifact Room
 component {
 	x = "17";
@@ -440,6 +451,147 @@ component {
 	tex_1 = "0";
 }
 
+# Decorative plants
+thing {
+	type = "1";
+	x = "224";
+	y = "1120";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/interior_decorations/flowers_1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1184";
+	y = "1120";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/interior_decorations/flowers_2.bmp";
+}
+
+# Interior Hall Pillars
+thing {
+	type = "1";
+	x = "544";
+	y = "864";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/interior_decorations/pillar.bmp";
+}
+
+thing {
+	type = "1";
+	x = "864";
+	y = "864";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/interior_decorations/pillar.bmp";
+}
+
+thing {
+	type = "1";
+	x = "544";
+	y = "288";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/interior_decorations/pillar.bmp";
+}
+
+thing {
+	type = "1";
+	x = "544";
+	y = "480";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/interior_decorations/pillar.bmp";
+}
+
+thing {
+	type = "1";
+	x = "160";
+	y = "864";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/interior_decorations/pillar.bmp";
+}
+
+thing {
+	type = "1";
+	x = "352";
+	y = "864";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/interior_decorations/pillar.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1056";
+	y = "864";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/interior_decorations/pillar.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1248";
+	y = "864";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/interior_decorations/pillar.bmp";
+}
+
+thing {
+	type = "1";
+	x = "352";
+	y = "1120";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/interior_decorations/pillar.bmp";
+}
+
+thing {
+	type = "1";
+	x = "544";
+	y = "1120";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/interior_decorations/pillar.bmp";
+}
+
+thing {
+	type = "1";
+	x = "864";
+	y = "1120";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/interior_decorations/pillar.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1056";
+	y = "1120";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/interior_decorations/pillar.bmp";
+}
 # Room for Artifacts
 # Flooring
 component {
