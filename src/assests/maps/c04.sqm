@@ -779,6 +779,17 @@ component {
 	tex_1 = "./src/assests/textures/measure/measure_02.bmp";
 }
 
+# Gazeebo things
+thing {
+	type = "1";
+	x = "286";
+	y = "1506";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/gazeebo/table.bmp";
+}
+
 # Flooring
 component {
 	x = "1";
