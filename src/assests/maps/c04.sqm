@@ -790,6 +790,25 @@ thing {
 	sprite_sheet = "./src/assests/sprites/gazeebo/table.bmp";
 }
 
+thing {
+	type = "1";
+	x = "269";
+	y = "1459";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/gazeebo/chair_1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "265";
+	y = "1564";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/gazeebo/chair_1.bmp";
+}
 # Flooring
 component {
 	x = "1";
