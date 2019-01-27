@@ -698,6 +698,87 @@ component {
 
 # Garden
 
+# Gazeebo
+# Pillars
+component {
+	x = "2";
+	y = "21";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_02.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "2";
+	y = "25";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_02.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "5";
+	y = "21";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_02.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "5";
+	y = "25";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_02.bmp";
+	tex_1 = "0";
+}
+
+# Curtain Wall
+component {
+	x = "2";
+	y = "22";
+	w = "1";
+	h = "3";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/measure/measure_02.bmp";
+	tex_1 = "0";
+}
+
+# Cover
+component {
+	x = "5";
+	y = "22";
+	w = "1";
+	h = "3";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/measure/measure_02.bmp";
+	tex_1 = "./src/assests/textures/measure/measure_02.bmp";
+}
+
+component {
+	x = "3";
+	y = "21";
+	w = "2";
+	h = "5";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/measure/measure_02.bmp";
+	tex_1 = "./src/assests/textures/measure/measure_02.bmp";
+}
+
 # Flooring
 component {
 	x = "1";
