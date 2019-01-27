@@ -809,6 +809,37 @@ thing {
 	anim_class = "0";
 	sprite_sheet = "./src/assests/sprites/gazeebo/chair_1.bmp";
 }
+
+thing {
+	type = "1";
+	x = "213";
+	y = "1439";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/gazeebo/table_2.bmp";
+}
+
+thing {
+	type = "1";
+	x = "317";
+	y = "1483";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/gazeebo/ornament_1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "215";
+	y = "1581";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/gazeebo/chest.bmp";
+}
+
 # Flooring
 component {
 	x = "1";
