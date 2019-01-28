@@ -752,7 +752,7 @@ component {
 	h = "3";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_02.bmp";
+	tex_0 = "./src/assests/textures/gazeebo/curtain.bmp";
 	tex_1 = "0";
 }
 
