@@ -707,7 +707,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_02.bmp";
+	tex_0 = "./src/assests/textures/gazeebo/pillar.bmp";
 	tex_1 = "0";
 }
 
@@ -718,7 +718,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_02.bmp";
+	tex_0 = "./src/assests/textures/gazeebo/pillar.bmp";
 	tex_1 = "0";
 }
 
@@ -729,7 +729,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_02.bmp";
+	tex_0 = "./src/assests/textures/gazeebo/pillar.bmp";
 	tex_1 = "0";
 }
 
@@ -740,7 +740,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_02.bmp";
+	tex_0 = "./src/assests/textures/gazeebo/pillar.bmp";
 	tex_1 = "0";
 }
 
