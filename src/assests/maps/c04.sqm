@@ -842,13 +842,24 @@ thing {
 
 # Flooring
 component {
+	x = "7";
+	y = "21";
+	w = "12";
+	h = "5";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/grass/grass1.bmp";
+	tex_1 = "0";
+}
+
+component {
 	x = "1";
 	y = "20";
 	w = "20";
 	h = "7";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/floor/cobblestone1.bmp";
 	tex_1 = "0";
 }
 
@@ -898,6 +909,107 @@ component {
 	is_floor_ciel = "0";
 	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
 	tex_1 = "0";
+}
+
+# Things in the Garden
+thing {
+	type = "1";
+	x = "544";
+	y = "1376";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "672";
+	y = "1376";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "800";
+	y = "1376";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "928";
+	y = "1376";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1056";
+	y = "1376";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "544";
+	y = "1632";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "672";
+	y = "1632";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "800";
+	y = "1632";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "928";
+	y = "1632";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1056";
+	y = "1632";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
 }
 
 # Cellar
