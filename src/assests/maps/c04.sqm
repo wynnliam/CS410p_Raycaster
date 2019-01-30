@@ -871,7 +871,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/garden/wall.bmp";
 	tex_1 = "0";
 }
 
@@ -883,7 +883,7 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/garden/wall.bmp";
 	tex_1 = "0";
 }
 
@@ -895,7 +895,7 @@ component {
 	h = "7";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/garden/wall.bmp";
 	tex_1 = "0";
 }
 
@@ -907,7 +907,7 @@ component {
 	h = "7";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/garden/wall.bmp";
 	tex_1 = "0";
 }
 
