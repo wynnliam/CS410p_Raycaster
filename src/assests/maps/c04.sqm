@@ -1092,6 +1092,146 @@ thing {
 	sprite_sheet = "./src/assests/sprites/foliage/tree3.bmp";
 }
 
+thing {
+	type = "1";
+	x = "564";
+	y = "1443";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flowers1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "550";
+	y = "1583";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flowers2.bmp";
+}
+
+thing {
+	type = "1";
+	x = "732";
+	y = "1555";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flowers3.bmp";
+}
+
+thing {
+	type = "1";
+	x = "804";
+	y = "1451";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flowers4.bmp";
+}
+
+thing {
+	type = "1";
+	x = "724";
+	y = "1446";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flowers5.bmp";
+}
+
+thing {
+	type = "1";
+	x = "644";
+	y = "1501";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flowers6.bmp";
+}
+
+thing {
+	type = "1";
+	x = "544";
+	y = "1312";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/potted_plant.bmp";
+}
+
+thing {
+	type = "1";
+	x = "704";
+	y = "1312";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/potted_plant.bmp";
+}
+
+thing {
+	type = "1";
+	x = "864";
+	y = "1312";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/potted_plant.bmp";
+}
+
+thing {
+	type = "1";
+	x = "544";
+	y = "1696";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/potted_plant.bmp";
+}
+
+thing {
+	type = "1";
+	x = "704";
+	y = "1696";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/potted_plant.bmp";
+}
+
+thing {
+	type = "1";
+	x = "864";
+	y = "1696";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/potted_plant.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1248";
+	y = "1440";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/potted_plant.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1248";
+	y = "1568";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/potted_plant.bmp";
+}
+
 # Cellar
 
 # Flooring
