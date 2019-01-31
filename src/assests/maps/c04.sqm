@@ -919,7 +919,17 @@ thing {
 	rot = "0";
 
 	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+	sprite_sheet = "./src/assests/sprites/foliage/tree3.bmp";
+}
+
+thing {
+	type = "1";
+	x = "608";
+	y = "1376";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/garden_column.bmp";
 }
 
 thing {
@@ -929,7 +939,17 @@ thing {
 	rot = "0";
 
 	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+	sprite_sheet = "./src/assests/sprites/foliage/tree3.bmp";
+}
+
+thing {
+	type = "1";
+	x = "736";
+	y = "1376";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/garden_column.bmp";
 }
 
 thing {
@@ -939,7 +959,17 @@ thing {
 	rot = "0";
 
 	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+	sprite_sheet = "./src/assests/sprites/foliage/tree3.bmp";
+}
+
+thing {
+	type = "1";
+	x = "864";
+	y = "1376";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/garden_column.bmp";
 }
 
 thing {
@@ -949,7 +979,17 @@ thing {
 	rot = "0";
 
 	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+	sprite_sheet = "./src/assests/sprites/foliage/tree3.bmp";
+}
+
+thing {
+	type = "1";
+	x = "992";
+	y = "1376";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/garden_column.bmp";
 }
 
 thing {
@@ -959,7 +999,7 @@ thing {
 	rot = "0";
 
 	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+	sprite_sheet = "./src/assests/sprites/foliage/tree3.bmp";
 }
 
 thing {
@@ -969,7 +1009,17 @@ thing {
 	rot = "0";
 
 	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+	sprite_sheet = "./src/assests/sprites/foliage/tree3.bmp";
+}
+
+thing {
+	type = "1";
+	x = "608";
+	y = "1632";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/garden_column.bmp";
 }
 
 thing {
@@ -979,7 +1029,17 @@ thing {
 	rot = "0";
 
 	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+	sprite_sheet = "./src/assests/sprites/foliage/tree3.bmp";
+}
+
+thing {
+	type = "1";
+	x = "736";
+	y = "1632";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/garden_column.bmp";
 }
 
 thing {
@@ -989,7 +1049,17 @@ thing {
 	rot = "0";
 
 	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+	sprite_sheet = "./src/assests/sprites/foliage/tree3.bmp";
+}
+
+thing {
+	type = "1";
+	x = "864";
+	y = "1632";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/garden_column.bmp";
 }
 
 thing {
@@ -999,7 +1069,17 @@ thing {
 	rot = "0";
 
 	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+	sprite_sheet = "./src/assests/sprites/foliage/tree3.bmp";
+}
+
+thing {
+	type = "1";
+	x = "992";
+	y = "1632";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/columns/garden_column.bmp";
 }
 
 thing {
@@ -1009,7 +1089,7 @@ thing {
 	rot = "0";
 
 	anim_class = "0";
-	sprite_sheet = "./src/assests/sprites/foliage/tree1.bmp";
+	sprite_sheet = "./src/assests/sprites/foliage/tree3.bmp";
 }
 
 # Cellar
