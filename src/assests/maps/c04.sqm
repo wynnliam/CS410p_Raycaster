@@ -765,7 +765,7 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/gazeebo/floor.bmp";
-	tex_1 = "./src/assests/textures/gazeebo/ceiling_1.bmp";
+	tex_1 = "./src/assests/textures/gazeebo/floor.bmp";
 }
 
 component {
@@ -776,7 +776,7 @@ component {
 
 	is_floor_ciel = "1";
 	tex_0 = "./src/assests/textures/gazeebo/floor.bmp";
-	tex_1 = "./src/assests/textures/gazeebo/ceiling_1.bmp";
+	tex_1 = "./src/assests/textures/gazeebo/floor.bmp";
 }
 
 # Gazeebo things
@@ -859,7 +859,7 @@ component {
 	h = "7";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/floor/cobblestone1.bmp";
+	tex_0 = "./src/assests/textures/garden/floor.bmp";
 	tex_1 = "0";
 }
 
