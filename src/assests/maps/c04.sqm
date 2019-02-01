@@ -1232,6 +1232,26 @@ thing {
 	sprite_sheet = "./src/assests/sprites/foliage/potted_plant.bmp";
 }
 
+thing {
+	type = "1";
+	x = "928";
+	y = "1504";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bigtree.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1120";
+	y = "1504";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/outdoor/tent.bmp";
+}
+
 # Cellar
 
 # Flooring
