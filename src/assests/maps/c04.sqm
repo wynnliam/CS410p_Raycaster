@@ -66,6 +66,18 @@ component {
 
 # Entrance Area
 
+# Doorway
+component {
+	x = "3";
+	y = "0";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/garden/wall2.bmp";
+	tex_1 = "0";
+}
+
 # Walkways
 component {
 	x = "3";
