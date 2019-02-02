@@ -687,13 +687,24 @@ thing {
 # Connects Garden with Cellar
 component {
 	x = "19";
+	y = "28";
+	w = "2";
+	h = "1";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/cellar/cellar_floor.bmp";
+	tex_1 = "./src/assests/textures/cellar/cellar_celing.bmp";
+}
+
+component {
+	x = "19";
 	y = "27";
 	w = "2";
 	h = "2";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
-	tex_1 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/garden/floor.bmp";
+	tex_1 = "0";
 }
 
 # Garden
@@ -1262,8 +1273,8 @@ component {
 	h = "6";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
-	tex_1 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/cellar/cellar_floor.bmp";
+	tex_1 = "./src/assests/textures/cellar/cellar_celing.bmp";
 }
 
 # Northmost Wall
@@ -1274,7 +1285,18 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/cellar/cellar_wall.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "18";
+	y = "35";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/cellar/shelf_1.bmp";
 	tex_1 = "0";
 }
 
@@ -1286,7 +1308,29 @@ component {
 	h = "1";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/cellar/cellar_wall.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "21";
+	y = "33";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/cellar/shelf_2.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "21";
+	y = "31";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/cellar/shelf_3.bmp";
 	tex_1 = "0";
 }
 
@@ -1298,7 +1342,7 @@ component {
 	h = "6";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/cellar/cellar_wall.bmp";
 	tex_1 = "0";
 }
 
@@ -1310,7 +1354,7 @@ component {
 	h = "6";
 
 	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/cellar/cellar_wall.bmp";
 	tex_1 = "0";
 }
 
