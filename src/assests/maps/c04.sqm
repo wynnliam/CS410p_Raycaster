@@ -520,13 +520,35 @@ component {
 # Connects Hall 2 With Garden
 component {
 	x = "6";
+	y = "19";
+	w = "2";
+	h = "1";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/garden/floor.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "6";
 	y = "18";
 	w = "2";
 	h = "2";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
-	tex_1 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/baroque/floor2.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling2.bmp";
+}
+
+component {
+	x = "14";
+	y = "19";
+	w = "2";
+	h = "1";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/garden/floor.bmp";
+	tex_1 = "0";
 }
 
 component {
@@ -536,8 +558,8 @@ component {
 	h = "2";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
-	tex_1 = "./src/assests/textures/measure/measure_01.bmp";
+	tex_0 = "./src/assests/textures/baroque/floor2.bmp";
+	tex_1 = "./src/assests/textures/baroque/ceiling2.bmp";
 }
 
 # Hall 2
