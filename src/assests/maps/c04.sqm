@@ -200,6 +200,17 @@ thing {
 	sprite_sheet = "./src/assests/sprites/foliage/bush1.bmp";
 }
 
+# Palm tree
+thing {
+	type = "1";
+	x = "288";
+	y = "544";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/palm_tree1.bmp";
+}
+
 # ESTATE INTERIOR
 
 # Connects Hall 1 with Hall 2
