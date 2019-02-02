@@ -211,6 +211,86 @@ thing {
 	sprite_sheet = "./src/assests/sprites/foliage/palm_tree1.bmp";
 }
 
+# Orchards
+thing {
+	type = "1";
+	x = "128";
+	y = "224";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/orchard_tree1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "128";
+	y = "352";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/orchard_tree1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "128";
+	y = "480";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/orchard_tree1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "288";
+	y = "288";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/orchard_tree1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "288";
+	y = "480";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/orchard_tree1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "160";
+	y = "672";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/orchard_tree1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "352";
+	y = "672";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/orchard_tree1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "352";
+	y = "160";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/orchard_tree1.bmp";
+}
 # ESTATE INTERIOR
 
 # Connects Hall 1 with Hall 2
