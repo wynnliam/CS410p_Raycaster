@@ -1,0 +1,337 @@
+properties {
+	name = "Generated";
+	sky_tex = "./src/assests/textures/biome/sky/sky03.bmp";
+}
+
+# Player spawn.
+thing {
+	type = "0";
+	x = "640";
+	y = "640";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "0";
+}
+
+# Bounding box.
+component {
+	x = "1";
+	y = "1";
+	w = "18";
+	h = "18";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/biome/floor/floor03.bmp";
+	tex_1 = "0";
+}
+component {
+	x = "0";
+	y = "0";
+	w = "20";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/biome/wall/wall03.bmp";
+	tex_1 = "0";
+}
+component {
+	x = "19";
+	y = "1";
+	w = "1";
+	h = "18";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/biome/wall/wall03.bmp";
+	tex_1 = "0";
+}
+component {
+	x = "0";
+	y = "19";
+	w = "20";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/biome/wall/wall03.bmp";
+	tex_1 = "0";
+}
+component {
+	x = "0";
+	y = "1";
+	w = "1";
+	h = "18";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/biome/wall/wall03.bmp";
+	tex_1 = "0";
+}
+thing {
+	type = "1";
+	x = "280";
+	y = "839";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "446";
+	y = "1208";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "1054";
+	y = "858";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "447";
+	y = "1187";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "442";
+	y = "1064";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "532";
+	y = "126";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "397";
+	y = "885";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "1143";
+	y = "431";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "514";
+	y = "672";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "822";
+	y = "966";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "245";
+	y = "662";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "371";
+	y = "1049";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "441";
+	y = "788";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "122";
+	y = "1181";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "889";
+	y = "702";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "907";
+	y = "1073";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "197";
+	y = "1129";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "938";
+	y = "1155";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "771";
+	y = "169";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "999";
+	y = "1118";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "1009";
+	y = "315";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "1020";
+	y = "191";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "1104";
+	y = "947";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "526";
+	y = "403";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "275";
+	y = "1125";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "1145";
+	y = "296";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "443";
+	y = "301";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "129";
+	y = "788";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "865";
+	y = "156";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
+thing {
+	type = "1";
+	x = "625";
+	y = "539";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/biome/tree/tree03.bmp";
+}
