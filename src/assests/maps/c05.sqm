@@ -56,6 +56,18 @@ component {
 	tex_1 = "0";
 }
 
+# Southmost Wall
+component {
+	x = "20";
+	y = "21";
+	w = "11";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/sand/sand_01.bmp";
+	tex_1 = "0";
+}
+
 # Floor Area 2
 component {
 	x = "14";
