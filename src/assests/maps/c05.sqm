@@ -327,63 +327,63 @@ component {
 	tex_1 = "0";
 }
 
-# Bounding Area -- Without this, the parser shits itself
-# Floor
-component {
-	x = "1";
-	y = "1";
-	w = "31";
-	h = "29";
-
-	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
-	tex_1 = "0";
-}
-
-# Northmost Wall
-component {
-	x = "0";
-	y = "0";
-	w = "33";
-	h = "1";
-
-	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
-	tex_1 = "0";
-}
-
-# Eastmost Wall
-component {
-	x = "32";
-	y = "1";
-	w = "1";
-	h = "29";
-
-	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_02.bmp";
-	tex_1 = "0";
-}
-
-# Southmost Wall
-component {
-	x = "0";
-	y = "30";
-	w = "33";
-	h = "1";
-
-	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
-	tex_1 = "0";
-}
-
-# Westmost Wall
-component {
-	x = "0";
-	y = "1";
-	w = "1";
-	h = "29";
-
-	is_floor_ciel = "0";
-	tex_0 = "./src/assests/textures/measure/measure_02.bmp";
-	tex_1 = "0";
-}
+## Bounding Area -- Without this, the parser shits itself
+## Floor
+#component {
+#	x = "1";
+#	y = "1";
+#	w = "31";
+#	h = "29";
+#
+#	is_floor_ciel = "1";
+#	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+#	tex_1 = "0";
+#}
+#
+## Northmost Wall
+#component {
+#	x = "0";
+#	y = "0";
+#	w = "33";
+#	h = "1";
+#
+#	is_floor_ciel = "0";
+#	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+#	tex_1 = "0";
+#}
+#
+## Eastmost Wall
+#component {
+#	x = "32";
+#	y = "1";
+#	w = "1";
+#	h = "29";
+#
+#	is_floor_ciel = "0";
+#	tex_0 = "./src/assests/textures/measure/measure_02.bmp";
+#	tex_1 = "0";
+#}
+#
+## Southmost Wall
+#component {
+#	x = "0";
+#	y = "30";
+#	w = "33";
+#	h = "1";
+#
+#	is_floor_ciel = "0";
+#	tex_0 = "./src/assests/textures/measure/measure_01.bmp";
+#	tex_1 = "0";
+#}
+#
+## Westmost Wall
+#component {
+#	x = "0";
+#	y = "1";
+#	w = "1";
+#	h = "29";
+#
+#	is_floor_ciel = "0";
+#	tex_0 = "./src/assests/textures/measure/measure_02.bmp";
+#	tex_1 = "0";
+#}
