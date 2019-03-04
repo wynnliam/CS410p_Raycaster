@@ -20,6 +20,29 @@ thing {
 }
 
 # Main Pass Area
+# Stream
+component {
+	x = "28";
+	y = "1";
+	w = "1";
+	h = "20";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/water/stream_water_01.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "20";
+	y = "13";
+	w = "1";
+	h = "8";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/blend/grass_to_sand_blend_1.bmp";
+	tex_1 = "0";
+}
+
 # Floor Area 1
 component {
 	x = "20";
@@ -28,7 +51,7 @@ component {
 	h = "20";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/sand/sand_02.bmp";
+	tex_0 = "./src/assests/textures/grass/grass2.bmp";
 	tex_1 = "0";
 }
 
@@ -88,7 +111,7 @@ component {
 	h = "15";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/sand/sand_02.bmp";
+	tex_0 = "./src/assests/textures/sand/grey_sand_02.bmp";
 	tex_1 = "0";
 }
 
@@ -171,8 +194,8 @@ component {
 	h = "2";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/sand/sand_02.bmp";
-	tex_1 = "./src/assests/textures/sand/sand_02.bmp";
+	tex_0 = "./src/assests/textures/sand/grey_sand_03.bmp";
+	tex_1 = "./src/assests/textures/sand/grey_sand_03.bmp";
 }
 
 # Cave Walls
@@ -206,8 +229,8 @@ component {
 	h = "1";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/sand/sand_02.bmp";
-	tex_1 = "./src/assests/textures/sand/sand_02.bmp";
+	tex_0 = "./src/assests/textures/sand/grey_sand_01.bmp";
+	tex_1 = "./src/assests/textures/sand/grey_sand_01.bmp";
 }
 
 # Hideout Interior
@@ -218,8 +241,8 @@ component {
 	h = "2";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/sand/sand_02.bmp";
-	tex_1 = "./src/assests/textures/sand/sand_02.bmp";
+	tex_0 = "./src/assests/textures/sand/grey_sand_01.bmp";
+	tex_1 = "./src/assests/textures/sand/grey_sand_01.bmp";
 }
 
 component {
@@ -229,8 +252,8 @@ component {
 	h = "5";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/sand/sand_02.bmp";
-	tex_1 = "./src/assests/textures/sand/sand_02.bmp";
+	tex_0 = "./src/assests/textures/sand/grey_sand_01.bmp";
+	tex_1 = "./src/assests/textures/sand/grey_sand_01.bmp";
 }
 
 # Walls of Hideout
@@ -269,13 +292,24 @@ component {
 
 # Hideout Exterior Flooring
 component {
+	x = "4";
+	y = "7";
+	w = "5";
+	h = "4";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/sand/grey_sand_02.bmp";
+	tex_1 = "0";
+}
+
+component {
 	x = "1";
 	y = "4";
 	w = "8";
 	h = "7";
 
 	is_floor_ciel = "1";
-	tex_0 = "./src/assests/textures/sand/sand_02.bmp";
+	tex_0 = "./src/assests/textures/sand/grey_sand_01.bmp";
 	tex_1 = "0";
 }
 
