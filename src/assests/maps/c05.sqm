@@ -20,6 +20,29 @@ thing {
 }
 
 # Main Pass Area
+# Mud next to stream
+component {
+	x = "27";
+	y = "1";
+	w = "1";
+	h = "20";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/blend/grass_to_mud_blend_1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "29";
+	y = "1";
+	w = "1";
+	h = "20";
+
+	is_floor_ciel = "1";
+	tex_0 = "./src/assests/textures/mud/mud1.bmp";
+	tex_1 = "0";
+}
+
 # Stream
 component {
 	x = "28";
