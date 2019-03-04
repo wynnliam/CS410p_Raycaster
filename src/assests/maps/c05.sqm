@@ -227,6 +227,66 @@ thing {
 	sprite_sheet = "./src/assests/sprites/foliage/grass/type_1/grass_06.bmp";
 }
 
+thing {
+	type = "1";
+	x = "1853";
+	y = "781";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_1/water_bush_00.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1808";
+	y = "1021";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_1/water_bush_01.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1854";
+	y = "1271";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_1/water_bush_02.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1854";
+	y = "562";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_1/water_bush_00.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1814";
+	y = "351";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_1/water_bush_01.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1842";
+	y = "141";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_1/water_bush_02.bmp";
+}
+
 # Floor Area 2
 component {
 	x = "14";
