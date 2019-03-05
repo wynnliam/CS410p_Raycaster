@@ -437,6 +437,125 @@ thing {
 	sprite_sheet = "./src/assests/sprites/foliage/grass/type_2/grass_00.bmp";
 }
 
+thing {
+	type = "1";
+	x = "1582";
+	y = "311";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_3/grass_00.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1517";
+	y = "519";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_3/grass_01.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1627";
+	y = "639";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_3/grass_02.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1549";
+	y = "819";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_3/grass_03.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1450";
+	y = "973";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_3/grass_04.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1426";
+	y = "1165";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_3/grass_05.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1666";
+	y = "1245";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_3/grass_00.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1391";
+	y = "945";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_3/grass_01.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1304";
+	y = "656";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_3/grass_02.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1374";
+	y = "516";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_3/grass_03.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1493";
+	y = "278";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_3/grass_04.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1313";
+	y = "106";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_3/grass_05.bmp";
+}
 # Floor Area 2
 component {
 	x = "14";
