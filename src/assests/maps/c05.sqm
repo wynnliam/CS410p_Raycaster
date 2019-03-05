@@ -287,6 +287,156 @@ thing {
 	sprite_sheet = "./src/assests/sprites/foliage/bush/type_1/water_bush_02.bmp";
 }
 
+thing {
+	type = "1";
+	x = "1587";
+	y = "419";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_2/grass_00.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1532";
+	y = "595";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_2/grass_01.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1628";
+	y = "763";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_2/grass_02.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1529";
+	y = "917";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_2/grass_03.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1620";
+	y = "1112";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_2/grass_04.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1520";
+	y = "1242";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_2/grass_05.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1651";
+	y = "1003";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_2/grass_06.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1663";
+	y = "823";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_2/grass_00.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1387";
+	y = "658";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_2/grass_01.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1339";
+	y = "418";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_2/grass_02.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1429";
+	y = "288";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_2/grass_03.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1366";
+	y = "197";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_2/grass_04.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1666";
+	y = "157";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_2/grass_05.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1683";
+	y = "333";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_2/grass_06.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1409";
+	y = "625";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_2/grass_00.bmp";
+}
+
 # Floor Area 2
 component {
 	x = "14";
