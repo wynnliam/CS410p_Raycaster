@@ -787,6 +787,56 @@ thing {
 	anim_class = "0";
 	sprite_sheet = "./src/assests/sprites/foliage/tree5.bmp";
 }
+
+thing {
+	type = "1";
+	x = "1758";
+	y = "529";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_2/large_bush.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1761";
+	y = "913";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_2/large_bush.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1737";
+	y = "1278";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_2/large_bush.bmp";
+}
+thing {
+	type = "1";
+	x = "1863";
+	y = "1148";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_2/large_bush.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1881";
+	y = "423";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_2/large_bush.bmp";
+}
+
 # Floor Area 2
 component {
 	x = "14";
