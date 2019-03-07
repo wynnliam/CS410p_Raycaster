@@ -667,6 +667,126 @@ thing {
 	sprite_sheet = "./src/assests/sprites/foliage/tree4.bmp";
 }
 
+
+thing {
+	type = "1";
+	x = "1612";
+	y = "337";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree5.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1590";
+	y = "561";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree5.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1668";
+	y = "741";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree5.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1530";
+	y = "789";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree5.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1467";
+	y = "887";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree5.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1403";
+	y = "1084";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree5.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1379";
+	y = "1276";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree5.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1459";
+	y = "1276";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree5.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1609";
+	y = "1226";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree5.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1397";
+	y = "506";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree5.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1347";
+	y = "356";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree5.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1419";
+	y = "171";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/tree5.bmp";
+}
 # Floor Area 2
 component {
 	x = "14";
