@@ -837,6 +837,65 @@ thing {
 	sprite_sheet = "./src/assests/sprites/foliage/bush/type_2/large_bush.bmp";
 }
 
+thing {
+	type = "1";
+	x = "1460";
+	y = "377";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_4/wild_flower_white.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1470";
+	y = "688";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_4/wild_flower_white.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1602";
+	y = "798";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_4/wild_flower_white.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1592";
+	y = "1015";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_4/wild_flower_white.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1496";
+	y = "1183";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/grass/type_4/wild_flower_white.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1560";
+	y = "1123";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/rock_formation/rock_formation_1.bmp";
+}
 # Floor Area 2
 component {
 	x = "14";
