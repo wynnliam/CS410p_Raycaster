@@ -1249,6 +1249,56 @@ thing {
 	anim_class = "0";
 	sprite_sheet = "./src/assests/sprites/foliage/flower/type_0/desert_flower_1.bmp";
 }
+
+thing {
+	type = "1";
+	x = "1078";
+	y = "1267";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flower/type_1/cactus_1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1098";
+	y = "1475";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flower/type_1/cactus_2.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1037";
+	y = "1720";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flower/type_1/cactus_3.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1016";
+	y = "1015";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flower/type_1/cactus_1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "935";
+	y = "875";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flower/type_1/cactus_2.bmp";
+}
 # Cave Flooring
 component {
 	x = "9";
