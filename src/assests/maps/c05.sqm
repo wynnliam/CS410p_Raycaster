@@ -1209,6 +1209,46 @@ thing {
 	anim_class = "0";
 	sprite_sheet = "./src/assests/sprites/rock_formation/rock/type_0/desert_rock_1c.bmp";
 }
+
+thing {
+	type = "1";
+	x = "1186";
+	y = "1123";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flower/type_0/desert_flower_1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "934";
+	y = "1285";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flower/type_0/desert_flower_1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "934";
+	y = "1493";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flower/type_0/desert_flower_1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1104";
+	y = "1714";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/flower/type_0/desert_flower_1.bmp";
+}
 # Cave Flooring
 component {
 	x = "9";
