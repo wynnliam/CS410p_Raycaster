@@ -1079,6 +1079,136 @@ thing {
 	anim_class = "0";
 	sprite_sheet = "./src/assests/sprites/foliage/bush/type_3/desert_bush_3.bmp";
 }
+
+thing {
+	type = "1";
+	x = "1163";
+	y = "1646";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/desert_tree.bmp";
+}
+
+thing {
+	type = "1";
+	x = "985";
+	y = "1373";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/desert_tree.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1105";
+	y = "923";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/desert_tree.bmp";
+}
+
+thing {
+	type = "1";
+	x = "980";
+	y = "1202";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/rock_formation/rock/type_0/desert_rock_1a.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1232";
+	y = "1433";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/rock_formation/rock/type_0/desert_rock_1b.bmp";
+}
+
+thing {
+	type = "1";
+	x = "977";
+	y = "1535";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/rock_formation/rock/type_0/desert_rock_1c.bmp";
+}
+
+thing {
+	type = "1";
+	x = "965";
+	y = "1739";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/rock_formation/rock/type_0/desert_rock_2a.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1199";
+	y = "1723";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/rock_formation/rock/type_0/desert_rock_2b.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1226";
+	y = "1318";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/rock_formation/rock/type_0/desert_rock_2c.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1169";
+	y = "1033";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/rock_formation/rock/type_0/desert_rock_3a.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1057";
+	y = "969";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/rock_formation/rock/type_0/desert_rock_1a.bmp";
+}
+
+thing {
+	type = "1";
+	x = "953";
+	y = "1049";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/rock_formation/rock/type_0/desert_rock_1b.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1120";
+	y = "871";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/rock_formation/rock/type_0/desert_rock_1c.bmp";
+}
 # Cave Flooring
 component {
 	x = "9";
