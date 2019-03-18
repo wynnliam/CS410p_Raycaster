@@ -896,6 +896,7 @@ thing {
 	anim_class = "0";
 	sprite_sheet = "./src/assests/sprites/rock_formation/rock_formation_1.bmp";
 }
+
 # Floor Area 2
 component {
 	x = "14";
@@ -979,6 +980,105 @@ component {
 	tex_1 = "0";
 }
 
+thing {
+	type = "1";
+	x = "1116";
+	y = "1099";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_3/desert_bush_1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1220";
+	y = "1223";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_3/desert_bush_2.bmp";
+}
+
+thing {
+	type = "1";
+	x = "964";
+	y = "1646";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_3/desert_bush_2.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1210";
+	y = "1524";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_3/desert_bush_2.bmp";
+}
+
+thing {
+	type = "1";
+	x = "983";
+	y = "935";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_3/desert_bush_2.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1180";
+	y = "933";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_3/desert_bush_3.bmp";
+}
+
+thing {
+	type = "1";
+	x = "985";
+	y = "1083";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_3/desert_bush_3.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1009";
+	y = "1275";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_3/desert_bush_3.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1066";
+	y = "1579";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_3/desert_bush_3.bmp";
+}
+
+thing {
+	type = "1";
+	x = "1117";
+	y = "1308";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/foliage/bush/type_3/desert_bush_3.bmp";
+}
 # Cave Flooring
 component {
 	x = "9";
