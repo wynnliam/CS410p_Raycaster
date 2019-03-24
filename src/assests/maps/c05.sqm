@@ -1496,6 +1496,16 @@ component {
 	tex_1 = "0";
 }
 
+thing {
+	type = "1";
+	x = "304";
+	y = "514";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/totem_poles/totem.bmp";
+}
+
 ## Bounding Area -- Without this, the parser shits itself
 ## Floor
 #component {
