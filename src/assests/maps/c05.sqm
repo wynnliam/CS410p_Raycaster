@@ -1506,6 +1506,17 @@ thing {
 	sprite_sheet = "./src/assests/sprites/totem_poles/totem.bmp";
 }
 
+thing {
+	type = "1";
+	x = "304";
+	y = "625";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/totem_poles/totem_2.bmp";
+}
+
+
 ## Bounding Area -- Without this, the parser shits itself
 ## Floor
 #component {
