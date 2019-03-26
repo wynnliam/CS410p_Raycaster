@@ -1464,6 +1464,17 @@ component {
 
 component {
 	x = "0";
+	y = "5";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/flags/flag_4.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
 	y = "3";
 	w = "10";
 	h = "1";
@@ -1551,7 +1562,95 @@ thing {
 	sprite_sheet = "./src/assests/sprites/totem_poles/totem_2.bmp";
 }
 
+thing {
+	type = "1";
+	x = "345";
+	y = "656";
+	rot = "0";
 
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/pots/clay_pot_1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "300";
+	y = "666";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/pots/clay_pot_1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "295";
+	y = "635";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/pots/clay_pot_1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "337";
+	y = "682";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/pots/clay_pot_1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "531";
+	y = "538";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/pots/clay_pot_1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "535";
+	y = "493";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/pots/clay_pot_1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "518";
+	y = "344";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/pots/clay_pot_1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "536";
+	y = "302";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/pots/clay_pot_1.bmp";
+}
+
+thing {
+	type = "1";
+	x = "523";
+	y = "312";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/pots/clay_pot_1.bmp";
+}
 ## Bounding Area -- Without this, the parser shits itself
 ## Floor
 #component {
