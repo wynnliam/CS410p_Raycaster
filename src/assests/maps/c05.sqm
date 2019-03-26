@@ -1427,6 +1427,41 @@ component {
 }
 
 # Northmost Wall of Hideout
+
+# Flags
+component {
+	x = "2";
+	y = "3";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/flags/flag_1.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "4";
+	y = "3";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/flags/flag_2.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "6";
+	y = "3";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/flags/flag_3.bmp";
+	tex_1 = "0";
+}
+
 component {
 	x = "0";
 	y = "3";
