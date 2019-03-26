@@ -897,6 +897,15 @@ thing {
 	sprite_sheet = "./src/assests/sprites/rock_formation/rock_formation_1.bmp";
 }
 
+thing {
+	type = "1";
+	x = "1715";
+	y = "816";
+	rot = "0";
+
+	anim_class = "0";
+	sprite_sheet = "./src/assests/sprites/sculptures/cross_1.bmp";
+}
 # Floor Area 2
 component {
 	x = "14";
