@@ -1475,6 +1475,28 @@ component {
 
 component {
 	x = "0";
+	y = "7";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/flags/flag_5.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
+	y = "9";
+	w = "1";
+	h = "1";
+
+	is_floor_ciel = "0";
+	tex_0 = "./src/assests/textures/flags/flag_6.bmp";
+	tex_1 = "0";
+}
+
+component {
+	x = "0";
 	y = "3";
 	w = "10";
 	h = "1";
